@@ -9,11 +9,9 @@ public class LoginTest extends BaseTest {
     
     @Test
     public void testCompleteLoginFlow() {
-        LoginPage loginPage = new LoginPage(driver);
-        
-        // Step 1: Navigate and Login
-        loginPage.navigateToLogin(baseUrl);
-        WelcomePage welcomePage = loginPage.login("will", "will");
+        // Step 1: Navigate and Login using helper
+        login("will", "will");
+        WelcomePage welcomePage = new WelcomePage(driver);
         
         // Step 2: Verify welcome Access
         String welcomeTitle = welcomePage.getWelcomeTitle();

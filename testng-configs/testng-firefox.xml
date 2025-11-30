@@ -1,0 +1,17 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+<!-- 
+    TEST WITH FIREFOX BROWSER
+    Run with: mvn test "-DsuiteXmlFile=testng-configs/testng-firefox.xml"
+-->
+<suite name="SuiteCRM Testing Suite - Firefox" verbose="1">
+    
+    <parameter name="browser" value="firefox"/>
+    
+    <!-- Nanti buat test yang langsung sekali jalan -->
+    <!-- <test name="Comprehensive Flow Test" preserve-order="true">
+        <classes>
+            <class name="com.proyek_softes.demo.tests.ComprehensiveTest"/> 
+        </classes>
+    </test> -->
+
+</suite>

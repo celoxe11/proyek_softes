@@ -7,9 +7,10 @@
 <suite name="SuiteCRM Testing Suite" verbose="1">
     
     <!-- Comprehensive Test - All tests run in ONE browser session -->
-    <test name="Comprehensive Flow Test" preserve-order="true">
+    <test name="All Tests" preserve-order="true">
         <classes>
-            <class name="com.proyek_softes.demo.tests.ComprehensiveTest"/> 
+            <class name="com.proyek_softes.demo.tests.LoginTest"/>
+            <class name="com.proyek_softes.demo.tests.DashboardTest"/>
         </classes>
     </test>
 

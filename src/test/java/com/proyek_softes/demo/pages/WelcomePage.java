@@ -13,11 +13,7 @@ public class WelcomePage {
 
     // Welcome Locators
     private By welcomeTitle = By.xpath("//div[@id='about_header']/h1");
-    private By accountsTab = By.id("grouptab_0");
-    private By accountsMenu = By.id("moduleTab_9_Accounts");
-    private By contactsMenu = By.id("moduleTab_9_Contacts");
-    private By opportunitiesMenu = By.id("moduleTab_9_Opportunities");
-    private By leadsMenu = By.id("moduleTab_9_Leads");
+    private By dashboardButton = By.cssSelector(".navbar-brand.with-home-icon");
 
     public WelcomePage(WebDriver driver) {
         this.driver = driver;
@@ -29,27 +25,5 @@ public class WelcomePage {
         return driver.findElement(welcomeTitle).getText();
     }
 
-    public AccountsPage navigateToAccounts() {
-        wait.until(ExpectedConditions.elementToBeClickable(accountsTab)).click();
-        wait.until(ExpectedConditions.elementToBeClickable(accountsMenu)).click();
-        return new AccountsPage(driver);
-    }
-
-    public ContactsPage navigateToContacts() {
-        wait.until(ExpectedConditions.elementToBeClickable(accountsTab)).click();
-        wait.until(ExpectedConditions.elementToBeClickable(contactsMenu)).click();
-        return new ContactsPage(driver);
-    }
-
-    public OpportunitiesPage navigateToOpportunities() {
-        wait.until(ExpectedConditions.elementToBeClickable(accountsTab)).click();
-        wait.until(ExpectedConditions.elementToBeClickable(opportunitiesMenu)).click();
-        return new OpportunitiesPage(driver);
-    }
-
-    public LeadsPage navigateToLeads() {
-        wait.until(ExpectedConditions.elementToBeClickable(accountsTab)).click();
-        wait.until(ExpectedConditions.elementToBeClickable(leadsMenu)).click();
-        return new LeadsPage(driver);
-    }
+    
 }
