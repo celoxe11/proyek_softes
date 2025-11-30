@@ -1,0 +1,14 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+<!-- 
+    TEST ONLY OPPORTUNITY MODULE
+    Run with: mvn test -DsuiteXmlFile=testng-opportunity.xml
+-->
+<suite name="Opportunity CRUD Test Only" verbose="1">
+    
+    <test name="Opportunity CRUD Test">
+        <classes>
+            <class name="com.proyek_softes.demo.tests.crud.OpportunityCrudTest"/>
+        </classes>
+    </test>
+
+</suite>

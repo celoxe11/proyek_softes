@@ -1,0 +1,14 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+<!-- 
+    TEST ONLY LOGIN MODULE
+    Run with: mvn test -DsuiteXmlFile=testng-login.xml
+-->
+<suite name="Login Test Only" verbose="1">
+    
+    <test name="Login Flow Test">
+        <classes>
+            <class name="com.proyek_softes.demo.tests.LoginTest"/> 
+        </classes>
+    </test>
+
+</suite>
