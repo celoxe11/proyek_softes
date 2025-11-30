@@ -1,0 +1,21 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<!-- 
+    TEST ONLY dashboard MODULE
+    Run with: mvn test -DsuiteXmlFile=testng-dashboard.xml
+-->
+<suite name="Dashboard Test Only" verbose="1">
+
+    <test name="Dashboard Test" preserve-order="true">
+        <classes>
+            <class name="com.proyek_softes.demo.tests.DashboardTest">
+                <methods>
+                    <include name="testDashboardAccess" />
+                    <include name="testAddDashlet" />
+                    <include name="testSearchDashlet" />
+                    <include name="testClearDashletSearch" />
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+</suite>
