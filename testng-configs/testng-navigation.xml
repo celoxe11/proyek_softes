@@ -1,0 +1,23 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<!-- 
+    TEST ONLY Navigation MODULE
+    Run with: mvn test -DsuiteXmlFile=testng-navigation.xml
+-->
+<suite name="Navigation Test Only" verbose="1">
+
+    <test name="Navigation Test" preserve-order="true">
+        <classes>
+            <class name="com.proyek_softes.demo.tests.NavigationTest">
+                <methods>
+                    <include name="testSalesNavigation" />
+                    <include name="testMarketingNavigation" />
+                    <include name="testSupportNavigation" />
+                    <include name="testActivitiesNavigation" />
+                    <include name="testCollaborationNavigation" />
+                    <include name="testAllTabsNavigation" />
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+</suite>
