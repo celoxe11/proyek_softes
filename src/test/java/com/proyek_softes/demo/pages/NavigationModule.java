@@ -172,6 +172,12 @@ public class NavigationModule {
             // Get the element
             WebElement element = driver.findElement(itemLocator);
             
+            // Hover over the submenu item to highlight it before clicking
+            actions.moveToElement(element).perform();
+            
+            // Pause to show which submenu item is being hovered
+            Thread.sleep(600);
+            
             // Use JavaScript click for more reliability (bypasses visibility checks)
             ((org.openqa.selenium.JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
             
