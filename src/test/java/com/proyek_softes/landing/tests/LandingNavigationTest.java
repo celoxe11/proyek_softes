@@ -1,4 +1,6 @@
-package com.proyek_softes.demo.landing;
+package com.proyek_softes.landing.tests;
+
+import com.proyek_softes.landing.main.components.LandingNavigationPage;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -8,8 +10,6 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
-
-import java.util.Map;
 
 public class LandingNavigationTest {
     private WebDriver driver;

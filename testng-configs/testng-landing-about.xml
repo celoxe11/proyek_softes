@@ -7,7 +7,7 @@
     
     <test name="About Menu Tests">
         <classes>
-            <class name="com.proyek_softes.demo.landing.LandingNavigationTest">
+            <class name="com.proyek_softes.landing.tests.LandingNavigationTest">
                 <methods>
                     <include name="testMainMenuVisibility" />
                     <include name="testAboutMainMenu" />

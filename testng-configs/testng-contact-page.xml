@@ -1,0 +1,23 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+<!-- 
+    CONTACT PAGE TEST
+    Tests navigation flow: HomePage -> AboutUs -> ContactPage
+    Run with: mvn test "-DsuiteXmlFile=testng-configs/testng-contact-page.xml"
+-->
+<suite name="Contact Page Test Suite" verbose="1">
+    
+    <test name="Contact Page Journey Tests">
+        <classes>
+            <class name="com.proyek_softes.landing.tests.ContactPageTest">
+                <methods>
+                    <include name="testNavigationToContactPage" />
+                    <include name="testFillContactForm" />
+                    <include name="testFillCompleteContactForm" />
+                    <include name="testContactFormValidation" />
+                    <include name="testCompleteUserJourney" />
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+</suite>

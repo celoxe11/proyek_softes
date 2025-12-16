@@ -1,9 +1,10 @@
-package com.proyek_softes.demo.landing;
+package com.proyek_softes.landing.main.base;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.annotations.AfterSuite;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
@@ -27,6 +28,13 @@ public class BaseLandingTest {
             System.out.println("=== Chrome Browser Opened - Starting Landing Page Test Suite ===");
         }
         driver.manage().window().maximize();
+    }
+    
+    @BeforeMethod
+    public void resetToHomePage() {
+        // Reset ke HomePage sebelum setiap test method
+        driver.get(baseUrl);
+        System.out.println("\n>>> Reset to HomePage: " + baseUrl);
     }
 
     @AfterSuite

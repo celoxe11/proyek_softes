@@ -8,7 +8,7 @@
     
     <test name="Landing Navigation Tests" preserve-order="true">
         <classes>
-            <class name="com.proyek_softes.demo.landing.LandingNavigationTest">
+            <class name="com.proyek_softes.landing.tests.LandingNavigationTest">
                 <methods>
                     <!-- Main menu visibility -->
                     <include name="testMainMenuVisibility" />

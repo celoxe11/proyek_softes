@@ -1,4 +1,4 @@
-package com.proyek_softes.demo.landing;
+package com.proyek_softes.landing.main.components;
 
 import java.time.Duration;
 import java.util.HashMap;
