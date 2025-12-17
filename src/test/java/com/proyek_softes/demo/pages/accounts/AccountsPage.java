@@ -1,11 +1,15 @@
 package com.proyek_softes.demo.pages.accounts;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
 
 public class AccountsPage {
 
@@ -13,110 +17,77 @@ public class AccountsPage {
     private WebDriverWait wait;
     private Actions actions;
 
+    // Navbar untuk navigasi ke accounts
+    private By navTab = By.id("grouptab_0");
+    private By subTab = By.id("moduleTab_6_Accounts");
+
+    // Sidebar dan link di sidebar
+    private By sidebarMenu = By.id("actionMenuSidebar");
+    private By createAccountLink = By.xpath("//a[@data-action-name='Create']");
+    private By importAccountLink = By.xpath("//a[@data-action-name='Import']");
+    private By viewAccountLink = By.xpath("//a[@data-action-name='List']");
+    private By recentlyViewedAccount1Link = By.xpath("//a[@class='recent-links-detail' and @accessKey='1']");
+    private By recentlyViewedAccount1LinkEdit = By.xpath("//a[@class='recent-links-edit']");
+
+    // all page locator (semua page punya class module-title-text) untuk title
+    // mereka
+    private By pageTitle = By.className("module-title-text");
+
     public AccountsPage(WebDriver driver) {
         this.driver = driver;
-        this.wait = new WebDriverWait(driver, java.time.Duration.ofSeconds(10));
+        this.wait = new WebDriverWait(driver, java.time.Duration.ofSeconds(20));
         this.actions = new Actions(driver);
     }
 
-    public void navigateToCreateAccount() {
-        // Implementation for navigating to create account page
-        By navTab = By.id("grouptab_0");
-        By subTab = By.id("moduleTab_6_Accounts");
-        By createAccountLink = By.xpath("//a[@data-action-name='Create']");
-
+    // cek berdasarkan title halaman
+    public boolean checkPageTitle(String expectedTitle) {
         try {
-            // Scroll to top to ensure navigation is visible
-            ((org.openqa.selenium.JavascriptExecutor) driver).executeScript("window.scrollTo(0, 0)");
-            Thread.sleep(500);
-            
-            WebElement navTabElement = wait.until(ExpectedConditions.presenceOfElementLocated(navTab));
-            
-            // Use JavaScript to trigger hover
-            ((org.openqa.selenium.JavascriptExecutor) driver)
-                .executeScript("arguments[0].dispatchEvent(new MouseEvent('mouseover', {bubbles: true}));", navTabElement);
-            
-            Thread.sleep(1000);
-
-            // Wait for submenu element to be present
-            WebElement subTabElement = wait.until(ExpectedConditions.presenceOfElementLocated(subTab));
-            
-            // Ensure it's visible before clicking
-            wait.until(ExpectedConditions.visibilityOf(subTabElement));
-
-            // Use JavaScript click for more reliability
-            ((org.openqa.selenium.JavascriptExecutor) driver).executeScript("arguments[0].click();", subTabElement);
-
-            // Wait for page to load after navigation
-            Thread.sleep(2000);
-
-            // Wait for the action sidebar to be present
-            wait.until(ExpectedConditions.presenceOfElementLocated(By.id("actionMenuSidebar")));
-
-            // Wait for the create account link to be clickable with increased timeout
-            WebDriverWait extendedWait = new WebDriverWait(driver, java.time.Duration.ofSeconds(15));
-            extendedWait.until(ExpectedConditions.elementToBeClickable(createAccountLink));
-
-            // Click the create account link using JavaScript
-            WebElement createAccountElement = driver.findElement(createAccountLink);
-            ((org.openqa.selenium.JavascriptExecutor) driver).executeScript("arguments[0].click();", createAccountElement);
-            
-            // Wait for create page to load
-            Thread.sleep(1500);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            throw new RuntimeException("Thread was interrupted", e);
+            wait.until(ExpectedConditions.visibilityOfElementLocated(pageTitle));
+            String title = driver.findElement(pageTitle).getText();
+            return title.toUpperCase().contains(expectedTitle.toUpperCase());
         } catch (Exception e) {
-            throw new RuntimeException("Failed to navigate to Create Account page. Error: " + e.getMessage(), e);
+            return false;
         }
+    }
+
+    public void navigateToAccountsModule() {
+        wait.until(ExpectedConditions.presenceOfElementLocated(navTab));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(navTab));
+        actions.moveToElement(driver.findElement(navTab)).perform();
+        wait.until(ExpectedConditions.presenceOfElementLocated(subTab));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(subTab));
+        driver.findElement(subTab).click();
+
+        // Wait for sidebar to be visible after clicking the module
+        wait.until(ExpectedConditions.visibilityOfElementLocated(sidebarMenu));
+    }
+
+    public void navigateToCreateAccount() {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(createAccountLink));
+        wait.until(ExpectedConditions.elementToBeClickable(createAccountLink));
+        driver.findElement(createAccountLink).click();
     }
 
     public void navigateToViewAccounts() {
-        // Implementation for navigating to view accounts page
-        By viewAccountLink = By.xpath("//a[@data-action-name='List']");
-        try {
-            Thread.sleep(600);
-
-            // Wait for the action sidebar to be present
-            wait.until(ExpectedConditions.presenceOfElementLocated(By.id("actionMenuSidebar")));
-
-            // Wait for the view accounts link to be clickable with increased timeout
-            WebDriverWait extendedWait = new WebDriverWait(driver, java.time.Duration.ofSeconds(15));
-            extendedWait.until(ExpectedConditions.elementToBeClickable(viewAccountLink));
-
-            // Click the view accounts link using JavaScript
-            WebElement viewAccountElement = driver.findElement(viewAccountLink);
-            ((org.openqa.selenium.JavascriptExecutor) driver).executeScript("arguments[0].click();", viewAccountElement);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            throw new RuntimeException("Thread was interrupted", e);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to click view accounts link. Error: " + e.getMessage(), e);
-        }
+        wait.until(ExpectedConditions.visibilityOfElementLocated(viewAccountLink));
+        wait.until(ExpectedConditions.elementToBeClickable(viewAccountLink));
+        driver.findElement(viewAccountLink).click();
     }
 
     public void navigateToImportAccounts() {
-        // Implementation for navigating to import accounts page
-        By importAccountLink = By.xpath("//a[@data-action-name='Import']");
-        try {
-            Thread.sleep(600);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(importAccountLink));
+        wait.until(ExpectedConditions.elementToBeClickable(importAccountLink));
+        driver.findElement(importAccountLink).click();
+    }
 
-            // Wait for the action sidebar to be present
-            wait.until(ExpectedConditions.presenceOfElementLocated(By.id("actionMenuSidebar")));
+    public void navigateToRecentlyViewedAccount() {
+        wait.until(ExpectedConditions.elementToBeClickable(recentlyViewedAccount1Link));
+        driver.findElement(recentlyViewedAccount1Link).click();
+    }
 
-            // Wait for the import accounts link to be clickable with increased timeout
-            WebDriverWait extendedWait = new WebDriverWait(driver, java.time.Duration.ofSeconds(15));
-            extendedWait.until(ExpectedConditions.elementToBeClickable(importAccountLink));
-
-            // Click the import accounts link using JavaScript
-            WebElement importAccountElement = driver.findElement(importAccountLink);
-            ((org.openqa.selenium.JavascriptExecutor) driver).executeScript("arguments[0].click();", importAccountElement);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            throw new RuntimeException("Thread was interrupted", e);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to click import accounts link. Error: " + e.getMessage(), e);
-        }
+    public void navigateToRecentlyViewedAccountEdit() {
+        wait.until(ExpectedConditions.elementToBeClickable(recentlyViewedAccount1LinkEdit));
+        driver.findElement(recentlyViewedAccount1LinkEdit).click();
     }
 
     public void filterQuick() {

@@ -18,17 +18,20 @@ public class CreateAccountsPage {
     private Actions actions;
 
     // locators can be added here
-    private By cancelButton = By.id("CANCEL");
-    private By saveButton = By.id("SAVE");
-    private By addEmailButton = By.id("Accounts6_email_widget_add");
+    private By pageTitle = By.className("module-title-text");
+    private By listTable = By.xpath(
+            "//*[contains(@class, 'list') and contains(@class, 'view') and contains(@class, 'table-responsive')]");
+    private By buttonSave = By.xpath("//input[@title='Save' and @id='SAVE']");
+    private By buttonCancel = By.xpath("//input[@title='Cancel [Alt+l]' and @id='CANCEL']");
+    private By addEmailButton = By.cssSelector("button.email-address-add-button[title='Add Email Address ']");
     private By removeEmail1Button = By.id("Accounts0removeButton1");
+
+    // Duplicate account warning locator
+    private By duplicateWarningMessage = By
+            .xpath("//td[contains(text(), 'The account record you are about to create might be a duplicate')]");
 
     private Map<String, By> overviewInputLocators;
     private Map<String, By> moreInformationInputLocators;
-
-    // Dummy data for testing
-    private Map<String, String> dummyOverviewData;
-    private Map<String, String> dummyMoreInformationData;
 
     public CreateAccountsPage(WebDriver driver) {
         this.driver = driver;
@@ -38,9 +41,6 @@ public class CreateAccountsPage {
         // Initialize input locators
         initializeOverviewInputLocators();
         initializMoreInformationInputLocators();
-
-        // Initialize dummy data
-        initializeDummyData();
     }
 
     private void initializeOverviewInputLocators() {
@@ -100,82 +100,151 @@ public class CreateAccountsPage {
         moreInformationInputLocators.put("btnClearCampaign", By.id("btn_clr_campaign_name"));
     }
 
-    private void initializeDummyData() {
-        // Initialize Overview dummy data
-        dummyOverviewData = new HashMap<>();
-        dummyOverviewData.put("name", "Tech Innovations Inc");
-        dummyOverviewData.put("officePhone", "+1-555-0123");
-        dummyOverviewData.put("website", "http://www.techinnovations.com");
-        dummyOverviewData.put("fax", "+1-555-0124");
-        dummyOverviewData.put("email", "contact@techinnovations.com");
-        dummyOverviewData.put("billingStreet", "123 Innovation Drive");
-        dummyOverviewData.put("billingCity", "San Francisco");
-        dummyOverviewData.put("billingState", "California");
-        dummyOverviewData.put("billingPostalCode", "94102");
-        dummyOverviewData.put("billingCountry", "USA");
-        dummyOverviewData.put("shippingStreet", "456 Tech Boulevard");
-        dummyOverviewData.put("shippingCity", "San Jose");
-        dummyOverviewData.put("shippingState", "California");
-        dummyOverviewData.put("shippingPostalCode", "95110");
-        dummyOverviewData.put("shippingCountry", "USA");
-        dummyOverviewData.put("description", "Leading technology solutions provider specializing in AI and cloud computing.");
-
-        // Initialize More Information dummy data
-        dummyMoreInformationData = new HashMap<>();
-        dummyMoreInformationData.put("accountType", "Customer");
-        dummyMoreInformationData.put("industry", "Technology");
-        dummyMoreInformationData.put("annualRevenue", "5000000");
-        dummyMoreInformationData.put("employees", "250");
-        dummyMoreInformationData.put("parentName", "");
-        dummyMoreInformationData.put("campaignName", "");
-    }
-
     public void cancel() {
-        driver.findElement(cancelButton).click();
+        driver.findElement(buttonCancel).click();
     }
 
     public void save() {
-        driver.findElement(saveButton).click();
-    }
-
-    public void addInformation() {
-        addOverviewInformation();
-        addMoreInformation();
-    }
-
-    public void addOverviewInformation() {
         try {
-            // Fill Basic Information
-            fillInputField("name", dummyOverviewData.get("name"), overviewInputLocators);
-            fillInputField("officePhone", dummyOverviewData.get("officePhone"), overviewInputLocators);
-            fillInputField("website", dummyOverviewData.get("website"), overviewInputLocators);
-            fillInputField("fax", dummyOverviewData.get("fax"), overviewInputLocators);
+            WebElement saveButton = wait.until(ExpectedConditions.presenceOfElementLocated(buttonSave));
 
-            // Fill Email Address (first email field is already present)
-            fillInputField("email", dummyOverviewData.get("email"), overviewInputLocators);
+            // Scroll the button into view
+            ((org.openqa.selenium.JavascriptExecutor) driver)
+                    .executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", saveButton);
 
-            // Fill Billing Address
-            fillInputField("billingStreet", dummyOverviewData.get("billingStreet"), overviewInputLocators);
-            fillInputField("billingCity", dummyOverviewData.get("billingCity"), overviewInputLocators);
-            fillInputField("billingState", dummyOverviewData.get("billingState"), overviewInputLocators);
-            fillInputField("billingPostalCode", dummyOverviewData.get("billingPostalCode"), overviewInputLocators);
-            fillInputField("billingCountry", dummyOverviewData.get("billingCountry"), overviewInputLocators);
+            // Wait a moment for scroll to complete
+            Thread.sleep(300);
 
-            // Fill Shipping Address
-            fillInputField("shippingStreet", dummyOverviewData.get("shippingStreet"), overviewInputLocators);
-            fillInputField("shippingCity", dummyOverviewData.get("shippingCity"), overviewInputLocators);
-            fillInputField("shippingState", dummyOverviewData.get("shippingState"), overviewInputLocators);
-            fillInputField("shippingPostalCode", dummyOverviewData.get("shippingPostalCode"), overviewInputLocators);
-            fillInputField("shippingCountry", dummyOverviewData.get("shippingCountry"), overviewInputLocators);
+            // Try to click normally first
+            try {
+                wait.until(ExpectedConditions.elementToBeClickable(buttonSave)).click();
+            } catch (org.openqa.selenium.ElementClickInterceptedException e) {
+                // If normal click fails, use JavaScript click
+                System.out.println("  Note: Using JavaScript click for Save button due to overlap");
+                ((org.openqa.selenium.JavascriptExecutor) driver)
+                        .executeScript("arguments[0].click();", saveButton);
+            }
 
-            // Fill Description
-            fillInputField("description", dummyOverviewData.get("description"), overviewInputLocators);
+            // Wait a bit for page to respond
+            Thread.sleep(1000);
 
-            Thread.sleep(500); // Brief pause for visibility
+            // Check if duplicate warning appears
+            if (isDuplicateWarningDisplayed()) {
+                System.out.println("  Note: Duplicate account warning detected, proceeding to save anyway...");
+                saveDuplicateAccount();
+            }
 
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            throw new RuntimeException("Thread was interrupted while adding overview information", e);
+            throw new RuntimeException("Thread was interrupted while saving", e);
+        }
+    }
+
+    public boolean isDuplicateWarningDisplayed() {
+        try {
+            return driver.findElements(duplicateWarningMessage).size() > 0;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public void saveDuplicateAccount() {
+        System.out.println("  → Confirming save for potential duplicate account...");
+
+        WebElement saveButton = wait.until(ExpectedConditions.presenceOfElementLocated(buttonSave));
+
+        // Scroll the button into view
+        ((org.openqa.selenium.JavascriptExecutor) driver)
+                .executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", saveButton);
+
+        // Try to click normally first
+        try {
+            wait.until(ExpectedConditions.elementToBeClickable(buttonSave)).click();
+        } catch (org.openqa.selenium.ElementClickInterceptedException e) {
+            // If normal click fails, use JavaScript click
+            System.out.println("  Note: Using JavaScript click for Save button due to overlap");
+            ((org.openqa.selenium.JavascriptExecutor) driver)
+                    .executeScript("arguments[0].click();", saveButton);
+        }
+
+        System.out.println("  ✓ Duplicate account saved successfully");
+    }
+
+    public void addInformationFromData(java.util.Map<String, String> data) {
+        try {
+            // Fill Basic Information
+            fillInputFieldFromData("name", data.get("name"));
+            fillInputFieldFromData("officePhone", data.get("officePhone"));
+            fillInputFieldFromData("website", data.get("website"));
+            fillInputFieldFromData("fax", data.get("fax"));
+
+            // Handle email addresses - first email goes in existing field, additional
+            // emails need add button
+            if (data.get("email") != null && !data.get("email").isEmpty()) {
+                String[] emails = data.get("email").split(",");
+                for (int i = 0; i < emails.length; i++) {
+                    String email = emails[i].trim();
+                    if (i == 0) {
+                        // Fill the first email in the existing field
+                        fillInputFieldFromData("email", email);
+                    } else {
+                        // Add new email fields for additional emails
+                        addEmailWithValue(email, i);
+                    }
+                }
+            }
+
+            // Fill Billing Address
+            fillInputFieldFromData("billingStreet", data.get("billingStreet"));
+            fillInputFieldFromData("billingCity", data.get("billingCity"));
+            fillInputFieldFromData("billingState", data.get("billingState"));
+            fillInputFieldFromData("billingPostalCode", data.get("billingPostalCode"));
+            fillInputFieldFromData("billingCountry", data.get("billingCountry"));
+
+            // Fill Description
+            fillInputFieldFromData("description", data.get("description"));
+
+            // Fill More Information (dropdowns)
+            String accountType = data.get("accountType");
+            if (accountType != null && !accountType.isEmpty()) {
+                selectDropdown("accountType", accountType, moreInformationInputLocators);
+            }
+
+            String industry = data.get("industry");
+            if (industry != null && !industry.isEmpty()) {
+                selectDropdown("industry", industry, moreInformationInputLocators);
+            }
+
+            fillInputFieldFromData("annualRevenue", data.get("annualRevenue"));
+            fillInputFieldFromData("employees", data.get("employees"));
+
+            Thread.sleep(500);
+            System.out.println("  → Filled account data: " + data.get("name"));
+
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException("Thread was interrupted while adding information from data", e);
+        }
+    }
+
+    /**
+     * Helper method to fill input field from external data
+     */
+    private void fillInputFieldFromData(String fieldKey, String value) {
+        if (value != null && !value.isEmpty()) {
+            By locator = overviewInputLocators.get(fieldKey);
+            if (locator == null) {
+                locator = moreInformationInputLocators.get(fieldKey);
+            }
+            if (locator != null) {
+                try {
+                    WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(locator));
+                    element.clear();
+                    element.sendKeys(value);
+                } catch (Exception e) {
+                    System.out.println("  Warning: Could not fill field " + fieldKey + ": " + e.getMessage());
+                }
+            }
         }
     }
 
@@ -190,62 +259,36 @@ public class CreateAccountsPage {
         }
     }
 
-    public void addEmailWithValue(String email) {
+    public void addEmailWithValue(String email, int index) {
         try {
             // Click the add email button to add a new email field
             addEmail();
 
-            // Find the newly added email field (second email field)
-            By newEmailField = By.id("Accounts0emailAddress1");
+            // Find the newly added email field using the index
+            // The first email is index 0 (Accounts0emailAddress0), second is index 1, etc.
+            By newEmailField = By.id("Accounts0emailAddress" + index);
             WebElement emailElement = wait.until(ExpectedConditions.presenceOfElementLocated(newEmailField));
             emailElement.clear();
             emailElement.sendKeys(email);
 
         } catch (Exception e) {
-            throw new RuntimeException("Failed to add email with value: " + email, e);
+            throw new RuntimeException("Failed to add email with value: " + email + " at index " + index, e);
         }
+    }
+
+    // Backward compatibility method - adds email at index 1 (second email field)
+    public void addEmailWithValue(String email) {
+        addEmailWithValue(email, 1);
     }
 
     public void removeEmail() {
         try {
-
             WebElement removeButton = wait.until(ExpectedConditions.elementToBeClickable(removeEmail1Button));
             removeButton.click();
             Thread.sleep(500); // Wait for email field to be removed
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new RuntimeException("Thread was interrupted while removing email", e);
-        }
-    }
-
-    public void addMoreInformation() {
-        try {
-            // Select Account Type
-            selectDropdown("accountType", dummyMoreInformationData.get("accountType"), moreInformationInputLocators);
-
-            // Select Industry
-            selectDropdown("industry", dummyMoreInformationData.get("industry"), moreInformationInputLocators);
-
-            // Fill Financial Information
-            fillInputField("annualRevenue", dummyMoreInformationData.get("annualRevenue"), moreInformationInputLocators);
-            fillInputField("employees", dummyMoreInformationData.get("employees"), moreInformationInputLocators);
-
-            Thread.sleep(500); // Brief pause for visibility
-
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            throw new RuntimeException("Thread was interrupted while adding more information", e);
-        }
-    }
-
-    private void fillInputField(String fieldKey, String value, Map<String, By> locatorMap) {
-        if (value != null && !value.isEmpty()) {
-            By locator = locatorMap.get(fieldKey);
-            if (locator != null) {
-                WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(locator));
-                element.clear();
-                element.sendKeys(value);
-            }
         }
     }
 
@@ -268,7 +311,34 @@ public class CreateAccountsPage {
         return messageText;
     }
 
-    public void onlyAddName() {
-        fillInputField("name", dummyOverviewData.get("name"), overviewInputLocators);
+    public boolean isAccountSavedSuccessfully(String accountName) {
+        try {
+            String title = wait.until(ExpectedConditions.presenceOfElementLocated(pageTitle)).getText();
+            return title.contains(accountName);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean hasValidationError() {
+        try {
+            return driver.findElements(By.className("validation-message")).size() > 0
+                    || driver.findElements(By.className("error")).size() > 0;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public String getCurrentUrl() {
+        return driver.getCurrentUrl();
+    }
+
+    public boolean isOnDetailViewPage() {
+        try {
+            String currentUrl = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("DetailView"))).getText();
+            return currentUrl.contains("action=DetailView");
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

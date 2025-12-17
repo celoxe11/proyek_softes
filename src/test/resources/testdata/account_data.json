@@ -1,0 +1,102 @@
+{
+  "createAccountData": [
+    {
+      "testCase": "Account with minimal data",
+      "name": "Test Account Minimal",
+      "officePhone": "",
+      "website": "",
+      "fax": "",
+      "email": "",
+      "billingStreet": "",
+      "billingCity": "",
+      "billingState": "",
+      "billingPostalCode": "",
+      "billingCountry": "",
+      "description": "",
+      "accountType": "",
+      "industry": "",
+      "annualRevenue": "",
+      "employees": "",
+      "expectedResult": "success"
+    },
+    {
+      "testCase": "Account with full data - Tech Company",
+      "name": "Tech Innovations Inc",
+      "officePhone": "+1-555-0123",
+      "website": "http://www.techinnovations.com",
+      "fax": "+1-555-0124",
+      "email": ["contact@techinnovations.com"],
+      "billingStreet": "123 Innovation Drive",
+      "billingCity": "San Francisco",
+      "billingState": "California",
+      "billingPostalCode": "94102",
+      "billingCountry": "USA",
+      "description": "Leading technology solutions provider",
+      "accountType": "Customer",
+      "industry": "Technology",
+      "annualRevenue": "5000000",
+      "employees": "250",
+      "expectedResult": "success"
+    },
+    {
+      "testCase": "Account with Indonesian data",
+      "name": "PT Maju Bersama",
+      "officePhone": "+62-21-5550123",
+      "website": "http://www.majubersama.co.id",
+      "fax": "+62-21-5550124",
+      "email": ["info@majubersama.co.id"],
+      "billingStreet": "Jl. Sudirman No. 123",
+      "billingCity": "Jakarta",
+      "billingState": "DKI Jakarta",
+      "billingPostalCode": "12190",
+      "billingCountry": "Indonesia",
+      "description": "Perusahaan teknologi terkemuka di Indonesia",
+      "accountType": "Customer",
+      "industry": "Technology",
+      "annualRevenue": "10000000000",
+      "employees": "500",
+      "expectedResult": "success"
+    },
+    {
+      "testCase": "Account with multiple email",
+      "name": "Tech Innovations Inc",
+      "officePhone": "+1-555-0123",
+      "website": "http://www.techinnovations.com",
+      "fax": "+1-555-0124",
+      "email": ["contact@techinnovations.com", "info@techinnovations.com"],
+      "billingStreet": "123 Innovation Drive",
+      "billingCity": "San Francisco",
+      "billingState": "California",
+      "billingPostalCode": "94102",
+      "billingCountry": "USA",
+      "description": "Leading technology solutions provider",
+      "accountType": "Customer",
+      "industry": "Technology",
+      "annualRevenue": "5000000",
+      "employees": "250",
+      "expectedResult": "success"
+    }
+  ],
+  "loginData": [
+    {
+      "testCase": "Valid login credentials",
+      "username": "will",
+      "password": "will",
+      "expectedResult": "success"
+    },
+    {
+      "testCase": "Invalid login credentials",
+      "username": "invalid_user",
+      "password": "wrong_password",
+      "expectedResult": "failure"
+    }
+  ],
+  "validationTestData": [
+    {
+      "testCase": "Empty form - no mandatory fields",
+      "name": "",
+      "expectedValidationMessage": "Missing required field: Name",
+      "expectedResult": "validation_error"
+    }
+  ]
+}
