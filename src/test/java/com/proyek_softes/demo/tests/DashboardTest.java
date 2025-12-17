@@ -3,7 +3,6 @@ package com.proyek_softes.demo.tests;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import com.proyek_softes.demo.pages.DashboardPage;
 
 public class DashboardTest extends BaseTest {

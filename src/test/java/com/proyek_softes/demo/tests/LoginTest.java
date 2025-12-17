@@ -2,7 +2,7 @@ package com.proyek_softes.demo.tests;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import com.proyek_softes.demo.pages.LoginPage;
+
 import com.proyek_softes.demo.pages.WelcomePage;
 
 public class LoginTest extends BaseTest {

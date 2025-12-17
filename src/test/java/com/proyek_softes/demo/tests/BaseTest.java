@@ -1,5 +1,6 @@
 package com.proyek_softes.demo.tests;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -7,10 +8,10 @@ import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
-import io.github.bonigarcia.wdm.WebDriverManager;
 
 import com.proyek_softes.demo.pages.LoginPage;
-import org.openqa.selenium.By;
+
+import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class BaseTest {
     protected static WebDriver driver;
@@ -44,7 +45,7 @@ public class BaseTest {
         loginPage.navigateToLogin(baseUrl);
 
         // Check if login inputs are present (if not, we might already be logged in)
-        if (driver.findElements(By.id("user_name")).size() > 0) {
+        if (!driver.findElements(By.id("user_name")).isEmpty()) {
             loginPage.login(username, password);
         } else {
             System.out.println("Already logged in or redirected to dashboard.");

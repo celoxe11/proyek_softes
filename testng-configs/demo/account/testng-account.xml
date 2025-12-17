@@ -1,0 +1,13 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+<!-- 
+    TEST ONLY ACCOUNT MODULE
+-->
+<suite name="Account Test Only" verbose="1">
+    
+    <test name="Account Flow Test">
+        <classes>
+            <class name="com.proyek_softes.demo.tests.AccountTest"/> 
+        </classes>
+    </test>
+
+</suite>
