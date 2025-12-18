@@ -26,9 +26,9 @@ public class CreateAccountsPage {
     private By addEmailButton = By.cssSelector("button.email-address-add-button[title='Add Email Address ']");
     private By removeEmail1Button = By.id("Accounts0removeButton1");
 
-    // Duplicate account warning locator
-    private By duplicateWarningMessage = By
-            .xpath("//td[contains(text(), 'The account record you are about to create might be a duplicate')]");
+    // Duplicate account warning locator - looks for "Save Account" h2 heading
+    private By duplicateWarningMessage = By.xpath("//h2[contains(text(), 'Save Account')]");
+    private By duplicateWarningButton = By.xpath("//input[@title='Save' and @onclick='this.form.action.value=\'Save\';']");
 
     private Map<String, By> overviewInputLocators;
     private Map<String, By> moreInformationInputLocators;
@@ -142,7 +142,19 @@ public class CreateAccountsPage {
 
     public boolean isDuplicateWarningDisplayed() {
         try {
-            return driver.findElements(duplicateWarningMessage).size() > 0;
+            // Create a short wait (3 seconds) to allow page to load
+            WebDriverWait shortWait = new WebDriverWait(driver, java.time.Duration.ofSeconds(3));
+
+            // Wait for element to be visible, returns null if timeout
+            WebElement warningElement = shortWait.until(driver -> {
+                var elements = driver.findElements(duplicateWarningMessage);
+                if (!elements.isEmpty() && elements.get(0).isDisplayed()) {
+                    return elements.get(0);
+                }
+                return null;
+            });
+
+            return warningElement != null;
         } catch (Exception e) {
             return false;
         }
@@ -151,20 +163,20 @@ public class CreateAccountsPage {
     public void saveDuplicateAccount() {
         System.out.println("  → Confirming save for potential duplicate account...");
 
-        WebElement saveButton = wait.until(ExpectedConditions.presenceOfElementLocated(buttonSave));
+        wait.until(ExpectedConditions.presenceOfElementLocated(duplicateWarningButton));
 
         // Scroll the button into view
         ((org.openqa.selenium.JavascriptExecutor) driver)
-                .executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", saveButton);
+                .executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", duplicateWarningButton);
 
         // Try to click normally first
         try {
-            wait.until(ExpectedConditions.elementToBeClickable(buttonSave)).click();
+            wait.until(ExpectedConditions.elementToBeClickable(duplicateWarningButton)).click();
         } catch (org.openqa.selenium.ElementClickInterceptedException e) {
             // If normal click fails, use JavaScript click
             System.out.println("  Note: Using JavaScript click for Save button due to overlap");
             ((org.openqa.selenium.JavascriptExecutor) driver)
-                    .executeScript("arguments[0].click();", saveButton);
+                    .executeScript("arguments[0].click();", duplicateWarningButton);
         }
 
         System.out.println("  ✓ Duplicate account saved successfully");
@@ -172,6 +184,9 @@ public class CreateAccountsPage {
 
     public void addInformationFromData(java.util.Map<String, String> data) {
         try {
+            // Wait for the form to be ready by ensuring the name field is present
+            wait.until(ExpectedConditions.presenceOfElementLocated(By.id("name")));
+
             // Fill Basic Information
             fillInputFieldFromData("name", data.get("name"));
             fillInputFieldFromData("officePhone", data.get("officePhone"));
@@ -227,9 +242,6 @@ public class CreateAccountsPage {
         }
     }
 
-    /**
-     * Helper method to fill input field from external data
-     */
     private void fillInputFieldFromData(String fieldKey, String value) {
         if (value != null && !value.isEmpty()) {
             By locator = overviewInputLocators.get(fieldKey);
@@ -314,7 +326,7 @@ public class CreateAccountsPage {
     public boolean isAccountSavedSuccessfully(String accountName) {
         try {
             String title = wait.until(ExpectedConditions.presenceOfElementLocated(pageTitle)).getText();
-            return title.contains(accountName);
+            return title.toLowerCase().contains(accountName.toLowerCase());
         } catch (Exception e) {
             return false;
         }

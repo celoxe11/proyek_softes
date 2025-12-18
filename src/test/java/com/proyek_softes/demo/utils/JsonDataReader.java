@@ -1,10 +1,5 @@
 package com.proyek_softes.demo.utils;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -12,6 +7,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 public class JsonDataReader {
 
@@ -144,5 +144,49 @@ public class JsonDataReader {
         } else {
             return value.getAsString();
         }
+    }
+
+    /**
+     * Get nested data array from a specific test case for DataProvider
+     * Used for test cases with nested "datas" array structure
+     * 
+     * @param filePath     path to JSON file
+     * @param arrayName    name of the main JSON array (e.g., "createAccountData")
+     * @param testCaseName name of the test case containing nested data
+     * @param nestedKey    name of the nested array key (e.g., "datas")
+     * @return Object[][] suitable for TestNG DataProvider
+     */
+    public static Object[][] getNestedDataProviderArray(String filePath, String arrayName, String testCaseName,
+            String nestedKey) {
+        JsonObject jsonObject = readJsonFile(filePath);
+        JsonArray jsonArray = jsonObject.getAsJsonArray(arrayName);
+
+        // Find the test case
+        for (JsonElement element : jsonArray) {
+            JsonObject obj = element.getAsJsonObject();
+            if (obj.has("testCase") && obj.get("testCase").getAsString().equals(testCaseName)) {
+                // Get the nested array
+                if (obj.has(nestedKey)) {
+                    JsonArray nestedArray = obj.getAsJsonArray(nestedKey);
+                    List<Object[]> dataList = new ArrayList<>();
+
+                    for (JsonElement nestedElement : nestedArray) {
+                        JsonObject nestedObj = nestedElement.getAsJsonObject();
+                        Map<String, String> dataMap = new HashMap<>();
+
+                        for (String key : nestedObj.keySet()) {
+                            JsonElement value = nestedObj.get(key);
+                            dataMap.put(key, convertJsonValueToString(value));
+                        }
+
+                        dataList.add(new Object[] { dataMap });
+                    }
+
+                    return dataList.toArray(new Object[0][0]);
+                }
+            }
+        }
+
+        throw new RuntimeException("Nested data not found for testCase: " + testCaseName + ", nestedKey: " + nestedKey);
     }
 }

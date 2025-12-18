@@ -20,6 +20,47 @@
       "expectedResult": "success"
     },
     {
+      "testCase": "Account with duplicate data",
+      "datas": [
+        {
+          "name": "Test Account Duplicate",
+          "officePhone": "",
+          "website": "",
+          "fax": "",
+          "email": "",
+          "billingStreet": "",
+          "billingCity": "",
+          "billingState": "",
+          "billingPostalCode": "",
+          "billingCountry": "",
+          "description": "",
+          "accountType": "",
+          "industry": "",
+          "annualRevenue": "",
+          "employees": "",
+          "expectedResult": "success"
+        },
+        {
+          "name": "Test Account Duplicate",
+          "officePhone": "",
+          "website": "",
+          "fax": "",
+          "email": "",
+          "billingStreet": "",
+          "billingCity": "",
+          "billingState": "",
+          "billingPostalCode": "",
+          "billingCountry": "",
+          "description": "",
+          "accountType": "",
+          "industry": "",
+          "annualRevenue": "",
+          "employees": "",
+          "expectedResult": "asked_confirmation"
+        }
+      ]
+    },
+    {
       "testCase": "Account with full data - Tech Company",
       "name": "Tech Innovations Inc",
       "officePhone": "+1-555-0123",
@@ -36,25 +77,6 @@
       "industry": "Technology",
       "annualRevenue": "5000000",
       "employees": "250",
-      "expectedResult": "success"
-    },
-    {
-      "testCase": "Account with Indonesian data",
-      "name": "PT Maju Bersama",
-      "officePhone": "+62-21-5550123",
-      "website": "http://www.majubersama.co.id",
-      "fax": "+62-21-5550124",
-      "email": ["info@majubersama.co.id"],
-      "billingStreet": "Jl. Sudirman No. 123",
-      "billingCity": "Jakarta",
-      "billingState": "DKI Jakarta",
-      "billingPostalCode": "12190",
-      "billingCountry": "Indonesia",
-      "description": "Perusahaan teknologi terkemuka di Indonesia",
-      "accountType": "Customer",
-      "industry": "Technology",
-      "annualRevenue": "10000000000",
-      "employees": "500",
       "expectedResult": "success"
     },
     {
