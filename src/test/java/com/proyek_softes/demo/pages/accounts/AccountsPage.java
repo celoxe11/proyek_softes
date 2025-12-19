@@ -202,4 +202,8 @@ public class AccountsPage {
     public void performBulkMap() {
         // Implementation for performing bulk map
     }
+
+    public By getPageTitle() {
+        return pageTitle;
+    }
 }

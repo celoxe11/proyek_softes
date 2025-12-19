@@ -2,6 +2,8 @@ package com.proyek_softes.demo.tests;
 
 import java.util.Map;
 
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import static org.testng.Assert.assertTrue;
 import org.testng.annotations.Test;
 
@@ -157,13 +159,13 @@ public class AccountTest extends BaseTest {
         createAccountsPage.save();
         
         // First account should save successfully without warning
-        if ("success".equals(expectedResult)) {
+        if (expectedResult.equals("success")) {
             boolean isSaved = createAccountsPage.isAccountSavedSuccessfully(testData.get("name"));
             assertTrue(isSaved, "First account should be saved successfully");
             System.out.println("✅ First account created successfully: " + testData.get("name"));
         } 
         // Second account should show duplicate warning
-        else if ("asked_confirmation".equals(expectedResult)) {
+        else if (expectedResult.equals("asked_confirmation")) {
             boolean warningDisplayed = createAccountsPage.isDuplicateWarningDisplayed();
             assertTrue(warningDisplayed, "Duplicate warning should be displayed for second account");
             System.out.println("✅ Duplicate warning detected as expected");
@@ -247,10 +249,9 @@ public class AccountTest extends BaseTest {
         // Step 3: Cancel the duplicate creation
         createAccountsPage.cancel();
         System.out.println("  ✓ Clicked Cancel button");
-        
-        // Verify we're redirected to accounts list (not saved)
-        String currentUrl = createAccountsPage.getCurrentUrl();
-        boolean onAccountsList = currentUrl.contains("module=Accounts");
+
+        WebElement accountPageTitle = wait.until(ExpectedConditions.presenceOfElementLocated(accountsPage.getPageTitle()));
+        boolean onAccountsList = accountPageTitle.getText().trim().equalsIgnoreCase("ACCOUNTS");
         assertTrue(onAccountsList, "Should be redirected to accounts list after cancel");
         System.out.println("✅ Cancel duplicate test passed!");
     }

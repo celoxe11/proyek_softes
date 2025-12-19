@@ -28,7 +28,8 @@ public class CreateAccountsPage {
 
     // Duplicate account warning locator - looks for "Save Account" h2 heading
     private By duplicateWarningMessage = By.xpath("//h2[contains(text(), 'Save Account')]");
-    private By duplicateWarningButton = By.xpath("//input[@title='Save' and @onclick='this.form.action.value=\'Save\';']");
+    private By duplicateWarningSaveButton = By.xpath("//input[@title='Save' and contains(@onclick, \"this.form.action.value='Save'\")]");
+    private By duplicateWarningCancelButton = By.xpath("//input[@title='Cancel' and contains(@onclick, \"this.form.module.value='Accounts'\")]");
 
     private Map<String, By> overviewInputLocators;
     private Map<String, By> moreInformationInputLocators;
@@ -101,7 +102,7 @@ public class CreateAccountsPage {
     }
 
     public void cancel() {
-        driver.findElement(buttonCancel).click();
+        driver.findElement(duplicateWarningCancelButton).click();
     }
 
     public void save() {
@@ -125,14 +126,8 @@ public class CreateAccountsPage {
                         .executeScript("arguments[0].click();", saveButton);
             }
 
-            // Wait a bit for page to respond
+            // wait a moment for save to process
             Thread.sleep(1000);
-
-            // Check if duplicate warning appears
-            if (isDuplicateWarningDisplayed()) {
-                System.out.println("  Note: Duplicate account warning detected, proceeding to save anyway...");
-                saveDuplicateAccount();
-            }
 
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
@@ -163,20 +158,20 @@ public class CreateAccountsPage {
     public void saveDuplicateAccount() {
         System.out.println("  → Confirming save for potential duplicate account...");
 
-        wait.until(ExpectedConditions.presenceOfElementLocated(duplicateWarningButton));
+        WebElement saveButton = wait.until(ExpectedConditions.presenceOfElementLocated(duplicateWarningSaveButton));
 
         // Scroll the button into view
         ((org.openqa.selenium.JavascriptExecutor) driver)
-                .executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", duplicateWarningButton);
+                .executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", saveButton);
 
         // Try to click normally first
         try {
-            wait.until(ExpectedConditions.elementToBeClickable(duplicateWarningButton)).click();
+            wait.until(ExpectedConditions.elementToBeClickable(duplicateWarningSaveButton)).click();
         } catch (org.openqa.selenium.ElementClickInterceptedException e) {
             // If normal click fails, use JavaScript click
             System.out.println("  Note: Using JavaScript click for Save button due to overlap");
             ((org.openqa.selenium.JavascriptExecutor) driver)
-                    .executeScript("arguments[0].click();", duplicateWarningButton);
+                    .executeScript("arguments[0].click();", saveButton);
         }
 
         System.out.println("  ✓ Duplicate account saved successfully");
@@ -336,19 +331,6 @@ public class CreateAccountsPage {
         try {
             return driver.findElements(By.className("validation-message")).size() > 0
                     || driver.findElements(By.className("error")).size() > 0;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    public String getCurrentUrl() {
-        return driver.getCurrentUrl();
-    }
-
-    public boolean isOnDetailViewPage() {
-        try {
-            String currentUrl = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("DetailView"))).getText();
-            return currentUrl.contains("action=DetailView");
         } catch (Exception e) {
             return false;
         }
