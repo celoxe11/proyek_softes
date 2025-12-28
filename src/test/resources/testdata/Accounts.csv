@@ -1,25 +1,5 @@
 "Name","ID","Website","Email Address","Non Primary E-mails","Office Phone","Alternate Phone","Fax","Billing Street","Billing City","Billing State","Billing Postal Code","Billing Country","Shipping Street","Shipping City","Shipping State","Shipping Postal Code","Shipping Country","Description","Type","Industry","Annual Revenue","Employees","SIC Code","Ticker Symbol","Parent Account ID","Ownership","Campaign ID","Rating","Assigned to","Assigned User","Date Created","Date Modified","Modified By","Created By","Deleted","Longitude","Latitude","Geocode Status","Address"
-"Hollywood Diner Ltd","24004230-56d5-b2fe-dc35-692dad6fa0c5","www.phonethe.edu","the16@example.biz","sugar.sales.phone@example.biz","(232) 859-1665","","","111 Silicon Valley Road","San Jose","NY","51710","USA","111 Silicon Valley Road","San Jose","NY","51710","USA","","Customer","Media","","","","","","","","","chris","seed_chris_id","12/01/2025 03:00 pm","12/01/2025 03:00 pm","1","1","0","","","",""
-"South Sea Plumbing Products","258c3cef-ec44-6e02-a50b-692dad681ad8","www.devkid.org","sugar.hr@example.de","the46@example.tv","(422) 534-6517","","","123 Anywhere Street","San Jose","NY","88173","USA","123 Anywhere Street","San Jose","NY","88173","USA","","Customer","Engineering","","","","","","","","","chris","seed_chris_id","12/01/2025 03:00 pm","12/01/2025 03:00 pm","1","1","0","","","",""
-"B.C. Investing International","3357e5c1-aacc-cad0-a1d1-692dadbed502","www.phonebeans.org","support83@example.tv","the.vegan@example.name","(174) 897-6649","","","9 IBM Path","San Jose","NY","64344","USA","9 IBM Path","San Jose","NY","64344","USA","","Customer","Communications","","","","","","","","","chris","seed_chris_id","12/01/2025 03:00 pm","12/01/2025 03:00 pm","1","1","0","","","",""
-"JBC Banking Inc","45039770-8495-5bc9-f57a-692dad11c308","www.qaphone.info","section.beans.kid@example.cn","kid.section.the@example.us","(918) 401-8639","","","123 Anywhere Street","St. Petersburg","NY","75141","USA","123 Anywhere Street","St. Petersburg","NY","75141","USA","","Customer","Manufacturing","","","","","","","","","chris","seed_chris_id","12/01/2025 03:00 pm","12/01/2025 03:00 pm","1","1","0","","","",""
-"Trait Institute Inc","8e1dfa1a-c716-ba65-159f-692dadb081ae","www.salesinfo.it","beans.phone.info@example.tw","sales84@example.edu","(078) 970-3420","","","345 Sugar Blvd.","Sunnyvale","NY","52331","USA","345 Sugar Blvd.","Sunnyvale","NY","52331","USA","","Customer","Communications","","","","","","","","","chris","seed_chris_id","12/01/2025 03:00 pm","12/01/2025 03:00 pm","1","1","0","","","",""
-
-
-"This is a sample import file which provides an example of the expected contents of a file that is ready for import."
-"The file is a comma-delimited .csv file, using double-quotes as the field qualifier."
-
-"The header row is the top-most row in the file and contains the field labels as you would see them in the application."
-"These labels are used for mapping the data in the file to the fields in the application."
-
-"Notes: The database names could also be used in the header row. This is useful when you are using phpMyAdmin or another database tool to provide an exported list of data to import."
-"The column order is not critical as the import process matches the data to the appropriate fields based on the header row."
-
-
-"To use this file as a template, do the following:"
-"1. Remove the sample rows of data"
-"2. Remove the help text that you are reading right now"
-"3. Input your own data into the appropriate rows and columns"
-"4. Save the file to a known location on your system"
-"5. Click on the Import option from the Actions menu in the application and choose the file to upload"
-   
+"Global Tech Solutions","a1b2c3d4-e5f6-7890-abcd-ef1234567890","www.globaltech.com","contact@globaltech.com","support@globaltech.com","(555) 123-4567","","","456 Innovation Way","San Francisco","CA","94105","USA","456 Innovation Way","San Francisco","CA","94105","USA","Key enterprise account","Customer","Technology","5000000","150","7371","GTSL","","Public","","Warm","admin","seed_admin_id","12/28/2025 09:00 am","12/28/2025 09:00 am","1","1","0","","","",""
+"Blue Water Logistics","b2c3d4e5-f6a7-8901-bcde-f12345678901","www.bluewater.net","info@bluewater.net","logistics@bluewater.net","(415) 987-6543","","","789 Harbor Pier","Miami","FL","33101","USA","789 Harbor Pier","Miami","FL","33101","USA","International shipping lead","Prospect","Transportation","1200000","45","4731","BWLOG","","Private","","Cold","chris","seed_chris_id","12/28/2025 10:15 am","12/28/2025 10:15 am","1","1","0","","","",""
+"Summit Peak Consulting","d4e5f6a7-b8c9-0123-defa-234567890123","www.summitpeak.biz","hello@summitpeak.biz","billing@summitpeak.biz","(303) 444-5566","","","55 Mountain View","Denver","CO","80202","USA","55 Mountain View","Denver","CO","80202","USA","Management consulting firm","Customer","Education","2100000","12","8742","","","Partnership","","Warm","admin","seed_admin_id","12/28/2025 01:45 pm","12/28/2025 01:45 pm","1","1","0","","","",""
+"Iron Forge Manufacturing","e5f6a7b8-c9d0-1234-efab-345678901234","www.ironforge.io","ops@ironforge.io","","(312) 777-8899","","","22 Industrial Park","Chicago","IL","60601","USA","22 Industrial Park","Chicago","IL","60601","USA","Regional manufacturer","Customer","Manufacturing","15000000","300","3441","IFMG","","Public","","Hot","chris","seed_chris_id","12/28/2025 02:20 pm","12/28/2025 02:20 pm","1","1","0","","","",""
