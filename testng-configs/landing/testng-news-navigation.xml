@@ -1,0 +1,31 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<!-- 
+    NEWS NAVIGATION TEST
+    Test Case: Navigate to News & Press and click 5th article
+    
+    Scenario:
+    1. Arahkan ke menu About
+    2. Pilih sub-menu News & Press
+    3. Klik judul news ke-5
+    4. Assert halaman https://suitecrm.com/suitecrm-8-8-1-7-14-7-security-maintenance-patch-released/ benar
+    5. Screenshot hasil assert
+    
+    Run with: mvn test -DsuiteXmlFile=testng-configs/landing/testng-news-navigation.xml
+-->
+<suite name="News Navigation Test Suite" verbose="1">
+    
+    <test name="News Navigation Tests" preserve-order="true">
+        <classes>
+            <class name="com.proyek_softes.landing.tests.NewsNavigationTest">
+                <methods>
+                    <!-- Main test: Navigate to 5th article -->
+                    <include name="testNavigateToNewsAndClickFifthArticle" />
+                    
+                    <!-- Alternative test: Navigate by title -->
+                    <include name="testNavigateToSpecificArticleByTitle" />
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+</suite>

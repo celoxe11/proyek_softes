@@ -1,0 +1,25 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<!-- 
+    COMMUNITY NAVIGATION TEST
+    Test Case:
+    1. Arahkan ke menu About
+    2. Pilih sub-menu "SuiteCRM Journey"
+    3. Tekan button "Join the Community"
+    4. Assert halaman https://community.suitecrm.com/ benar
+    5. Screenshot hasil assert
+    
+    Run with: mvn test -DsuiteXmlFile=testng-configs/landing/testng-community-navigation.xml
+-->
+<suite name="Community Navigation Test Suite" verbose="1">
+    
+    <test name="Community Navigation Test" preserve-order="true">
+        <classes>
+            <class name="com.proyek_softes.landing.tests.CommunityNavigationTest">
+                <methods>
+                    <include name="testNavigateToCommunityPage" />
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+</suite>

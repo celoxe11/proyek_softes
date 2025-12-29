@@ -40,6 +40,9 @@
                     <!-- Dropdown visibility -->
                     <include name="testDropdownVisibility" />
                     
+                    <!-- Third-level menu tests (Documentation sub-menus) -->
+                    <include name="testDocumentationSubMenus" />
+                    
                     <!-- Comprehensive test -->
                     <include name="testAllNavigationItems" />
                 </methods>

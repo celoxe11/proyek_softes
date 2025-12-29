@@ -1,15 +1,13 @@
 package com.proyek_softes.landing.tests;
 
 import com.proyek_softes.landing.main.components.LandingNavigationPage;
+import com.proyek_softes.landing.main.utils.BrowserDetector;
 
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
-import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class LandingNavigationTest {
     private WebDriver driver;
@@ -18,13 +16,12 @@ public class LandingNavigationTest {
 
     @BeforeClass
     public void setUp() {
-        WebDriverManager.chromedriver().setup();
-        driver = new ChromeDriver();
-        driver.manage().window().maximize();
-        
+        // Deteksi dan gunakan browser yang tersedia secara otomatis
+        driver = BrowserDetector.createDriver();
+
         // Navigate to landing page
         driver.get(baseUrl);
-        
+
         navigationPage = new LandingNavigationPage(driver);
         System.out.println("=== Starting Landing Page Navigation Tests ===");
     }
@@ -44,10 +41,10 @@ public class LandingNavigationTest {
     @Test(priority = 1)
     public void testMainMenuVisibility() {
         System.out.println("\n--- Testing Main Menu Visibility ---");
-        
-        String[] mainMenus = {"about", "products", "services", "resources", "community", "getstarted"};
+
+        String[] mainMenus = { "about", "products", "services", "resources", "community", "getstarted" };
         int visibleCount = 0;
-        
+
         for (String menu : mainMenus) {
             boolean isVisible = navigationPage.isMainMenuVisible(menu);
             if (isVisible) {
@@ -57,9 +54,9 @@ public class LandingNavigationTest {
                 System.out.println("❌ " + menu + " menu is NOT visible");
             }
         }
-        
-        Assert.assertTrue(visibleCount >= 5, 
-            "At least 5 main menu items should be visible, but only " + visibleCount + " were found");
+
+        Assert.assertTrue(visibleCount >= 5,
+                "At least 5 main menu items should be visible, but only " + visibleCount + " were found");
     }
 
     // ========================================
@@ -76,13 +73,13 @@ public class LandingNavigationTest {
     @Test(priority = 3)
     public void testAboutSubMenus() {
         System.out.println("\n--- Testing About Sub-Menus ---");
-        
+
         // Only test sub-menus that are confirmed to exist from inspect element
         // Removed "journey" as it causes timeout
-        String[] subMenus = {"aboutus", "newspress", "roadmap", "careers", "newsletter", "contactus"};
+        String[] subMenus = { "aboutus", "newspress", "roadmap", "careers", "newsletter", "contactus" };
         int successCount = 0;
         int totalTests = subMenus.length;
-        
+
         for (String subMenu : subMenus) {
             navigationPage.navigateToHome(baseUrl); // Reset to home
             boolean success = navigationPage.navigateToSubMenu("about", subMenu);
@@ -90,15 +87,15 @@ public class LandingNavigationTest {
                 successCount++;
             }
         }
-        
+
         double successRate = (successCount * 100.0) / totalTests;
         System.out.println("\n--- About Sub-Menu Summary ---");
         System.out.println("✓ Successful: " + successCount + "/" + totalTests);
         System.out.println("✓ Success Rate: " + String.format("%.1f", successRate) + "%");
-        
+
         // Lower threshold since some menus might not be visible/clickable
-        Assert.assertTrue(successRate >= 40, 
-            "About sub-menu success rate should be at least 40%, but was: " + successRate + "%");
+        Assert.assertTrue(successRate >= 40,
+                "About sub-menu success rate should be at least 40%, but was: " + successRate + "%");
     }
 
     // ========================================
@@ -115,11 +112,11 @@ public class LandingNavigationTest {
     @Test(priority = 5)
     public void testProductsSubMenus() {
         System.out.println("\n--- Testing Products Sub-Menus ---");
-        
-        String[] subMenus = {"suitecrm", "suiteassured"};
+
+        String[] subMenus = { "suitecrm", "suiteassured" };
         int successCount = 0;
         int totalTests = subMenus.length;
-        
+
         for (String subMenu : subMenus) {
             navigationPage.navigateToHome(baseUrl);
             boolean success = navigationPage.navigateToSubMenu("products", subMenu);
@@ -127,14 +124,14 @@ public class LandingNavigationTest {
                 successCount++;
             }
         }
-        
+
         double successRate = (successCount * 100.0) / totalTests;
         System.out.println("\n--- Products Sub-Menu Summary ---");
         System.out.println("✓ Successful: " + successCount + "/" + totalTests);
         System.out.println("✓ Success Rate: " + String.format("%.1f", successRate) + "%");
-        
-        Assert.assertTrue(successRate >= 40, 
-            "Products sub-menu success rate should be at least 40%, but was: " + successRate + "%");
+
+        Assert.assertTrue(successRate >= 40,
+                "Products sub-menu success rate should be at least 40%, but was: " + successRate + "%");
     }
 
     // ========================================
@@ -151,11 +148,11 @@ public class LandingNavigationTest {
     @Test(priority = 7)
     public void testServicesSubMenus() {
         System.out.println("\n--- Testing Services Sub-Menus ---");
-        
-        String[] subMenus = {"support", "consultancy", "suitehosted", "suitemigration", "enterprise"};
+
+        String[] subMenus = { "support", "consultancy", "suitehosted", "suitemigration", "enterprise" };
         int successCount = 0;
         int totalTests = subMenus.length;
-        
+
         for (String subMenu : subMenus) {
             navigationPage.navigateToHome(baseUrl);
             boolean success = navigationPage.navigateToSubMenu("services", subMenu);
@@ -163,14 +160,14 @@ public class LandingNavigationTest {
                 successCount++;
             }
         }
-        
+
         double successRate = (successCount * 100.0) / totalTests;
         System.out.println("\n--- Services Sub-Menu Summary ---");
         System.out.println("✓ Successful: " + successCount + "/" + totalTests);
         System.out.println("✓ Success Rate: " + String.format("%.1f", successRate) + "%");
-        
-        Assert.assertTrue(successRate >= 40, 
-            "Services sub-menu success rate should be at least 40%, but was: " + successRate + "%");
+
+        Assert.assertTrue(successRate >= 40,
+                "Services sub-menu success rate should be at least 40%, but was: " + successRate + "%");
     }
 
     // ========================================
@@ -187,11 +184,12 @@ public class LandingNavigationTest {
     @Test(priority = 9)
     public void testResourcesSubMenus() {
         System.out.println("\n--- Testing Resources Sub-Menus ---");
-        
-        String[] subMenus = {"downloadsuite", "allsuitecrm", "documentation", "addons", "comparesuite", "translations", "training", "client"};
+
+        String[] subMenus = { "downloadsuite", "allsuitecrm", "documentation", "addons", "comparesuite", "translations",
+                "training", "client" };
         int successCount = 0;
         int totalTests = subMenus.length;
-        
+
         for (String subMenu : subMenus) {
             navigationPage.navigateToHome(baseUrl);
             boolean success = navigationPage.navigateToSubMenu("resources", subMenu);
@@ -199,14 +197,14 @@ public class LandingNavigationTest {
                 successCount++;
             }
         }
-        
+
         double successRate = (successCount * 100.0) / totalTests;
         System.out.println("\n--- Resources Sub-Menu Summary ---");
         System.out.println("✓ Successful: " + successCount + "/" + totalTests);
         System.out.println("✓ Success Rate: " + String.format("%.1f", successRate) + "%");
-        
-        Assert.assertTrue(successRate >= 40, 
-            "Resources sub-menu success rate should be at least 40%, but was: " + successRate + "%");
+
+        Assert.assertTrue(successRate >= 40,
+                "Resources sub-menu success rate should be at least 40%, but was: " + successRate + "%");
     }
 
     // ========================================
@@ -223,11 +221,11 @@ public class LandingNavigationTest {
     @Test(priority = 11)
     public void testCommunitySubMenus() {
         System.out.println("\n--- Testing Community Sub-Menus ---");
-        
-        String[] subMenus = {"community", "sponsorship", "partners", "github"};
+
+        String[] subMenus = { "community", "sponsorship", "partners", "github" };
         int successCount = 0;
         int totalTests = subMenus.length;
-        
+
         for (String subMenu : subMenus) {
             navigationPage.navigateToHome(baseUrl);
             boolean success = navigationPage.navigateToSubMenu("community", subMenu);
@@ -235,14 +233,14 @@ public class LandingNavigationTest {
                 successCount++;
             }
         }
-        
+
         double successRate = (successCount * 100.0) / totalTests;
         System.out.println("\n--- Community Sub-Menu Summary ---");
         System.out.println("✓ Successful: " + successCount + "/" + totalTests);
         System.out.println("✓ Success Rate: " + String.format("%.1f", successRate) + "%");
-        
-        Assert.assertTrue(successRate >= 40, 
-            "Community sub-menu success rate should be at least 40%, but was: " + successRate + "%");
+
+        Assert.assertTrue(successRate >= 40,
+                "Community sub-menu success rate should be at least 40%, but was: " + successRate + "%");
     }
 
     // ========================================
@@ -259,11 +257,11 @@ public class LandingNavigationTest {
     @Test(priority = 13)
     public void testGetStartedSubMenus() {
         System.out.println("\n--- Testing Get Started Sub-Menus ---");
-        
-        String[] subMenus = {"download", "demosuitecrm", "suitecrmhosted"};
+
+        String[] subMenus = { "download", "demosuitecrm", "suitecrmhosted" };
         int successCount = 0;
         int totalTests = subMenus.length;
-        
+
         for (String subMenu : subMenus) {
             navigationPage.navigateToHome(baseUrl);
             boolean success = navigationPage.navigateToSubMenu("getstarted", subMenu);
@@ -271,14 +269,14 @@ public class LandingNavigationTest {
                 successCount++;
             }
         }
-        
+
         double successRate = (successCount * 100.0) / totalTests;
         System.out.println("\n--- Get Started Sub-Menu Summary ---");
         System.out.println("✓ Successful: " + successCount + "/" + totalTests);
         System.out.println("✓ Success Rate: " + String.format("%.1f", successRate) + "%");
-        
-        Assert.assertTrue(successRate >= 40, 
-            "Get Started sub-menu success rate should be at least 40%, but was: " + successRate + "%");
+
+        Assert.assertTrue(successRate >= 40,
+                "Get Started sub-menu success rate should be at least 40%, but was: " + successRate + "%");
     }
 
     // ========================================
@@ -288,10 +286,10 @@ public class LandingNavigationTest {
     @Test(priority = 14)
     public void testDropdownVisibility() {
         System.out.println("\n--- Testing Dropdown Menu Visibility ---");
-        
-        String[] menusWithDropdown = {"about", "products", "services", "resources", "community", "getstarted"};
+
+        String[] menusWithDropdown = { "about", "products", "services", "resources", "community", "getstarted" };
         int visibleDropdowns = 0;
-        
+
         for (String menu : menusWithDropdown) {
             navigationPage.navigateToHome(baseUrl);
             boolean isVisible = navigationPage.isSubMenuDropdownVisible(menu);
@@ -302,10 +300,10 @@ public class LandingNavigationTest {
                 System.out.println("❌ " + menu + " dropdown is NOT visible on hover");
             }
         }
-        
+
         System.out.println("\nDropdown visibility: " + visibleDropdowns + "/" + menusWithDropdown.length);
-        Assert.assertTrue(visibleDropdowns >= 2, 
-            "At least 2 dropdowns should be visible, but only " + visibleDropdowns + " were found");
+        Assert.assertTrue(visibleDropdowns >= 2,
+                "At least 2 dropdowns should be visible, but only " + visibleDropdowns + " were found");
     }
 
     // ========================================
@@ -315,23 +313,24 @@ public class LandingNavigationTest {
     @Test(priority = 15)
     public void testAllNavigationItems() {
         System.out.println("\n--- Comprehensive Navigation Test ---");
-        
+
         int totalTests = 0;
         int successfulTests = 0;
-        
+
         // Test all main menus and their sub-menus
         String[][] navigationMap = {
-            {"about", "aboutus", "newspress", "roadmap", "careers", "newsletter", "contactus"},
-            {"products", "suitecrm", "suiteassured"},
-            {"services", "support", "consultancy", "suitehosted", "suitemigration", "enterprise"},
-            {"resources", "downloadsuite", "allsuitecrm", "documentation", "addons", "comparesuite", "translations", "training", "client"},
-            {"community", "community", "sponsorship", "partners", "github"},
-            {"getstarted", "download", "demosuitecrm", "suitecrmhosted"}
+                { "about", "aboutus", "newspress", "roadmap", "careers", "newsletter", "contactus" },
+                { "products", "suitecrm", "suiteassured" },
+                { "services", "support", "consultancy", "suitehosted", "suitemigration", "enterprise" },
+                { "resources", "downloadsuite", "allsuitecrm", "documentation", "addons", "comparesuite",
+                        "translations", "training", "client" },
+                { "community", "community", "sponsorship", "partners", "github" },
+                { "getstarted", "download", "demosuitecrm", "suitecrmhosted" }
         };
-        
+
         for (String[] menuGroup : navigationMap) {
             String parentMenu = menuGroup[0];
-            
+
             for (int i = 1; i < menuGroup.length; i++) {
                 totalTests++;
                 navigationPage.navigateToHome(baseUrl);
@@ -341,7 +340,7 @@ public class LandingNavigationTest {
                 }
             }
         }
-        
+
         double successRate = (successfulTests * 100.0) / totalTests;
         System.out.println("\n========================================");
         System.out.println("FINAL NAVIGATION TEST SUMMARY");
@@ -351,8 +350,48 @@ public class LandingNavigationTest {
         System.out.println("❌ Failed: " + (totalTests - successfulTests));
         System.out.println("Success Rate: " + String.format("%.1f", successRate) + "%");
         System.out.println("========================================");
-        
-        Assert.assertTrue(successRate >= 40, 
-            "Overall navigation success rate should be at least 40%, but was: " + successRate + "%");
+
+        Assert.assertTrue(successRate >= 40,
+                "Overall navigation success rate should be at least 40%, but was: " + successRate + "%");
+    }
+
+    // ========================================
+    // THIRD-LEVEL MENU TESTS (Resources > Documentation)
+    // ========================================
+
+    @Test(priority = 15)
+    public void testDocumentationSubMenus() {
+        System.out.println("\n--- Testing Documentation Third-Level Sub-Menus ---");
+
+        String[] docSubMenus = { "userguide", "developerguide", "reportsdocuments" };
+        int successCount = 0;
+        int totalTests = docSubMenus.length;
+
+        for (String docMenu : docSubMenus) {
+            navigationPage.navigateToHome(baseUrl); // Reset to home
+            boolean success = navigationPage.navigateToThirdLevelMenu("resources", "documentation", docMenu);
+            if (success) {
+                successCount++;
+                System.out.println("✓ Successfully navigated to Documentation → " + docMenu);
+            } else {
+                System.out.println("❌ Failed to navigate to Documentation → " + docMenu);
+            }
+
+            try {
+                Thread.sleep(1000); // Wait between tests
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
+
+        double successRate = (successCount * 100.0) / totalTests;
+        System.out.println("\n--- Documentation Sub-Menu Summary ---");
+        System.out.println("✓ Successful: " + successCount + "/" + totalTests);
+        System.out.println("✓ Success Rate: " + String.format("%.1f", successRate) + "%");
+
+        // Set threshold lower since these are third-level menus (more prone to timing
+        // issues)
+        Assert.assertTrue(successRate >= 33,
+                "At least 1 out of 3 documentation sub-menus should work. Success rate: " + successRate + "%");
     }
 }

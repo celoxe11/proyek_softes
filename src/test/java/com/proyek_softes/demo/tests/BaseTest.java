@@ -40,8 +40,7 @@ public class BaseTest {
             options.setExperimentalOption("prefs", java.util.Map.of(
                     "credentials_enable_service", false,
                     "profile.password_manager_enabled", false,
-                    "profile.password_manager_leak_detection", false
-            ));
+                    "profile.password_manager_leak_detection", false));
 
             driver = new ChromeDriver(options);
             System.out.println("\n=== Chrome Browser Opened - Starting Test ===");
