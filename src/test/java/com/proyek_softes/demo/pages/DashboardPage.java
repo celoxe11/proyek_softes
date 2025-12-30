@@ -66,12 +66,12 @@ public class DashboardPage {
             wait.until(ExpectedConditions.visibilityOfElementLocated(searchResultsContainer));
             // Add a small delay for results to render
             Thread.sleep(500);
-            
+
             // Check if the specific dashlet element is present in the DOM
             // Use presenceOfElementLocated instead of checking isDisplayed()
             // because elements inside a modal might not be considered "displayed"
             wait.until(ExpectedConditions.presenceOfElementLocated(By.id(dashletId)));
-            
+
             // Also verify it's in the search results by getting the element
             WebElement dashlet = driver.findElement(By.id(dashletId));
             System.out.println("✅ Found dashlet in search results: " + dashletId);

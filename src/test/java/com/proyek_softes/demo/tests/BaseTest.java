@@ -1,7 +1,9 @@
 package com.proyek_softes.demo.tests;
 
-import org.openqa.selenium.By;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -16,11 +18,19 @@ import com.proyek_softes.demo.pages.LoginPage;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class BaseTest {
 
     protected WebDriver driver;
     protected WebDriverWait wait;
-    protected String baseUrl = "https://demo.suiteondemand.com/index.php?module=Users&action=Login";
+
+    protected String baseUrl = "https://suitecrm.com";
     protected String browser = "chrome"; // default browser
 
     @BeforeMethod
@@ -58,32 +68,76 @@ public class BaseTest {
         }
     }
 
+    // login helper method, to be used in tests
     protected void login(String username, String password) {
         LoginPage loginPage = new LoginPage(driver);
-        loginPage.navigateToLogin(baseUrl);
+        loginPage.login(username, password);
 
-        // wait until page is loaded
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.id("user_name")));
+        // Wait until URL indicates we are logged in (dashboard page)
+        wait.until(ExpectedConditions.urlContains("module=Home&action=Demo"));
+    }
 
-        // Check if login inputs are present (if not, we might already be logged in)
-        if (!driver.findElements(By.id("user_name")).isEmpty()) {
-            loginPage.login(username, password);
+    // login helper method for SuiteCRM 8
+    protected void login8(String username, String password) {
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.login8(username, password);
 
-            // Wait for dashboard to fully load after login
-            try {
-                wait.until(ExpectedConditions
-                        .presenceOfElementLocated(By.id("grouptab_0")));
+        // Wait until URL indicates we are logged in (dashboard page)
+        wait.until(ExpectedConditions.urlContains("/home"));
+    }
 
-                // Additional wait to ensure page is fully stable
-                Thread.sleep(2000);
-                System.out.println("✓ Login successful and dashboard loaded");
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            } catch (Exception e) {
-                System.out.println("Warning: Dashboard may not be fully loaded - " + e.getMessage());
+    // Take screenshot of current viewport
+    protected void takeScreenshot(String fileName) {
+        try {
+            // Create screenshots directory if it doesn't exist
+            File screenshotDir = new File("screenshots");
+            if (!screenshotDir.exists()) {
+                screenshotDir.mkdirs();
             }
-        } else {
-            System.out.println("Already logged in or redirected to dashboard.");
+
+            // Take screenshot
+            TakesScreenshot ts = (TakesScreenshot) driver;
+            File source = ts.getScreenshotAs(OutputType.FILE);
+
+            // Add timestamp to filename
+            String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+            String fullFileName = fileName + "_" + timestamp + ".png";
+
+            // Copy to destination
+            File destination = new File("screenshots/" + fullFileName);
+            Files.copy(source.toPath(), destination.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+            System.out.println("Screenshot saved: " + destination.getAbsolutePath());
+        } catch (IOException e) {
+            System.out.println("Failed to take screenshot: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    // Take screenshot of specific element
+    protected void takeElementScreenshot(String fileName, WebElement element) {
+        try {
+            // Create screenshots directory if it doesn't exist
+            File screenshotDir = new File("screenshots");
+            if (!screenshotDir.exists()) {
+                screenshotDir.mkdirs();
+            }
+
+            // Take element screenshot
+            File source = element.getScreenshotAs(OutputType.FILE);
+
+            // Add timestamp to filename
+            String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+            String fullFileName = fileName + "_" + timestamp + ".png";
+
+            // Copy to destination
+            File destination = new File("screenshots/" + fullFileName);
+            Files.copy(source.toPath(), destination.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+            System.out.println("Element screenshot saved: " + destination.getAbsolutePath());
+        } catch (IOException e) {
+            System.out.println("Failed to take screenshot: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 }
