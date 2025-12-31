@@ -1,10 +1,9 @@
 package com.proyek_softes.demo.tests;
 
-import static org.testng.Assert.assertTrue;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import static org.testng.Assert.assertTrue;
 import org.testng.annotations.Test;
 
 import com.proyek_softes.demo.pages.LoginPage;
@@ -38,11 +37,11 @@ public class LoginTest extends BaseTest {
     public void testDem002() {
         driver.get(baseUrl);
         LoginPage loginPage = new LoginPage(driver);
-        loginPage.navigateToDemo8();
+        loginPage.navigateToDemo7();
 
         wait.until(
                 ExpectedConditions
-                        .urlContains("https://suite8demo.suiteondemand.com/index.php?action=Login&module=Users"));
+                        .urlContains("https://demo.suiteondemand.com/index.php?action=Login&module=Users"));
 
         login("will", "will");
 
@@ -58,7 +57,10 @@ public class LoginTest extends BaseTest {
 
         // take screenshot of title
         WebElement titleElement = driver.findElement(By.className("swal2-title"));
-        takeElementScreenshot("DEM-001_RedefineCustomisation", titleElement);
+        takeElementScreenshot("DEM-002_RedefineCustomisation", titleElement);
+
+        // click finished button
+        welcomePage.clickFinishedInTour();
     }
 
     @Test

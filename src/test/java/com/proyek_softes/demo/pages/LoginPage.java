@@ -1,5 +1,7 @@
 package com.proyek_softes.demo.pages;
 
+import java.time.Duration;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -7,28 +9,28 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import java.time.Duration;
 
 public class LoginPage {
-    private WebDriver driver;
-    private WebDriverWait wait;
+
+    private final WebDriver driver;
+    private final WebDriverWait wait;
     private Actions actions;
 
     // locators for SuiteCRM 7 demo login
-    private By usernameField = By.id("user_name");
-    private By passwordField = By.id("username_password");
-    private By loginButton = By.id("bigbutton");
+    private final By usernameField = By.id("user_name");
+    private final By passwordField = By.id("username_password");
+    private final By loginButton = By.id("bigbutton");
 
     // locators for SuiteCRM 8 demo login
-    private By usernameField8 = By.id("username");
-    private By passwordField8 = By.id("password");
-    private By loginButton8 = By.id("login-button");
+    private final By usernameField8 = By.name("username");
+    private final By passwordField8 = By.name("password");
+    private final By loginButton8 = By.id("login-button");
 
     // Get Started
-    private By getStartedButton = By.id("menu-item-564397");
-    private By demoLink = By.id("menu-item-564400");
-    private By demoSuiteCRM7Link = By.xpath("//span[contains(text(),'ACCESS THE SUITECRM 7 ESR DEMO')]/parent::a");
-    private By demoSuiteCRM8Link = By.xpath("//span[contains(text(),'ACCESS THE SUITECRM 8 DEMO')]/parent::a");
+    private final By getStartedButton = By.id("menu-item-564397");
+    private final By demoLink = By.id("menu-item-564400");
+    private final By demoSuiteCRM7Link = By.xpath("//span[contains(text(),'ACCESS THE SUITECRM 7 ESR DEMO')]/parent::a");
+    private final By demoSuiteCRM8Link = By.xpath("//span[contains(text(),'Access the SuiteCRM 8 Demo')]/parent::a");
 
     public LoginPage(WebDriver driver) {
         this.driver = driver;
@@ -79,7 +81,8 @@ public class LoginPage {
         WebElement demo8Link = wait.until(ExpectedConditions.visibilityOfElementLocated(demoSuiteCRM8Link));
 
         // Scroll to the link to ensure it's visible
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", demo8Link);
+        ((JavascriptExecutor) driver)
+                .executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", demo8Link);
 
         // Wait a moment for scroll to complete
         try {
@@ -98,14 +101,18 @@ public class LoginPage {
         }
     }
 
-    public void navigateToLogin() {
-        driver.get("https://demo.suiteondemand.com/index.php?module=Users&action=Login");
+    public void navigateToLogin(int suiteVersion) {
+        if (suiteVersion == 8) {
+            driver.get("https://suite8demo.suiteondemand.com/#/Login");
+        } else {
+            driver.get("https://demo.suiteondemand.com/index.php?module=Users&action=Login");
+        }
     }
 
     public void login(String username, String password) {
 
         if (driver.getCurrentUrl().contains("module=Users&action=Login") == false) {
-            navigateToLogin();
+            navigateToLogin(7);
         }
 
         wait.until(ExpectedConditions.presenceOfElementLocated(By.id("user_name")));
@@ -136,14 +143,14 @@ public class LoginPage {
 
     public void login8(String username, String password) {
 
-        if (driver.getCurrentUrl().contains("module=Users&action=Login") == false) {
-            navigateToLogin();
+        if (driver.getCurrentUrl().contains("/#/Login") == false) {
+            navigateToLogin(8);
         }
 
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.id("username")));
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.name("username")));
 
         // Check if login inputs are present (if not, we might already be logged in)
-        if (!driver.findElements(By.id("username")).isEmpty()) {
+        if (!driver.findElements(By.name("username")).isEmpty()) {
             wait.until(ExpectedConditions.visibilityOfElementLocated(usernameField8)).sendKeys(username);
             driver.findElement(passwordField8).sendKeys(password);
             driver.findElement(loginButton8).click();

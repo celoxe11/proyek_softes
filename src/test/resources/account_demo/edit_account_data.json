@@ -1,0 +1,18 @@
+{
+  "name_before_edit": "Tech Innovations Inc",
+  "name": "Global Retail Solutions Ltd",
+  "officePhone": "+1-555-9876",
+  "website": "http://www.globalretailsolutions.com",
+  "fax": "+1-555-9877",
+  "email": ["info@globalretailsolutions.com"],
+  "billingStreet": "456 Commerce Boulevard",
+  "billingCity": "Chicago",
+  "billingState": "Illinois",
+  "billingPostalCode": "60601",
+  "billingCountry": "USA",
+  "description": "Comprehensive retail management and consulting services",
+  "accountType": "Partner",
+  "industry": "Retail",
+  "annualRevenue": "12500000",
+  "employees": "480"
+}

@@ -2,6 +2,7 @@ package com.proyek_softes.demo.pages.accounts;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -13,20 +14,24 @@ public class AccountsPage {
     private Actions actions;
 
     // Navbar untuk navigasi ke accounts
-    private By navTab = By.id("grouptab_0");
-    private By subTab = By.id("moduleTab_6_Accounts");
+    private final By navTab = By.id("grouptab_0");
+    private final By subTab = By.id("moduleTab_6_Accounts");
 
     // Sidebar dan link di sidebar
-    private By sidebarMenu = By.id("actionMenuSidebar");
-    private By createAccountLink = By.xpath("//a[@data-action-name='Create']");
-    private By importAccountLink = By.xpath("//a[@data-action-name='Import']");
-    private By viewAccountLink = By.xpath("//a[@data-action-name='List']");
-    private By recentlyViewedAccount1Link = By.xpath("//a[@class='recent-links-detail' and @accessKey='1']");
-    private By recentlyViewedAccount1LinkEdit = By.xpath("//a[@class='recent-links-edit']");
+    private final By sidebarMenu = By.id("actionMenuSidebar");
+    private final By createAccountLink = By.xpath("//a[@data-action-name='Create']");
+    private final By importAccountLink = By.xpath("//a[@data-action-name='Import']");
+    private final By viewAccountLink = By.xpath("//a[@data-action-name='List']");
+    private final By recentlyViewedAccount1Link = By.xpath("//a[@class='recent-links-detail' and @accessKey='1']");
+    private final By recentlyViewedAccount1LinkEdit = By.xpath("//a[@class='recent-links-edit']");
 
-    // all page locator (semua page punya class module-title-text) untuk title
-    // mereka
-    private By pageTitle = By.className("module-title-text");
+    private final By firstRowAccountName = By.cssSelector("table.list.view tbody tr:first-child td[type='name'] a");
+
+    private final By tabActionsInDetail = By.id("tab-actions");
+    private final By editButtonInDetail = By.id("edit_button");
+
+    // all page locator (semua page punya class module-title-text) untuk title mereka
+    private final By pageTitle = By.className("module-title-text");
 
     public AccountsPage(WebDriver driver) {
         this.driver = driver;
@@ -83,6 +88,50 @@ public class AccountsPage {
     public void navigateToRecentlyViewedAccountEdit() {
         wait.until(ExpectedConditions.elementToBeClickable(recentlyViewedAccount1LinkEdit));
         driver.findElement(recentlyViewedAccount1LinkEdit).click();
+    }
+
+    public boolean isInFirstRow(String accountName) {
+        try {
+            // Wait for the table to be visible
+            wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("table.list.view")));
+
+            // Find the first data row (skip header row in tbody) and get the account name
+            By firstRowNameLocator = By.cssSelector("table.list.view tbody tr:first-child td[type='name'] a");
+            wait.until(ExpectedConditions.presenceOfElementLocated(firstRowNameLocator));
+
+            String firstRowAccountName = driver.findElement(firstRowNameLocator).getText().trim();
+
+            return firstRowAccountName.equals(accountName);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public WebElement getFirstRowLocator() {
+        wait.until(ExpectedConditions.presenceOfElementLocated(firstRowAccountName));
+        return driver.findElement(firstRowAccountName);
+    }
+
+    public void clickFirstAccount() {
+        getFirstRowLocator().click();
+    }
+
+    public boolean isAccountTitleCorrect(String accountName) {
+        try {
+            String title = wait.until(ExpectedConditions.presenceOfElementLocated(pageTitle)).getText();
+            System.out.println(title.toLowerCase());
+            System.out.println(accountName.toLowerCase());
+            return title.toLowerCase().contains(accountName.toLowerCase());
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public void editAccount() {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(tabActionsInDetail));
+        driver.findElement(tabActionsInDetail).click();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(editButtonInDetail));
+        driver.findElement(editButtonInDetail).click();
     }
 
     public void filterQuick() {

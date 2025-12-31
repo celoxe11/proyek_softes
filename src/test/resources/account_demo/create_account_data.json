@@ -1,0 +1,17 @@
+{
+  "name": "Tech Innovations Inc",
+  "officePhone": "+1-555-0123",
+  "website": "http://www.techinnovations.com",
+  "fax": "+1-555-0124",
+  "email": ["contact@techinnovations.com"],
+  "billingStreet": "123 Innovation Drive",
+  "billingCity": "San Francisco",
+  "billingState": "California",
+  "billingPostalCode": "94102",
+  "billingCountry": "USA",
+  "description": "Leading technology solutions provider",
+  "accountType": "Customer",
+  "industry": "Technology",
+  "annualRevenue": "5000000",
+  "employees": "250"
+}

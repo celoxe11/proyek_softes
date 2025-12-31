@@ -56,3 +56,6 @@ geckodriver.exe
 *.bak
 *.swp
 *~
+
+# screenshots
+screenshots/

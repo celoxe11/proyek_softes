@@ -189,4 +189,42 @@ public class JsonDataReader {
 
         throw new RuntimeException("Nested data not found for testCase: " + testCaseName + ", nestedKey: " + nestedKey);
     }
+
+    /**
+     * Get data from a direct JSON object (not wrapped in an array) for DataProvider
+     * Use this when your JSON file is a single object, not an array
+     * 
+     * @param filePath path to JSON file containing a direct object
+     * @return Object[][] suitable for TestNG DataProvider with single row
+     */
+    public static Object[][] getDirectObjectData(String filePath) {
+        JsonObject jsonObject = readJsonFile(filePath);
+        Map<String, String> dataMap = new HashMap<>();
+
+        for (String key : jsonObject.keySet()) {
+            JsonElement value = jsonObject.get(key);
+            dataMap.put(key, convertJsonValueToString(value));
+        }
+
+        return new Object[][] { { dataMap } };
+    }
+
+    /**
+     * Get data from a direct JSON object as a Map
+     * Use this when you need a single Map instead of DataProvider format
+     * 
+     * @param filePath path to JSON file containing a direct object
+     * @return Map containing the data
+     */
+    public static Map<String, String> getDirectObjectAsMap(String filePath) {
+        JsonObject jsonObject = readJsonFile(filePath);
+        Map<String, String> dataMap = new HashMap<>();
+
+        for (String key : jsonObject.keySet()) {
+            JsonElement value = jsonObject.get(key);
+            dataMap.put(key, convertJsonValueToString(value));
+        }
+
+        return dataMap;
+    }
 }

@@ -177,7 +177,7 @@ public class CreateAccountsPage {
         System.out.println("  ✓ Duplicate account saved successfully");
     }
 
-    public void addInformationFromData(java.util.Map<String, String> data) {
+    public void addInformationFromData(Map<String, String> data) {
         try {
             // Wait for the form to be ready by ensuring the name field is present
             wait.until(ExpectedConditions.presenceOfElementLocated(By.id("name")));
