@@ -77,15 +77,7 @@ public class CommunityNavigationTest {
             driver.quit();
         }
     }
-
-    /**
-     * Test Case Utama:
-     * 1. Arahkan ke menu About
-     * 2. Pilih sub-menu "SuiteCRM Journey"
-     * 3. Tekan button "Join the Community"
-     * 4. Assert URL benar
-     * 5. Screenshot hasil
-     */
+    
     @Test(priority = 1)
     public void testNavigateToCommunityPage() {
         System.out.println("\n════════════════════════════════════════════════════════════════");

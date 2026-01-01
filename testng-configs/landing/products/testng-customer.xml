@@ -1,0 +1,15 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+<suite name="PRD-001 Product Navigation Test Suite" verbose="1">
+    
+    <test name="PRD-001 Navigate to CRM Page" preserve-order="true">
+        <classes>
+            <class name="com.proyek_softes.landing.tests.ProductTest">
+                <methods>
+                    <include name="testPRD001_NavigateToCRMPage" />
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+</suite>
