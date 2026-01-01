@@ -1,4 +1,4 @@
-package com.proyek_softes.demo.pages.contacts;
+package com.proyek_softes.demo.pages.opportunity;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -7,29 +7,27 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class ContactsPage {
+public class OpportunityPage {
 
     private final WebDriver driver;
     private final WebDriverWait wait;
     private final Actions actions;
 
-    // Navbar untuk navigasi ke accounts
+    // Navbar untuk navigasi ke opportunities
     private final By navTab = By.id("grouptab_0");
-    private final By subTab = By.id("moduleTab_6_Contacts");
+    private final By subTab = By.id("moduleTab_6_Opportunities");
 
-    // private final By sidebarMenu = By.id("actionMenuSidebar");
-    private final By createContactLink = By.xpath("//a[@data-action-name='Create']");
-    private final By createContactFromVcard = By.xpath("//a[@data-action-name='Create_Contact_Vcard']");
-    private final By importContactLink = By.xpath("//a[@data-action-name='Import']");
-    private final By viewContactLink = By.xpath("//a[@data-action-name='List']");
+    private final By createOpportunityLink = By.xpath("//a[@data-action-name='Create']");
+    private final By importOpportunityLink = By.xpath("//a[@data-action-name='Import']");
+    private final By viewOpportunityLink = By.xpath("//a[@data-action-name='List']");
 
-    private final By firstRowContactName = By.cssSelector("table.list.view tbody tr:first-child td[type='name'] a");
+    private final By firstRowOpportunityName = By.cssSelector("table.list.view tbody tr:first-child td[type='name'] a");
     private final By filterResult = By.className("msg");
 
     // filter locators
     private final By filterButton = By.xpath("//a[@title='Filter']");
     private final By modalContent = By.className("modal-content");
-    private final By filterNameField = By.id("search_name_basic");
+    private final By filterNameField = By.id("name_basic");
     private final By filterMyItemsCheckbox = By.id("current_user_only_basic");
     private final By filterFavoritesCheckbox = By.id("favorites_only_basic");
     private final By filterSubmitButton = By.id("search_form_submit");
@@ -42,7 +40,7 @@ public class ContactsPage {
     // all page locator (semua page punya class module-title-text) untuk title mereka
     private final By pageTitle = By.className("module-title-text");
 
-    public ContactsPage(WebDriver driver) {
+    public OpportunityPage(WebDriver driver) {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, java.time.Duration.ofSeconds(20));
         this.actions = new Actions(driver);
@@ -50,109 +48,81 @@ public class ContactsPage {
 
     public boolean checkPageTitle(String expectedTitle) {
         try {
-            wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("module-title-text")));
-            String title = driver.findElement(By.className("module-title-text")).getText();
+            wait.until(ExpectedConditions.visibilityOfElementLocated(pageTitle));
+            String title = driver.findElement(pageTitle).getText();
             return title.toUpperCase().contains(expectedTitle.toUpperCase());
         } catch (Exception e) {
             return false;
         }
     }
 
-    public boolean checkImportVcardPageTitle(String expectedTitle) {
-        try {
-            wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("moduleTitle")));
-
-            // Method 1: Chain findElement calls to get child element
-            String title = driver.findElement(By.className("moduleTitle"))
-                    .findElement(By.tagName("h2"))
-                    .getText();
-
-            return title.toUpperCase().contains(expectedTitle.toUpperCase());
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    public void navigateToContactsModule() {
-        wait.until(org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElementLocated(navTab));
-        wait.until(org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated(navTab));
+    public void navigateToOpportunitiesModule() {
+        wait.until(ExpectedConditions.presenceOfElementLocated(navTab));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(navTab));
         actions.moveToElement(driver.findElement(navTab)).perform();
-        wait.until(org.openqa.selenium.support.ui.ExpectedConditions.presenceOfElementLocated(subTab));
-        wait.until(org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated(subTab));
+        wait.until(ExpectedConditions.presenceOfElementLocated(subTab));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(subTab));
         driver.findElement(subTab).click();
     }
 
-    public void navigateToCreateContact() {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(createContactLink));
-        wait.until(ExpectedConditions.elementToBeClickable(createContactLink));
-        driver.findElement(createContactLink).click();
+    public void navigateToCreateOpportunity() {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(createOpportunityLink));
+        wait.until(ExpectedConditions.elementToBeClickable(createOpportunityLink));
+        driver.findElement(createOpportunityLink).click();
     }
 
-    public void navigateToCreateContactFromVcard() {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(createContactFromVcard));
-        wait.until(ExpectedConditions.elementToBeClickable(createContactFromVcard));
-        driver.findElement(createContactFromVcard).click();
+    public void navigateToImportOpportunities() {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(importOpportunityLink));
+        wait.until(ExpectedConditions.elementToBeClickable(importOpportunityLink));
+        driver.findElement(importOpportunityLink).click();
     }
 
-    public void navigateToImportContact() {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(importContactLink));
-        wait.until(ExpectedConditions.elementToBeClickable(importContactLink));
-        driver.findElement(importContactLink).click();
+    public void navigateToViewOpportunities() {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(viewOpportunityLink));
+        wait.until(ExpectedConditions.elementToBeClickable(viewOpportunityLink));
+        driver.findElement(viewOpportunityLink).click();
     }
 
-    public void navigateToViewContact() {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(viewContactLink));
-        wait.until(ExpectedConditions.elementToBeClickable(viewContactLink));
-        driver.findElement(viewContactLink).click();
-    }
-
-    public boolean isInFirstRow(String contactName) {
+    public boolean isInFirstRow(String opportunityName) {
         try {
-            // Wait for the table to be visible
             wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("table.list.view")));
-
-            // Find the first data row (skip header row in tbody) and get the account name
             By firstRowNameLocator = By.cssSelector("table.list.view tbody tr:first-child td[type='name'] a");
             wait.until(ExpectedConditions.presenceOfElementLocated(firstRowNameLocator));
-
-            String firstRowContactName = driver.findElement(firstRowNameLocator).getText().trim();
-
-            System.out.println(firstRowContactName);
-
-            return firstRowContactName.contains(contactName);
+            String firstRowName = driver.findElement(firstRowNameLocator).getText().trim();
+            return firstRowName.equals(opportunityName);
         } catch (Exception e) {
             return false;
         }
     }
 
     public WebElement getFirstRowLocator() {
-        wait.until(ExpectedConditions.presenceOfElementLocated(firstRowContactName));
-        return driver.findElement(firstRowContactName);
+        wait.until(ExpectedConditions.presenceOfElementLocated(firstRowOpportunityName));
+        return driver.findElement(firstRowOpportunityName);
     }
 
-    public void clickFirstContact() {
+    public void clickFirstOpportunity() {
         getFirstRowLocator().click();
     }
 
-    public boolean isContactTitleCorrect(String contactName) {
+    public boolean isOpportunityTitleCorrect(String opportunityName) {
         try {
             String title = wait.until(ExpectedConditions.presenceOfElementLocated(pageTitle)).getText();
             System.out.println(title.toLowerCase());
-            System.out.println(contactName.toLowerCase());
-            return title.toLowerCase().contains(contactName.toLowerCase());
+            System.out.println(opportunityName.toLowerCase());
+            return title.toLowerCase().contains(opportunityName.toLowerCase());
         } catch (Exception e) {
             return false;
         }
     }
 
-    public void editContact() {
+    public void editOpportunity() {
         wait.until(ExpectedConditions.visibilityOfElementLocated(tabActionsInDetail));
         driver.findElement(tabActionsInDetail).click();
         wait.until(ExpectedConditions.visibilityOfElementLocated(editButtonInDetail));
         driver.findElement(editButtonInDetail).click();
     }
 
-    public void deleteContact() {
+    public void deleteOpportunity() {
         wait.until(ExpectedConditions.visibilityOfElementLocated(tabActionsInDetail));
         driver.findElement(tabActionsInDetail).click();
         wait.until(ExpectedConditions.visibilityOfElementLocated(deleteButtonInDetail));
@@ -179,12 +149,7 @@ public class ContactsPage {
             favoritesCheckbox.click();
         }
 
-        // submit filter
         driver.findElement(filterSubmitButton).click();
-    }
-
-    public void filterAdvanced() {
-        // Implementation for advanced filtering accounts
     }
 
     public boolean isFilterResultEmpty() {
@@ -192,7 +157,6 @@ public class ContactsPage {
             wait.until(ExpectedConditions.visibilityOfElementLocated(filterResult));
             String msg = driver.findElement(filterResult).getText().toLowerCase();
             System.out.println("Filter result message: " + msg);
-            System.out.println("Filter result message: " + msg.contains("no results found"));
             return msg.contains("no results found");
         } catch (Exception e) {
             return false;

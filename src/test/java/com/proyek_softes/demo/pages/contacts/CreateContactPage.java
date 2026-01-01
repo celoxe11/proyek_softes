@@ -12,6 +12,7 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class CreateContactPage {
+
     private WebDriver driver;
     private WebDriverWait wait;
     private Actions actions;
@@ -25,10 +26,10 @@ public class CreateContactPage {
     private Map<String, By> overviewInputLocators;
     private Map<String, By> moreInformationInputLocators;
 
-    public CreateContactPage(WebDriver driver, WebDriverWait wait, Actions actions) {
+    public CreateContactPage(WebDriver driver, WebDriverWait wait) {
         this.driver = driver;
         this.wait = wait;
-        this.actions = actions;
+        this.actions = new Actions(driver);
 
         // Initialize input locators
         initializeOverviewInputLocators();
@@ -272,6 +273,16 @@ public class CreateContactPage {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new RuntimeException("Thread was interrupted while removing email", e);
+        }
+    }
+
+    public boolean isContactSavedSuccessfully(String contactName) {
+        try {
+            By pageTitle = By.className("module-title-text");
+            String title = wait.until(ExpectedConditions.presenceOfElementLocated(pageTitle)).getText();
+            return title.toLowerCase().contains(contactName.toLowerCase());
+        } catch (Exception e) {
+            return false;
         }
     }
 

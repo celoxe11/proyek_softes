@@ -92,6 +92,34 @@ public class AccountTest extends BaseTest {
     @Test
     @Description("DEM-007")
     public void testDem007() {
+        try {
+            login("will", "will");
+            AccountsPage accountsPage = new AccountsPage(driver);
+            accountsPage.navigateToAccountsModule();
+            accountsPage.navigateToViewAccounts();
+
+            // get the first row account name before clicking
+            String firstRowAccountName = accountsPage.getFirstRowLocator().getText().trim();
+
+            accountsPage.clickFirstAccount();
+
+            Thread.sleep(2000);
+
+            accountsPage.deleteAccount();
+            accountsPage.clickOkInDeleteDialog();
+
+            // wait until return to view account
+            Thread.sleep(2000);
+
+            accountsPage.filterQuick(firstRowAccountName, false, false);
+
+            boolean isFilterResultEmpty = accountsPage.isFilterResultEmpty();
+            assertTrue(isFilterResultEmpty, "Deleted account should no longer exist in the accounts list");
+            takeElementScreenshot("DEM-007_Deleted_Account_Filter_Result", driver.findElement(accountsPage.getFilterResult()));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 

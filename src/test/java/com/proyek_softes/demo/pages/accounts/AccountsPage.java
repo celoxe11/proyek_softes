@@ -9,9 +9,9 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class AccountsPage {
 
-    private WebDriver driver;
-    private WebDriverWait wait;
-    private Actions actions;
+    private final WebDriver driver;
+    private final WebDriverWait wait;
+    private final Actions actions;
 
     // Navbar untuk navigasi ke accounts
     private final By navTab = By.id("grouptab_0");
@@ -26,9 +26,20 @@ public class AccountsPage {
     private final By recentlyViewedAccount1LinkEdit = By.xpath("//a[@class='recent-links-edit']");
 
     private final By firstRowAccountName = By.cssSelector("table.list.view tbody tr:first-child td[type='name'] a");
+    private final By filterResult = By.className("msg");
 
+    // filter locators
+    private final By filterButton = By.xpath("//a[@title='Filter']");
+    private final By modalContent = By.className("modal-content");
+    private final By filterNameField = By.id("name_basic");
+    private final By filterMyItemsCheckbox = By.id("current_user_only_basic");
+    private final By filterFavoritesCheckbox = By.id("favorites_only_basic");
+    private final By filterSubmitButton = By.id("search_form_submit");
+
+    // detail page locators
     private final By tabActionsInDetail = By.id("tab-actions");
     private final By editButtonInDetail = By.id("edit_button");
+    private final By deleteButtonInDetail = By.id("delete_button");
 
     // all page locator (semua page punya class module-title-text) untuk title mereka
     private final By pageTitle = By.className("module-title-text");
@@ -134,12 +145,51 @@ public class AccountsPage {
         driver.findElement(editButtonInDetail).click();
     }
 
-    public void filterQuick() {
-        // Implementation for quick filtering accounts
+    public void deleteAccount() {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(tabActionsInDetail));
+        driver.findElement(tabActionsInDetail).click();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(deleteButtonInDetail));
+        driver.findElement(deleteButtonInDetail).click();
+    }
+
+    public void clickOkInDeleteDialog() {
+        wait.until(ExpectedConditions.alertIsPresent());
+        driver.switchTo().alert().accept();
+    }
+
+    public void filterQuick(String name, boolean myItems, boolean favorites) {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(filterButton));
+        driver.findElement(filterButton).click();
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(modalContent));
+        driver.findElement(filterNameField).sendKeys(name);
+        WebElement myItemsCheckbox = driver.findElement(filterMyItemsCheckbox);
+        if (myItemsCheckbox.isSelected() != myItems) {
+            myItemsCheckbox.click();
+        }
+        WebElement favoritesCheckbox = driver.findElement(filterFavoritesCheckbox);
+        if (favoritesCheckbox.isSelected() != favorites) {
+            favoritesCheckbox.click();
+        }
+
+        // submit filter
+        driver.findElement(filterSubmitButton).click();
     }
 
     public void filterAdvanced() {
         // Implementation for advanced filtering accounts
+    }
+
+    public boolean isFilterResultEmpty() {
+        try {
+            wait.until(ExpectedConditions.visibilityOfElementLocated(filterResult));
+            String msg = driver.findElement(filterResult).getText().toLowerCase();
+            System.out.println("Filter result message: " + msg);
+            System.out.println("Filter result message: " + msg.contains("no results found"));
+            return msg.contains("no results found");
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public void chooseColumns() {
@@ -254,5 +304,9 @@ public class AccountsPage {
 
     public By getPageTitle() {
         return pageTitle;
+    }
+
+    public By getFilterResult() {
+        return filterResult;
     }
 }
