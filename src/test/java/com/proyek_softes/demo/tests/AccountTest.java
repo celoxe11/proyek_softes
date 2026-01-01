@@ -7,6 +7,7 @@ import org.testng.annotations.Test;
 
 import com.proyek_softes.demo.pages.accounts.AccountsPage;
 import com.proyek_softes.demo.pages.accounts.CreateAccountsPage;
+import com.proyek_softes.demo.pages.accounts.ImportAccountsPage;
 import com.proyek_softes.demo.utils.AccountDataProvider;
 
 import io.qameta.allure.Description;
@@ -121,6 +122,37 @@ public class AccountTest extends BaseTest {
             e.printStackTrace();
         }
 
+    }
+
+    @Test
+    @Description("DEM-008")
+    public void testDem008() {
+        try {
+            login("will", "will");
+            AccountsPage accountsPage = new AccountsPage(driver);
+            accountsPage.navigateToAccountsModule();
+            accountsPage.navigateToImportAccounts();
+
+            ImportAccountsPage importAccountsPage = new ImportAccountsPage(driver);
+            boolean isCSV = importAccountsPage.verifyDownloadedTemplateIsCSV(10, "DEM-008_Download_History");
+            assertTrue(isCSV, "Downloaded template should be in CSV format and named contains 'accounts'");
+            
+            // upload file and complete import process
+            importAccountsPage.uploadFile("Accounts.csv");
+
+            importAccountsPage.clickImportCreate();
+            importAccountsPage.clickNext();
+            importAccountsPage.clickNext();
+            importAccountsPage.clickNext();
+            importAccountsPage.clickImportNow();
+
+            boolean isRecordsImported = importAccountsPage.isRecordsImported();
+            assertTrue(isRecordsImported, "Records from Accounts.csv should be imported successfully");
+            takeElementScreenshot("DEM-008_Import_Accounts_Success", importAccountsPage.getSummaryElement());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     // @Test
