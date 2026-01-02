@@ -1,0 +1,20 @@
+{
+  "nameBeforeEdit": "Q-2026-001 Enterprise Software License",
+  "name": "Q-2026-001 Enterprise Software License - Updated",
+  "stage": "Negotiation",
+  "expiration": "04/30/2026",
+  "invoiceStatus": "Not Invoiced",
+  "term": "Nett 30",
+  "approvalStatus": "Approved",
+  "approvalIssue": "Approved by management",
+  "billingAddressStreet": "123 Business Plaza Suite 500",
+  "billingAddressCity": "San Francisco",
+  "billingAddressState": "CA",
+  "billingAddressPostalCode": "94102",
+  "billingAddressCountry": "USA",
+  "shippingAddressStreet": "456 Delivery Street",
+  "shippingAddressCity": "Oakland",
+  "shippingAddressState": "CA",
+  "shippingAddressPostalCode": "94601",
+  "shippingAddressCountry": "USA"
+}
