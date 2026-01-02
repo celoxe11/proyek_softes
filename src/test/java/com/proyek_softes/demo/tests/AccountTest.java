@@ -51,7 +51,6 @@ public class AccountTest extends BaseTest {
         try {
             Thread.sleep(2000); // wait for 2 seconds to ensure page is loaded
         } catch (InterruptedException e) {
-            e.printStackTrace();
         }
 
         boolean isOnAccountDetailPage = accountsPage.isAccountTitleCorrect(testData.get("name")); // Replace with actual name to verify
@@ -71,7 +70,6 @@ public class AccountTest extends BaseTest {
         try {
             Thread.sleep(2000); // wait for 2 seconds to ensure page is loaded
         } catch (InterruptedException e) {
-            e.printStackTrace();
         }
 
         boolean isOnAccountDetailPage = accountsPage.isAccountTitleCorrect(testData.get("name_before_edit"));
@@ -100,7 +98,7 @@ public class AccountTest extends BaseTest {
             accountsPage.navigateToViewAccounts();
 
             // get the first row account name before clicking
-            String firstRowAccountName = accountsPage.getFirstRowLocator().getText().trim();
+            String firstRowAccountName = accountsPage.getFirstRowNameLocator().getText().trim();
 
             accountsPage.clickFirstAccount();
 
@@ -118,8 +116,8 @@ public class AccountTest extends BaseTest {
             assertTrue(isFilterResultEmpty, "Deleted account should no longer exist in the accounts list");
             takeElementScreenshot("DEM-007_Deleted_Account_Filter_Result", driver.findElement(accountsPage.getFilterResult()));
 
-        } catch (Exception e) {
-            e.printStackTrace();
+            accountsPage.checkAndClearFilter();
+        } catch (InterruptedException e) {
         }
 
     }
@@ -127,32 +125,28 @@ public class AccountTest extends BaseTest {
     @Test
     @Description("DEM-008")
     public void testDem008() {
-        try {
-            login("will", "will");
-            AccountsPage accountsPage = new AccountsPage(driver);
-            accountsPage.navigateToAccountsModule();
-            accountsPage.navigateToImportAccounts();
+        login("will", "will");
+        AccountsPage accountsPage = new AccountsPage(driver);
+        accountsPage.navigateToAccountsModule();
+        accountsPage.navigateToImportAccounts();
 
-            ImportAccountsPage importAccountsPage = new ImportAccountsPage(driver);
-            boolean isCSV = importAccountsPage.verifyDownloadedTemplateIsCSV(10, "DEM-008_Download_History");
-            assertTrue(isCSV, "Downloaded template should be in CSV format and named contains 'accounts'");
-            
-            // upload file and complete import process
-            importAccountsPage.uploadFile("Accounts.csv");
+        ImportAccountsPage importAccountsPage = new ImportAccountsPage(driver);
+        boolean isCSV = importAccountsPage.verifyDownloadedTemplateIsCSV(10, "DEM-008_Download_History");
+        assertTrue(isCSV, "Downloaded template should be in CSV format and named contains 'accounts'");
 
-            importAccountsPage.clickImportCreate();
-            importAccountsPage.clickNext();
-            importAccountsPage.clickNext();
-            importAccountsPage.clickNext();
-            importAccountsPage.clickImportNow();
+        // upload file and complete import process
+        importAccountsPage.uploadFile("Accounts.csv");
 
-            boolean isRecordsImported = importAccountsPage.isRecordsImported();
-            assertTrue(isRecordsImported, "Records from Accounts.csv should be imported successfully");
-            takeElementScreenshot("DEM-008_Import_Accounts_Success", importAccountsPage.getSummaryElement());
+        importAccountsPage.clickImportCreate();
+        importAccountsPage.clickNext();
+        importAccountsPage.clickNext();
+        importAccountsPage.clickNext();
+        importAccountsPage.clickImportNow();
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        boolean isRecordsImported = importAccountsPage.isRecordsImported();
+        assertTrue(isRecordsImported, "Records from Accounts.csv should be imported successfully");
+        takeElementScreenshot("DEM-008_Import_Accounts_Success", importAccountsPage.getSummaryElement());
+
     }
 
     // @Test

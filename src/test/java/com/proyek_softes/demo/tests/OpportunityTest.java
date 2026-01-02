@@ -5,8 +5,8 @@ import java.util.Map;
 import static org.testng.Assert.assertTrue;
 import org.testng.annotations.Test;
 
-import com.proyek_softes.demo.pages.opportunity.ImportOpportunityPage;
 import com.proyek_softes.demo.pages.opportunity.CreateOpportunityPage;
+import com.proyek_softes.demo.pages.opportunity.ImportOpportunityPage;
 import com.proyek_softes.demo.pages.opportunity.OpportunityPage;
 import com.proyek_softes.demo.utils.OpportunityDataProvider;
 
@@ -50,7 +50,6 @@ public class OpportunityTest extends BaseTest {
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
-            e.printStackTrace();
         }
 
         boolean isOnOpportunityDetailPage = opportunityPage.isOpportunityTitleCorrect(testData.get("name"));
@@ -70,7 +69,6 @@ public class OpportunityTest extends BaseTest {
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
-            e.printStackTrace();
         }
 
         boolean isOnOpportunityDetailPage = opportunityPage.isOpportunityTitleCorrect(testData.get("nameBeforeEdit"));
@@ -115,39 +113,35 @@ public class OpportunityTest extends BaseTest {
             assertTrue(isFilterResultEmpty, "Deleted opportunity should no longer exist in the opportunities list");
             takeElementScreenshot("DEM-018_Deleted_Opportunity_Filter_Result", driver.findElement(opportunityPage.getFilterResult()));
 
-        } catch (Exception e) {
-            e.printStackTrace();
+            opportunityPage.checkAndClearFilter();
+        } catch (InterruptedException e) {
         }
     }
 
     @Test
     @Description("DEM-019")
     public void testDem019() {
-        try {
-            login("will", "will");
-            OpportunityPage opportunityPage = new OpportunityPage(driver);
-            opportunityPage.navigateToOpportunitiesModule();
-            opportunityPage.navigateToImportOpportunities();
+        login("will", "will");
+        OpportunityPage opportunityPage = new OpportunityPage(driver);
+        opportunityPage.navigateToOpportunitiesModule();
+        opportunityPage.navigateToImportOpportunities();
 
-            ImportOpportunityPage importOpportunityPage = new ImportOpportunityPage(driver);
-            boolean isCSV = importOpportunityPage.verifyDownloadedTemplateIsCSV(10, "DEM-019_Download_History");
-            assertTrue(isCSV, "Downloaded template should be in CSV format and named contains 'opportunities'");
-            
-            // upload file and complete import process
-            importOpportunityPage.uploadFile("Opportunities.csv");
+        ImportOpportunityPage importOpportunityPage = new ImportOpportunityPage(driver);
+        boolean isCSV = importOpportunityPage.verifyDownloadedTemplateIsCSV(10, "DEM-019_Download_History");
+        assertTrue(isCSV, "Downloaded template should be in CSV format and named contains 'opportunities'");
 
-            importOpportunityPage.clickImportCreate();
-            importOpportunityPage.clickNext();
-            importOpportunityPage.clickNext();
-            importOpportunityPage.clickNext();
-            importOpportunityPage.clickImportNow();
+        // upload file and complete import process
+        importOpportunityPage.uploadFile("Opportunities.csv");
 
-            boolean isRecordsImported = importOpportunityPage.isRecordsImported();
-            assertTrue(isRecordsImported, "Records from Opportunities.csv should be imported successfully");
-            takeElementScreenshot("DEM-019_Import_Opportunities_Success", importOpportunityPage.getSummaryElement());
+        importOpportunityPage.clickImportCreate();
+        importOpportunityPage.clickNext();
+        importOpportunityPage.clickNext();
+        importOpportunityPage.clickNext();
+        importOpportunityPage.clickImportNow();
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        boolean isRecordsImported = importOpportunityPage.isRecordsImported();
+        assertTrue(isRecordsImported, "Records from Opportunities.csv should be imported successfully");
+        takeElementScreenshot("DEM-019_Import_Opportunities_Success", importOpportunityPage.getSummaryElement());
+
     }
 }

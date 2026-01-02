@@ -6,7 +6,6 @@
   "mobilePhone": "+1-555-0101",
   "jobTitle": "Senior Sales Manager",
   "department": "Sales",
-  "accountName": "Acme Corporation",
   "fax": "+1-555-0102",
   "email": "john.doe@example.com",
   "primaryAddressStreet": "123 Main Street",
@@ -20,7 +19,5 @@
   "altAddressPostalCode": "11201",
   "altAddressCountry": "USA",
   "description": "Key contact for enterprise sales in the Northeast region",
-  "leadSource": "Cold Call",
-  "reportsToName": "Jane Smith",
-  "campaignName": "Q1 2026 Sales Campaign"
+  "leadSource": "Cold Call"
 }

@@ -20,18 +20,22 @@ public class LeadsPage {
     private final By createLeadLink = By.xpath("//a[@data-action-name='Create']");
     private final By importLeadLink = By.xpath("//a[@data-action-name='Import']");
     private final By viewLeadLink = By.xpath("//a[@data-action-name='List']");
+    private final By importVCardLink = By.xpath("//a[@data-action-name='Create_Lead_Vcard']");
 
     private final By firstRowLeadName = By.cssSelector("table.list.view tbody tr:first-child td[type='name'] a");
+    private final By firstRowLocator = By.cssSelector("table.list.view tbody tr[height='20']:first-of-type");
     private final By filterResult = By.className("msg");
 
     // filter locators
     private final By filterButton = By.xpath("//a[@title='Filter']");
+    private final By quickFilterTab = By.xpath("//li[contains(@class, 'searchTabHandler') and contains(@class, 'basic')]/a");
     private final By modalContent = By.className("modal-content");
     private final By filterNameField = By.id("search_name_basic");
     private final By filterMyItemsCheckbox = By.id("current_user_only_basic");
     private final By filterOpenItemsCheckbox = By.id("open_only_basic");
     private final By filterFavoritesCheckbox = By.id("favorites_only_basic");
     private final By filterSubmitButton = By.id("search_form_submit");
+    private final By filterClearButton = By.id("search_form_clear");
 
     // detail page locators
     private final By tabActionsInDetail = By.id("tab-actions");
@@ -83,6 +87,12 @@ public class LeadsPage {
         driver.findElement(viewLeadLink).click();
     }
 
+    public void navigateToImportVCard() {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(importVCardLink));
+        wait.until(ExpectedConditions.elementToBeClickable(importVCardLink));
+        driver.findElement(importVCardLink).click();
+    }
+
     public boolean isInFirstRow(String leadName) {
         try {
             wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("table.list.view")));
@@ -96,12 +106,17 @@ public class LeadsPage {
     }
 
     public WebElement getFirstRowLocator() {
+        wait.until(ExpectedConditions.presenceOfElementLocated(firstRowLocator));
+        return driver.findElement(firstRowLocator);
+    }
+
+    public WebElement getFirstRowNameLocator() {
         wait.until(ExpectedConditions.presenceOfElementLocated(firstRowLeadName));
         return driver.findElement(firstRowLeadName);
     }
 
     public void clickFirstLead() {
-        getFirstRowLocator().click();
+        getFirstRowNameLocator().click();
     }
 
     public boolean isLeadTitleCorrect(String leadName) {
@@ -139,6 +154,11 @@ public class LeadsPage {
         driver.findElement(filterButton).click();
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(modalContent));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(quickFilterTab));
+        WebElement quickFilterElement = driver.findElement(quickFilterTab);
+        if (!quickFilterElement.getAttribute("class").contains("active")) {
+            quickFilterElement.click();
+        }
         driver.findElement(filterNameField).sendKeys(name);
         WebElement myItemsCheckbox = driver.findElement(filterMyItemsCheckbox);
         if (myItemsCheckbox.isSelected() != myItems) {
@@ -169,5 +189,40 @@ public class LeadsPage {
 
     public By getFilterResult() {
         return filterResult;
+    }
+
+    public void checkAndClearFilter() {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(filterButton));
+        driver.findElement(filterButton).click();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(modalContent));
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(quickFilterTab));
+        WebElement quickFilterElement = driver.findElement(quickFilterTab);
+        if (!quickFilterElement.getAttribute("class").contains("active")) {
+            quickFilterElement.click();
+        }
+
+        wait.until(ExpectedConditions.presenceOfElementLocated(filterNameField));
+        wait.until(ExpectedConditions.presenceOfElementLocated(filterMyItemsCheckbox));
+        wait.until(ExpectedConditions.presenceOfElementLocated(filterOpenItemsCheckbox));
+        wait.until(ExpectedConditions.presenceOfElementLocated(filterFavoritesCheckbox));
+
+        // check if name field is filled or checkboxes are checked
+        String nameFieldValue = driver.findElement(filterNameField).getAttribute("value").trim();
+        boolean myItemsChecked = driver.findElement(filterMyItemsCheckbox).isSelected();
+        boolean openTIemsChecked = driver.findElement(filterOpenItemsCheckbox).isSelected();
+        boolean favoritesChecked = driver.findElement(filterFavoritesCheckbox).isSelected();
+
+        if (nameFieldValue.isEmpty() && !myItemsChecked && !favoritesChecked && !openTIemsChecked) {
+            // no filter applied
+            driver.findElement(filterSubmitButton).click();
+            return;
+        }
+
+        // clear all fields and then search, this will clear filter
+        wait.until(ExpectedConditions.presenceOfElementLocated(filterClearButton));
+        driver.findElement(filterClearButton).click();
+
+        driver.findElement(filterSubmitButton).click();
     }
 }

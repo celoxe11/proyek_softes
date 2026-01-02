@@ -6,22 +6,22 @@ import java.util.Map;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class CreateContactPage {
 
-    private WebDriver driver;
-    private WebDriverWait wait;
-    private Actions actions;
+    private final WebDriver driver;
+    private final WebDriverWait wait;
 
     // Common buttons
-    private By buttonSave = By.xpath("//input[@title='Save' and @id='SAVE']");
-    private By buttonCancel = By.xpath("//input[@title='Cancel [Alt+l]' and @id='CANCEL']");
-    private By addEmailButton = By.cssSelector("button.email-address-add-button[title='Add Email Address ']");
-    private By removeEmail1Button = By.id("Contacts0removeButton1");
+    private final By buttonSave = By.xpath("//input[@title='Save' and @id='SAVE']");
+    private final By buttonCancel = By.xpath("//input[@title='Cancel [Alt+l]' and @id='CANCEL']");
+    private final By addEmailButton = By.cssSelector("button.email-address-add-button[title='Add Email Address ']");
+    private final By removeEmail1Button = By.id("Contacts0removeButton1");
+    private final By selectAccountButton = By.id("btn_account_name");
+    private final By selectReportToButton = By.id("btn_report_to_name");
 
     private Map<String, By> overviewInputLocators;
     private Map<String, By> moreInformationInputLocators;
@@ -29,7 +29,6 @@ public class CreateContactPage {
     public CreateContactPage(WebDriver driver, WebDriverWait wait) {
         this.driver = driver;
         this.wait = wait;
-        this.actions = new Actions(driver);
 
         // Initialize input locators
         initializeOverviewInputLocators();
@@ -149,7 +148,15 @@ public class CreateContactPage {
             fillInputFieldFromData("mobilePhone", data.get("mobilePhone"));
             fillInputFieldFromData("jobTitle", data.get("jobTitle"));
             fillInputFieldFromData("department", data.get("department"));
-            fillInputFieldFromData("accountName", data.get("accountName"));
+
+            // Select Account Name
+            clickChooseAccountName();
+            if (data.get("accountName") != null && !data.get("accountName").isEmpty()) {
+                selectAccountName(data.get("accountName"));
+            } else {
+                selectAccountName();
+            }
+
             fillInputFieldFromData("fax", data.get("fax"));
 
             // Handle email addresses - first email goes in existing field, additional
@@ -191,8 +198,13 @@ public class CreateContactPage {
                 selectDropdown("leadSource", leadSource, moreInformationInputLocators);
             }
 
-            fillInputFieldFromData("reportsToName", data.get("reportsToName"));
-            fillInputFieldFromData("campaignName", data.get("campaignName"));
+            // Select Reports To
+            clickChooseReportTo();
+            if (data.get("reportsToName") != null && !data.get("reportsToName").isEmpty()) {
+                selectAccountName(data.get("reportsToName"));
+            } else {
+                selectAccountName();
+            }
 
             Thread.sleep(500);
             System.out.println("  → Filled contact data: " + data.get("firstName") + " " + data.get("lastName"));
@@ -201,6 +213,14 @@ public class CreateContactPage {
             Thread.currentThread().interrupt();
             throw new RuntimeException("Thread was interrupted while adding information from data", e);
         }
+    }
+
+    private void clickChooseAccountName() {
+        wait.until(ExpectedConditions.elementToBeClickable(selectAccountButton)).click();
+    }
+
+    private void clickChooseReportTo() {
+        wait.until(ExpectedConditions.elementToBeClickable(selectReportToButton)).click();
     }
 
     private void fillInputFieldFromData(String fieldKey, String value) {
@@ -230,6 +250,57 @@ public class CreateContactPage {
                 dropdown.selectByVisibleText(value);
             }
         }
+    }
+
+    public void selectAccountName(String accountName) {
+        try {
+            // Store the current window handle
+            String mainWindow = driver.getWindowHandle();
+
+            // Wait for the popup window to appear
+            wait.until(ExpectedConditions.numberOfWindowsToBe(2));
+
+            // Switch to the popup window
+            for (String windowHandle : driver.getWindowHandles()) {
+                if (!windowHandle.equals(mainWindow)) {
+                    driver.switchTo().window(windowHandle);
+                    break;
+                }
+            }
+
+            // Wait for the table to load in the popup
+            wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("table.list.view")));
+
+            // Find and click the account name in the first row
+            By firstAccountLink = By.cssSelector("table.list.view tbody tr:first-child td:first-child a");
+            WebElement accountLink = wait.until(ExpectedConditions.elementToBeClickable(firstAccountLink));
+            accountLink.click();
+
+            // Check if there's an alert and handle it
+            try {
+                wait.until(ExpectedConditions.alertIsPresent());
+                driver.switchTo().alert().accept();
+                System.out.println("  → Alert detected and accepted");
+            } catch (Exception e) {
+                // No alert present, continue normally
+            }
+
+            // Wait for popup to close and switch back to main window
+            wait.until(ExpectedConditions.numberOfWindowsToBe(1));
+            driver.switchTo().window(mainWindow);
+
+            // Wait a moment for the account name to populate
+            Thread.sleep(500);
+
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException("Thread was interrupted while selecting account name", e);
+        }
+    }
+
+    // Overloaded method to select first account without specifying name
+    public void selectAccountName() {
+        selectAccountName(null);
     }
 
     public void addEmail() {

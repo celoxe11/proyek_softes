@@ -9,7 +9,6 @@
   "mobilePhone": "+1-555-0201",
   "jobTitle": "VP of Sales",
   "department": "Executive Sales",
-  "accountName": "Acme Corporation",
   "fax": "+1-555-0202",
   "email": "j.doe@acmecorp.com",
   "primaryAddressStreet": "789 Executive Plaza",
@@ -23,7 +22,5 @@
   "altAddressPostalCode": "11354",
   "altAddressCountry": "USA",
   "description": "Promoted to VP - Now handling all enterprise sales operations",
-  "leadSource": "Partner",
-  "reportsToName": "Sarah Johnson",
-  "campaignName": "Q2 2026 Enterprise Outreach"
+  "leadSource": "Partner"
 }

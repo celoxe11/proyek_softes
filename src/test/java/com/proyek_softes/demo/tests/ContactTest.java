@@ -7,6 +7,7 @@ import org.testng.annotations.Test;
 
 import com.proyek_softes.demo.pages.contacts.ContactsPage;
 import com.proyek_softes.demo.pages.contacts.CreateContactPage;
+import com.proyek_softes.demo.pages.contacts.ImportContactVCardPage;
 import com.proyek_softes.demo.utils.ContactDataProvider;
 
 import io.qameta.allure.Description;
@@ -42,55 +43,55 @@ public class ContactTest extends BaseTest {
     @Test(dataProvider = "viewContactData", dataProviderClass = ContactDataProvider.class)
     @Description("DEM-010")
     public void testDem010(Map<String, String> testData) {
-        login("will", "will");
-        ContactsPage contactsPage = new ContactsPage(driver);
-        contactsPage.navigateToContactsModule();
-        contactsPage.navigateToViewContact();
-        contactsPage.clickFirstContact();
-
         try {
-            Thread.sleep(2000); // wait for 2 seconds to ensure page is loaded
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+            login("will", "will");
+            ContactsPage contactsPage = new ContactsPage(driver);
+            contactsPage.navigateToContactsModule();
+            contactsPage.navigateToViewContact();
 
-        String fullName = testData.get("salutation") + " " + testData.get("firstName") + " " + testData.get("lastName");
-        boolean isOnContactDetailPage = contactsPage.isContactTitleCorrect(fullName);
-        assertTrue(isOnContactDetailPage, "Should be on Contact Detail page for the selected contact");
-        takeScreenshot("DEM-010_View_Contact_Detail");
+            contactsPage.clickFirstContact();
+
+            Thread.sleep(2000);
+
+            String fullName = testData.get("salutation") + " " + testData.get("firstName") + " " + testData.get("lastName");
+            boolean isOnContactDetailPage = contactsPage.isContactTitleCorrect(fullName);
+            assertTrue(isOnContactDetailPage, "Should be on Contact Detail page for the selected contact");
+            takeScreenshot("DEM-010_View_Contact_Detail");
+        } catch (InterruptedException e) {
+        }
     }
 
     @Test(dataProvider = "editContactData", dataProviderClass = ContactDataProvider.class)
     @Description("DEM-011")
     public void testDem011(Map<String, String> testData) {
-        login("will", "will");
-        ContactsPage contactsPage = new ContactsPage(driver);
-        contactsPage.navigateToContactsModule();
-        contactsPage.navigateToViewContact();
-        contactsPage.clickFirstContact();
-
         try {
-            Thread.sleep(2000); // wait for 2 seconds to ensure page is loaded
+            login("will", "will");
+            ContactsPage contactsPage = new ContactsPage(driver);
+            contactsPage.navigateToContactsModule();
+            contactsPage.navigateToViewContact();
+
+            contactsPage.clickFirstContact();
+
+            Thread.sleep(2000);
+
+            String fullNameBeforeEdit = testData.get("salutationBeforeEdit") + " " + testData.get("firstNameBeforeEdit") + " " + testData.get("lastNameBeforeEdit");
+            boolean isOnContactDetailPage = contactsPage.isContactTitleCorrect(fullNameBeforeEdit);
+            assertTrue(isOnContactDetailPage, "Should be on Contact Detail page for the selected contact");
+            takeScreenshot("DEM-011_View_Contact_Detail_Before_Edit");
+
+            contactsPage.editContact();
+
+            CreateContactPage editContactPage = new CreateContactPage(driver, wait);
+            editContactPage.addInformationFromData(testData);
+            editContactPage.save();
+
+            String fullName = testData.get("salutation") + " " + testData.get("firstName") + " " + testData.get("lastName");
+            boolean isSaved = editContactPage.isContactSavedSuccessfully(fullName);
+            assertTrue(isSaved, "Contact should be saved successfully after editing");
+
+            takeScreenshot("DEM-011_Edit_Contact");
         } catch (InterruptedException e) {
-            e.printStackTrace();
         }
-
-        String fullNameBeforeEdit = testData.get("salutationBeforeEdit") + " " + testData.get("firstNameBeforeEdit") + " " + testData.get("lastNameBeforeEdit");
-        boolean isOnContactDetailPage = contactsPage.isContactTitleCorrect(fullNameBeforeEdit);
-        assertTrue(isOnContactDetailPage, "Should be on Contact Detail page for the selected contact");
-        takeScreenshot("DEM-011_View_Contact_Detail_Before_Edit");
-
-        contactsPage.editContact();
-
-        CreateContactPage editContactPage = new CreateContactPage(driver, wait);
-        editContactPage.addInformationFromData(testData);
-        editContactPage.save();
-
-        String fullName = testData.get("salutation") + " " + testData.get("firstName") + " " + testData.get("lastName");
-        boolean isSaved = editContactPage.isContactSavedSuccessfully(fullName);
-        assertTrue(isSaved, "Contact should be saved successfully after editing");
-
-        takeScreenshot("DEM-011_Edit_Contact");
     }
 
     @Test
@@ -102,8 +103,10 @@ public class ContactTest extends BaseTest {
             contactsPage.navigateToContactsModule();
             contactsPage.navigateToViewContact();
 
+            contactsPage.checkAndClearFilter();
+
             // get the first row contact name before clicking
-            String firstRowContactName = contactsPage.getFirstRowLocator().getText().trim();
+            String firstRowContactName = contactsPage.getFirstRowNameLocator().getText().trim();
 
             contactsPage.clickFirstContact();
 
@@ -121,9 +124,35 @@ public class ContactTest extends BaseTest {
             assertTrue(isFilterResultEmpty, "Deleted contact should no longer exist in the contacts list");
             takeElementScreenshot("DEM-012_Deleted_Contact_Filter_Result", driver.findElement(contactsPage.getFilterResult()));
 
-        } catch (Exception e) {
-            e.printStackTrace();
+            contactsPage.checkAndClearFilter();
+        } catch (InterruptedException e) {
         }
+
+    }
+
+    @Test
+    @Description("DEM-013")
+    public void testDem013() {
+        login("will", "will");
+        ContactsPage contactsPage = new ContactsPage(driver);
+        contactsPage.navigateToContactsModule();
+        contactsPage.navigateToImportVCard();
+
+        ImportContactVCardPage importContactVCardPage = new ImportContactVCardPage(driver);
+        importContactVCardPage.uploadFile("Contacts_vCard.vcf");
+        importContactVCardPage.clickImportButton();
+
+        boolean isContactSavedSuccessfully = importContactVCardPage.isContactSavedSuccessfully("Bob Johnson");
+        assertTrue(isContactSavedSuccessfully, "Contact should be saved successfully after importing");
+        takeScreenshot("DEM-013_Import_Contact_VCard");
+
+        contactsPage.navigateToViewContact();
+
+        String importedContactName = "Bob Johnson";
+        boolean isInFirstRow = contactsPage.isInFirstRow(importedContactName);
+        assertTrue(isInFirstRow, "Imported contact should appear in the contacts list");
+
+        takeElementScreenshot("DEM-013_Imported_Contact_In_List", contactsPage.getFirstRowLocator());
 
     }
 

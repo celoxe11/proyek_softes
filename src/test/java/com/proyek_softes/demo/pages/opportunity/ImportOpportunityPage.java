@@ -11,10 +11,10 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.openqa.selenium.WebElement;
 
 public class ImportOpportunityPage {
 
@@ -43,68 +43,70 @@ public class ImportOpportunityPage {
 
     /**
      * Downloads template and verifies it through browser download history
+     *
      * @param timeoutSeconds maximum time to wait for download
-     * @param screenshotName optional screenshot name (without extension) to capture the downloads page, pass null to skip
+     * @param screenshotName optional screenshot name (without extension) to
+     * capture the downloads page, pass null to skip
      * @return true if file is downloaded and is in CSV format
      */
     public boolean verifyDownloadedTemplateIsCSV(int timeoutSeconds, String screenshotName) {
         // Store current URL to navigate back later
         String originalUrl = driver.getCurrentUrl();
-        
+
         // Click download
         driver.findElement(downloadLink).click();
-        
+
         // Wait a bit for download to start
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
-        
+
         try {
             // Navigate to downloads page
             driver.get("chrome://downloads");
-            
+
             // Wait for downloads page to load
             Thread.sleep(1000);
-            
+
             // Get the shadow root and check for downloaded file
             long endTime = System.currentTimeMillis() + (timeoutSeconds * 1000L);
             String fileName = null;
-            
+
             while (System.currentTimeMillis() < endTime) {
                 try {
                     // Access shadow DOM to get download manager
                     org.openqa.selenium.JavascriptExecutor js = (org.openqa.selenium.JavascriptExecutor) driver;
-                    
+
                     // Get the first download item's file name
                     fileName = (String) js.executeScript(
-                        "var manager = document.querySelector('downloads-manager');" +
-                        "if (!manager || !manager.shadowRoot) return null;" +
-                        "var item = manager.shadowRoot.querySelector('downloads-item');" +
-                        "if (!item || !item.shadowRoot) return null;" +
-                        "var fileLink = item.shadowRoot.querySelector('#file-link');" +
-                        "return fileLink ? fileLink.textContent : null;");
-                    
+                            "var manager = document.querySelector('downloads-manager');"
+                            + "if (!manager || !manager.shadowRoot) return null;"
+                            + "var item = manager.shadowRoot.querySelector('downloads-item');"
+                            + "if (!item || !item.shadowRoot) return null;"
+                            + "var fileLink = item.shadowRoot.querySelector('#file-link');"
+                            + "return fileLink ? fileLink.textContent : null;");
+
                     if (fileName != null && !fileName.trim().isEmpty()) {
                         System.out.println("Found downloaded file in browser history: " + fileName);
                         break;
                     }
                     Thread.sleep(500);
-                } catch (Exception e) {
+                } catch (InterruptedException e) {
                     // Continue trying
                     Thread.sleep(500);
                 }
             }
-            
+
             // Take screenshot if requested
             if (screenshotName != null && fileName != null) {
                 takeScreenshotOfDownloadsPage(screenshotName);
             }
-            
+
             // Navigate back to original page
             driver.get(originalUrl);
-            
+
             // Check if file is CSV
             if (fileName != null) {
                 return isTemplateFileInCSVFormat(fileName) && fileName.toLowerCase().contains("opportunities");
@@ -112,11 +114,11 @@ public class ImportOpportunityPage {
                 System.err.println("No file found in browser download history");
                 return false;
             }
-            
+
         } catch (Exception e) {
             System.err.println("Error checking browser downloads: " + e.getMessage());
             e.printStackTrace();
-            
+
             // Try to navigate back to original page
             try {
                 driver.get(originalUrl);
@@ -129,15 +131,17 @@ public class ImportOpportunityPage {
 
     /**
      * Takes a screenshot of the current downloads page
-     * @param screenshotName the name for the screenshot file (without extension)
+     *
+     * @param screenshotName the name for the screenshot file (without
+     * extension)
      */
     private void takeScreenshotOfDownloadsPage(String screenshotName) {
         try {
             File screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
             File destination = new File("screenshots/" + screenshotName + ".png");
             destination.getParentFile().mkdirs();
-            Files.copy(screenshot.toPath(), destination.toPath(), 
-                      java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(screenshot.toPath(), destination.toPath(),
+                    java.nio.file.StandardCopyOption.REPLACE_EXISTING);
             System.out.println("Screenshot saved: " + destination.getAbsolutePath());
         } catch (Exception e) {
             System.err.println("Failed to take screenshot: " + e.getMessage());

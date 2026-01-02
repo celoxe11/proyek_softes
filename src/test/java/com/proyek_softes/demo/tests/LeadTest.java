@@ -6,6 +6,8 @@ import static org.testng.Assert.assertTrue;
 import org.testng.annotations.Test;
 
 import com.proyek_softes.demo.pages.leads.CreateLeadPage;
+import com.proyek_softes.demo.pages.leads.ImportLeadPage;
+import com.proyek_softes.demo.pages.leads.ImportLeadVCardPage;
 import com.proyek_softes.demo.pages.leads.LeadsPage;
 import com.proyek_softes.demo.utils.LeadDataProvider;
 
@@ -50,7 +52,6 @@ public class LeadTest extends BaseTest {
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
-            e.printStackTrace();
         }
 
         String fullName = testData.get("firstName") + " " + testData.get("lastName");
@@ -66,12 +67,12 @@ public class LeadTest extends BaseTest {
         LeadsPage leadsPage = new LeadsPage(driver);
         leadsPage.navigateToLeadsModule();
         leadsPage.navigateToViewLeads();
+        
         leadsPage.clickFirstLead();
 
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
-            e.printStackTrace();
         }
 
         String fullNameBeforeEdit = testData.get("firstNameBeforeEdit") + " " + testData.get("lastNameBeforeEdit");
@@ -100,8 +101,9 @@ public class LeadTest extends BaseTest {
             LeadsPage leadsPage = new LeadsPage(driver);
             leadsPage.navigateToLeadsModule();
             leadsPage.navigateToViewLeads();
+            
 
-            String firstRowLeadName = leadsPage.getFirstRowLocator().getText().trim();
+            String firstRowLeadName = leadsPage.getFirstRowNameLocator().getText().trim();
 
             leadsPage.clickFirstLead();
 
@@ -118,8 +120,61 @@ public class LeadTest extends BaseTest {
             assertTrue(isFilterResultEmpty, "Deleted lead should no longer exist in the leads list");
             takeElementScreenshot("DEM-023_Deleted_Lead_Filter_Result", driver.findElement(leadsPage.getFilterResult()));
 
-        } catch (Exception e) {
-            e.printStackTrace();
+            leadsPage.checkAndClearFilter();
+        } catch (InterruptedException e) {
         }
     }
+
+    @Test
+    @Description("DEM-024")
+    public void testDem024() {
+        login("will", "will");
+        LeadsPage leadsPage = new LeadsPage(driver);
+        leadsPage.navigateToLeadsModule();
+        leadsPage.navigateToImportVCard();
+
+        ImportLeadVCardPage importLeadVCardPage = new ImportLeadVCardPage(driver);
+        importLeadVCardPage.uploadFile("Leads_vCard.vcf");
+        importLeadVCardPage.clickImportButton();
+
+        boolean isLeadSavedSuccessfully = importLeadVCardPage.isLeadSavedSuccessfully("John Smith");
+        assertTrue(isLeadSavedSuccessfully, "Lead should be saved successfully after importing");
+        takeScreenshot("DEM-024_Import_Lead_VCard");
+
+        leadsPage.navigateToViewLeads();
+
+        String importedLeadName = "John Smith";
+        boolean isInFirstRow = leadsPage.isInFirstRow(importedLeadName);
+        assertTrue(isInFirstRow, "Imported lead should appear in the leads list");
+
+        takeElementScreenshot("DEM-024_Imported_Lead_In_List", leadsPage.getFirstRowLocator());
+    }
+
+    @Test
+    @Description("DEM-025")
+    public void testDem025() {
+        login("will", "will");
+        LeadsPage leadsPage = new LeadsPage(driver);
+        leadsPage.navigateToLeadsModule();
+        leadsPage.navigateToImportLeads();
+
+        ImportLeadPage importLeadPage = new ImportLeadPage(driver);
+        boolean isCSV = importLeadPage.verifyDownloadedTemplateIsCSV(10, "DEM-025_Download_History");
+        assertTrue(isCSV, "Downloaded template should be in CSV format and named contains 'leads'");
+
+        // upload file and complete import process
+        importLeadPage.uploadFile("Leads.csv");
+
+        importLeadPage.clickImportCreate();
+        importLeadPage.clickNext();
+        importLeadPage.clickNext();
+        importLeadPage.clickNext();
+        importLeadPage.clickImportNow();
+
+        boolean isRecordsImported = importLeadPage.isRecordsImported();
+        assertTrue(isRecordsImported, "Records from Leads.csv should be imported successfully");
+        takeElementScreenshot("DEM-025_Import_Leads_Success", importLeadPage.getSummaryElement());
+    }
+
+    
 }

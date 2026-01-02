@@ -26,15 +26,17 @@ public class AccountsPage {
     private final By recentlyViewedAccount1LinkEdit = By.xpath("//a[@class='recent-links-edit']");
 
     private final By firstRowAccountName = By.cssSelector("table.list.view tbody tr:first-child td[type='name'] a");
+    private final By firstRowLocator = By.cssSelector("table.list.view tbody tr[height='20']:first-of-type");
     private final By filterResult = By.className("msg");
-
     // filter locators
     private final By filterButton = By.xpath("//a[@title='Filter']");
+    private final By quickFilterTab = By.xpath("//li[contains(@class, 'searchTabHandler') and contains(@class, 'basic')]/a");
     private final By modalContent = By.className("modal-content");
     private final By filterNameField = By.id("name_basic");
     private final By filterMyItemsCheckbox = By.id("current_user_only_basic");
     private final By filterFavoritesCheckbox = By.id("favorites_only_basic");
     private final By filterSubmitButton = By.id("search_form_submit");
+    private final By filterClearButton = By.id("search_form_clear");
 
     // detail page locators
     private final By tabActionsInDetail = By.id("tab-actions");
@@ -119,12 +121,17 @@ public class AccountsPage {
     }
 
     public WebElement getFirstRowLocator() {
-        wait.until(ExpectedConditions.presenceOfElementLocated(firstRowAccountName));
-        return driver.findElement(firstRowAccountName);
+        wait.until(ExpectedConditions.presenceOfElementLocated(firstRowLocator));
+        return driver.findElement(firstRowLocator);
     }
 
     public void clickFirstAccount() {
-        getFirstRowLocator().click();
+        getFirstRowNameLocator().click();
+    }
+
+    public WebElement getFirstRowNameLocator() {
+        wait.until(ExpectedConditions.presenceOfElementLocated(firstRowAccountName));
+        return driver.findElement(firstRowAccountName);
     }
 
     public boolean isAccountTitleCorrect(String accountName) {
@@ -162,6 +169,11 @@ public class AccountsPage {
         driver.findElement(filterButton).click();
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(modalContent));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(quickFilterTab));
+        WebElement quickFilterElement = driver.findElement(quickFilterTab);
+        if (!quickFilterElement.getAttribute("class").contains("active")) {
+            quickFilterElement.click();
+        }
         driver.findElement(filterNameField).sendKeys(name);
         WebElement myItemsCheckbox = driver.findElement(filterMyItemsCheckbox);
         if (myItemsCheckbox.isSelected() != myItems) {
@@ -190,6 +202,39 @@ public class AccountsPage {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public void checkAndClearFilter() {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(filterButton));
+        driver.findElement(filterButton).click();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(modalContent));
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(quickFilterTab));
+        WebElement quickFilterElement = driver.findElement(quickFilterTab);
+        if (!quickFilterElement.getAttribute("class").contains("active")) {
+            quickFilterElement.click();
+        }
+
+        wait.until(ExpectedConditions.presenceOfElementLocated(filterNameField));
+        wait.until(ExpectedConditions.presenceOfElementLocated(filterMyItemsCheckbox));
+        wait.until(ExpectedConditions.presenceOfElementLocated(filterFavoritesCheckbox));
+
+        // check if name field is filled or checkboxes are checked
+        String nameFieldValue = driver.findElement(filterNameField).getAttribute("value").trim();
+        boolean myItemsChecked = driver.findElement(filterMyItemsCheckbox).isSelected();
+        boolean favoritesChecked = driver.findElement(filterFavoritesCheckbox).isSelected();
+
+        if (nameFieldValue.isEmpty() && !myItemsChecked && !favoritesChecked) {
+            // no filter applied
+            driver.findElement(filterSubmitButton).click();
+            return;
+        }
+
+        // clear all fields and then search, this will clear filter
+        wait.until(ExpectedConditions.presenceOfElementLocated(filterClearButton));
+        driver.findElement(filterClearButton).click();
+
+        driver.findElement(filterSubmitButton).click();
     }
 
     public void chooseColumns() {

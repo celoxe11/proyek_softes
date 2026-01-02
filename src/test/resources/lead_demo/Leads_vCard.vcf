@@ -1,0 +1,25 @@
+BEGIN:VCARD
+VERSION:3.0
+FN:John Smith
+N:Smith;John;;;
+TITLE:Senior Software Engineer
+ORG:Acme Corporation;Information Technology
+TEL;TYPE=WORK:0215551234
+TEL;TYPE=CELL:15878300023
+TEL;TYPE=FAX:0215554321
+URL:https://www.acme.com
+EMAIL;TYPE=WORK;PREF:john.smith@acme.com
+
+ADR;TYPE=WORK:;;Jl. Jenderal Sudirman No.10;Jakarta;DKI Jakarta;10220;Indonesia
+ADR;TYPE=OTHER:;;Jl. Melati No.5;Depok;Jawa Barat;16424;Indonesia
+
+NOTE:Prospective client interested in enterprise solution.
+
+X-STATUS:New
+X-STATUS-DESCRIPTION:Contacted via website inquiry
+X-LEAD-SOURCE:Website
+X-LEAD-SOURCE-DESCRIPTION:Submitted contact form
+X-OPPORTUNITY-AMOUNT:150000000
+X-REFERRED-BY:Michael Anderson
+X-CAMPAIGN:Q1 Enterprise Outreach
+END:VCARD

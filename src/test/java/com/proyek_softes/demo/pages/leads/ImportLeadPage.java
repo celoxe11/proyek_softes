@@ -1,4 +1,4 @@
-package com.proyek_softes.demo.pages.accounts;
+package com.proyek_softes.demo.pages.leads;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -17,7 +17,7 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class ImportAccountsPage {
+public class ImportLeadPage {
 
     private final WebDriver driver;
     private final WebDriverWait wait;
@@ -36,7 +36,7 @@ public class ImportAccountsPage {
     private final By exitButton = By.id("finished");
     private final By summaryText = By.xpath("//span[@style='font-size: 14px']");
 
-    public ImportAccountsPage(WebDriver driver) {
+    public ImportLeadPage(WebDriver driver) {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, java.time.Duration.ofSeconds(20));
         this.actions = new Actions(driver);
@@ -44,49 +44,51 @@ public class ImportAccountsPage {
 
     /**
      * Downloads template and verifies it through browser download history
+     *
      * @param timeoutSeconds maximum time to wait for download
-     * @param screenshotName optional screenshot name (without extension) to capture the downloads page, pass null to skip
+     * @param screenshotName optional screenshot name (without extension) to
+     * capture the downloads page, pass null to skip
      * @return true if file is downloaded and is in CSV format
      */
     public boolean verifyDownloadedTemplateIsCSV(int timeoutSeconds, String screenshotName) {
         // Store current URL to navigate back later
         String originalUrl = driver.getCurrentUrl();
-        
+
         // Click download
         driver.findElement(downloadLink).click();
-        
+
         // Wait a bit for download to start
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
-        
+
         try {
             // Navigate to downloads page
             driver.get("chrome://downloads");
-            
+
             // Wait for downloads page to load
             Thread.sleep(1000);
-            
+
             // Get the shadow root and check for downloaded file
             long endTime = System.currentTimeMillis() + (timeoutSeconds * 1000L);
             String fileName = null;
-            
+
             while (System.currentTimeMillis() < endTime) {
                 try {
                     // Access shadow DOM to get download manager
                     org.openqa.selenium.JavascriptExecutor js = (org.openqa.selenium.JavascriptExecutor) driver;
-                    
+
                     // Get the first download item's file name
                     fileName = (String) js.executeScript(
-                        "var manager = document.querySelector('downloads-manager');" +
-                        "if (!manager || !manager.shadowRoot) return null;" +
-                        "var item = manager.shadowRoot.querySelector('downloads-item');" +
-                        "if (!item || !item.shadowRoot) return null;" +
-                        "var fileLink = item.shadowRoot.querySelector('#file-link');" +
-                        "return fileLink ? fileLink.textContent : null;");
-                    
+                            "var manager = document.querySelector('downloads-manager');"
+                            + "if (!manager || !manager.shadowRoot) return null;"
+                            + "var item = manager.shadowRoot.querySelector('downloads-item');"
+                            + "if (!item || !item.shadowRoot) return null;"
+                            + "var fileLink = item.shadowRoot.querySelector('#file-link');"
+                            + "return fileLink ? fileLink.textContent : null;");
+
                     if (fileName != null && !fileName.trim().isEmpty()) {
                         System.out.println("Found downloaded file in browser history: " + fileName);
                         break;
@@ -97,26 +99,26 @@ public class ImportAccountsPage {
                     Thread.sleep(500);
                 }
             }
-            
+
             // Take screenshot if requested
             if (screenshotName != null && fileName != null) {
                 takeScreenshotOfDownloadsPage(screenshotName);
             }
-            
+
             // Navigate back to original page
             driver.get(originalUrl);
-            
+
             // Check if file is CSV
             if (fileName != null) {
-                return isTemplateFileInCSVFormat(fileName) && fileName.toLowerCase().contains("accounts");
+                return isTemplateFileInCSVFormat(fileName) && fileName.toLowerCase().contains("leads");
             } else {
                 System.err.println("No file found in browser download history");
                 return false;
             }
-            
+
         } catch (InterruptedException e) {
             System.err.println("Error checking browser downloads: " + e.getMessage());
-            
+
             // Try to navigate back to original page
             try {
                 driver.get(originalUrl);
@@ -129,15 +131,17 @@ public class ImportAccountsPage {
 
     /**
      * Takes a screenshot of the current downloads page
-     * @param screenshotName the name for the screenshot file (without extension)
+     *
+     * @param screenshotName the name for the screenshot file (without
+     * extension)
      */
     private void takeScreenshotOfDownloadsPage(String screenshotName) {
         try {
             File screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
             File destination = new File("screenshots/" + screenshotName + ".png");
             destination.getParentFile().mkdirs();
-            Files.copy(screenshot.toPath(), destination.toPath(), 
-                      java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(screenshot.toPath(), destination.toPath(),
+                    java.nio.file.StandardCopyOption.REPLACE_EXISTING);
             System.out.println("Screenshot saved: " + destination.getAbsolutePath());
         } catch (IOException | WebDriverException e) {
             System.err.println("Failed to take screenshot: " + e.getMessage());
@@ -150,7 +154,7 @@ public class ImportAccountsPage {
 
     public void uploadFile(String fileName) {
         // Get the absolute path to the file in test resources
-        String resourcePath = Paths.get("src", "test", "resources", "account_demo", fileName).toAbsolutePath().toString();
+        String resourcePath = Paths.get("src", "test", "resources", "lead_demo", fileName).toAbsolutePath().toString();
         File file = new File(resourcePath);
 
         // Upload the file by sending the absolute path to the input field

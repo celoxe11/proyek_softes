@@ -1,0 +1,13 @@
+BEGIN:VCARD
+VERSION:3.0
+FN:Bob Johnson
+N:Johnson;Bob;;;
+TITLE:HR Manager
+ORG:Gamma Industries;Human Resources
+TEL;TYPE=WORK:0219990000
+TEL;TYPE=CELL:18888888888
+EMAIL;TYPE=WORK:bob.johnson@gamma.com
+ADR;TYPE=WORK:;;Jl. Thamrin No.1;Jakarta;;10340;Indonesia
+NOTE:Responsible for recruitment
+X-ASSIGNED-TO:Pam Beesly
+END:VCARD
