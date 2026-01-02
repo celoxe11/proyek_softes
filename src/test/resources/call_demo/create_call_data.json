@@ -1,0 +1,14 @@
+{
+  "name": "Client Meeting - Project Kickoff 2026",
+  "direction": "Outbound",
+  "status": "Planned",
+  "dateStart": "01/15/2026",
+  "hours": "14",
+  "minutes": "00",
+  "parentType": "Account",
+  "parentName": "SELECT_FROM_POPUP",
+  "durationHours": "1",
+  "durationMinutes": "30",
+  "description": "Initial project kickoff meeting with the client to discuss requirements, timeline, and deliverables. Prepare presentation materials and technical documentation.",
+  "assignedUserName": "Will Westin"
+}

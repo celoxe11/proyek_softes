@@ -1,0 +1,13 @@
+{
+  "nameBeforeEdit": "Client Meeting - Project Kickoff 2026",
+  "name": "Client Meeting - Project Kickoff 2026 - UPDATED",
+  "direction": "Inbound",
+  "status": "Held",
+  "dateStart": "01/16/2026",
+  "hours": "10",
+  "minutes": "30",
+  "durationHours": "2",
+  "durationMinutes": "0",
+  "description": "UPDATED: Project kickoff meeting completed. Discussed all requirements in detail. Next steps: Create technical specification document and schedule follow-up meeting.",
+  "assignedUserName": "Chris Olliver"
+}
