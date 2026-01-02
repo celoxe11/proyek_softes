@@ -161,4 +161,105 @@ public class ProductsPage {
             System.out.println("⚠️ Warning: Page load wait timeout");
         }
     }
+
+    // ========================================
+    // SUITEASSURED NAVIGATION
+    // ========================================
+
+    /**
+     * Navigate ke halaman SuiteASSURED
+     * 
+     * @return true jika berhasil
+     */
+    public boolean navigateToSuiteAssured() {
+        try {
+            // Hover ke Products menu
+            hoverProductsMenu();
+            Thread.sleep(500);
+
+            // Cari submenu SuiteASSURED
+            By[] selectors = {
+                    By.xpath("//li[contains(@class, 'menu-item')]//a[contains(text(), 'SuiteASSURED')]"),
+                    By.xpath("//a[contains(@href, 'suiteassured')]"),
+                    By.xpath("//a[contains(translate(text(), 'SUITEASSURED', 'suiteassured'), 'suiteassured')]"),
+                    By.cssSelector("a[href*='suiteassured']")
+            };
+
+            WebElement subMenu = null;
+            for (By selector : selectors) {
+                try {
+                    subMenu = wait.until(ExpectedConditions.elementToBeClickable(selector));
+                    if (subMenu != null && subMenu.isDisplayed()) {
+                        break;
+                    }
+                } catch (Exception e) {
+                    continue;
+                }
+            }
+
+            if (subMenu != null) {
+                js.executeScript("arguments[0].click();", subMenu);
+                System.out.println("✓ Berhasil klik sub-menu SuiteASSURED");
+                return true;
+            }
+
+            // Fallback: direct URL
+            System.out.println("⚠️ Submenu not found, navigating directly...");
+            driver.get("https://suitecrm.com/enterprise/suiteassured/");
+            return true;
+
+        } catch (Exception e) {
+            System.out.println("❌ Gagal navigate ke SuiteASSURED: " + e.getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Click Contact Us button pada halaman SuiteASSURED
+     */
+    public void clickContactUsButton() {
+        try {
+            // Scroll down to find button
+            js.executeScript("window.scrollBy(0, 300);");
+            Thread.sleep(500);
+
+            By[] selectors = {
+                    By.xpath("//a[contains(@class, 'fusion-button')]//span[contains(text(), 'CONTACT US')]/parent::a"),
+                    By.xpath("//a[contains(@class, 'fusion-button')][contains(text(), 'CONTACT US')]"),
+                    By.xpath("//span[contains(text(), 'CONTACT US')]/parent::a"),
+                    By.cssSelector("a.fusion-button[href*='contact']"),
+                    By.xpath("//a[contains(@href, 'contact')][contains(@class, 'button')]")
+            };
+
+            WebElement button = null;
+            for (By selector : selectors) {
+                try {
+                    button = wait.until(ExpectedConditions.elementToBeClickable(selector));
+                    if (button != null && button.isDisplayed()) {
+                        System.out.println("✓ Found Contact Us button");
+                        break;
+                    }
+                } catch (Exception e) {
+                    continue;
+                }
+            }
+
+            if (button != null) {
+                js.executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", button);
+                Thread.sleep(500);
+
+                try {
+                    button.click();
+                } catch (Exception e) {
+                    js.executeScript("arguments[0].click();", button);
+                }
+                System.out.println("✓ Clicked Contact Us button");
+            } else {
+                System.out.println("❌ Contact Us button not found");
+            }
+
+        } catch (Exception e) {
+            System.out.println("❌ Error clicking Contact Us: " + e.getMessage());
+        }
+    }
 }

@@ -1,0 +1,29 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+
+<suite name="Product Module Test Suite" verbose="1">
+    
+    <test name="Product Navigation Tests" preserve-order="true">
+        <classes>
+            <class name="com.proyek_softes.landing.tests.ProductTest">
+                <methods>
+                    <!-- PRD-001: Navigate to CRM Page -->
+                    <include name="testPrd001" />
+                    
+                    <!-- PRD-002: Play YouTube Video -->
+                    <include name="testPrd002" />
+                    
+                    <!-- PRD-003: SuiteCRM Page Buttons -->
+                    <include name="testPrd003" />
+                    
+                    <!-- PRD-004: Read Case Study PDF -->
+                    <include name="testPrd004" />
+                    
+                    <!-- PRD-005: SuiteASSURED Contact Us -->
+                    <include name="testPrd005" />
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+</suite>

@@ -221,4 +221,225 @@ public class SuiteCRMPage {
         driver.get(PAGE_URL);
         waitForPageLoad();
     }
+
+    // ========================================
+    // BUTTON ACTIONS - Try For Free, Book Demo, Get in Touch
+    // ========================================
+
+    /**
+     * Click "Try For Free" button
+     */
+    public void clickTryForFreeButton() {
+        try {
+            scrollToButtons();
+            WebElement button = findButton("Try For Free", "demo/");
+            if (button != null) {
+                clickButton(button, "Try For Free");
+            }
+        } catch (Exception e) {
+            System.out.println("❌ Failed to click Try For Free: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Click "Book Demo" button
+     */
+    public void clickBookDemoButton() {
+        try {
+            scrollToButtons();
+            WebElement button = findButton("Book Demo", "contact");
+            if (button != null) {
+                clickButton(button, "Book Demo");
+            }
+        } catch (Exception e) {
+            System.out.println("❌ Failed to click Book Demo: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Click "Get in Touch" button
+     */
+    public void clickGetInTouchButton() {
+        try {
+            scrollToButtons();
+            WebElement button = findButton("Get in Touch", "contact");
+            if (button != null) {
+                clickButton(button, "Get in Touch");
+            }
+        } catch (Exception e) {
+            System.out.println("❌ Failed to click Get in Touch: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Scroll to buttons section
+     */
+    private void scrollToButtons() {
+        try {
+            js.executeScript("window.scrollTo(0, document.body.scrollHeight * 0.6);");
+            Thread.sleep(1000);
+        } catch (Exception e) {
+            // Continue
+        }
+    }
+
+    /**
+     * Find button by text or href
+     */
+    private WebElement findButton(String buttonText, String hrefContains) {
+        By[] selectors = {
+                By.xpath("//a[contains(@class, 'fusion-button')]//span[contains(text(), '" + buttonText
+                        + "')]/parent::a"),
+                By.xpath("//a[contains(@class, 'fusion-button')][contains(text(), '" + buttonText + "')]"),
+                By.xpath("//a[contains(@href, '" + hrefContains + "')][contains(@class, 'button')]"),
+                By.xpath("//span[contains(text(), '" + buttonText + "')]/parent::a"),
+                By.cssSelector("a.fusion-button[href*='" + hrefContains + "']")
+        };
+
+        for (By selector : selectors) {
+            try {
+                WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(selector));
+                if (element != null && element.isDisplayed()) {
+                    System.out.println("✓ Found button: " + buttonText);
+                    return element;
+                }
+            } catch (Exception e) {
+                continue;
+            }
+        }
+
+        System.out.println("❌ Button not found: " + buttonText);
+        return null;
+    }
+
+    /**
+     * Click button with scroll and fallback
+     */
+    private void clickButton(WebElement button, String buttonName) {
+        try {
+            js.executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", button);
+            Thread.sleep(500);
+
+            try {
+                button.click();
+            } catch (Exception e) {
+                js.executeScript("arguments[0].click();", button);
+            }
+
+            System.out.println("✓ Clicked button: " + buttonName);
+        } catch (Exception e) {
+            System.out.println("❌ Failed to click: " + buttonName + " - " + e.getMessage());
+        }
+    }
+
+    // ========================================
+    // CASE STUDY SECTION
+    // ========================================
+
+    /**
+     * Get active case study title from slider
+     */
+    public String getActiveCaseStudyTitle() {
+        try {
+            // Scroll to case study section
+            js.executeScript("window.scrollTo(0, document.body.scrollHeight * 0.7);");
+            Thread.sleep(1000);
+
+            // Find active testimonial/case study
+            By[] selectors = {
+                    By.cssSelector(".review.active-testimonial h2"),
+                    By.cssSelector(".review.active-testimonial .awb-quote-content"),
+                    By.cssSelector(".active-testimonial h2"),
+                    By.xpath("//div[contains(@class, 'active-testimonial')]//h2"),
+                    By.xpath("//div[contains(@class, 'review') and contains(@class, 'active')]//h2"),
+                    By.cssSelector("#case_study_slider .active h2"),
+                    By.cssSelector(".reviews .review h2")
+            };
+
+            for (By selector : selectors) {
+                try {
+                    WebElement element = driver.findElement(selector);
+                    if (element != null && element.isDisplayed()) {
+                        String title = element.getText().trim();
+                        if (!title.isEmpty()) {
+                            System.out.println("✓ Found case study title: " + title);
+                            return title;
+                        }
+                    }
+                } catch (Exception e) {
+                    continue;
+                }
+            }
+
+            // Fallback: get any visible case study name
+            try {
+                WebElement nameElement = driver.findElement(By.cssSelector(".reviews h2"));
+                return nameElement.getText().trim();
+            } catch (Exception e) {
+                // Continue
+            }
+
+            System.out.println("⚠️ Could not find case study title");
+            return "Case Study";
+
+        } catch (Exception e) {
+            System.out.println("❌ Error getting case study title: " + e.getMessage());
+            return "Case Study";
+        }
+    }
+
+    /**
+     * Click "Read Case Study" button
+     */
+    public void clickReadCaseStudyButton() {
+        try {
+            // Scroll to case study section
+            js.executeScript("window.scrollTo(0, document.body.scrollHeight * 0.7);");
+            Thread.sleep(1000);
+
+            By[] selectors = {
+                    By.xpath("//a[contains(text(), 'READ CASE STUDY')]"),
+                    By.xpath("//a[contains(text(), 'Read Case Study')]"),
+                    By.cssSelector("a[href*='casestudy']"),
+                    By.cssSelector("a[href*='.pdf']"),
+                    By.cssSelector(".button a[href*='pdf']"),
+                    By.xpath("//div[contains(@class, 'button')]//a[contains(@href, 'pdf')]"),
+                    By.xpath("//div[contains(@class, 'active-testimonial')]//a[contains(@href, 'pdf')]"),
+                    By.cssSelector(".reviews .button a")
+            };
+
+            WebElement button = null;
+            for (By selector : selectors) {
+                try {
+                    button = wait.until(ExpectedConditions.elementToBeClickable(selector));
+                    if (button != null && button.isDisplayed()) {
+                        System.out.println("✓ Found Read Case Study button");
+                        break;
+                    }
+                } catch (Exception e) {
+                    continue;
+                }
+            }
+
+            if (button != null) {
+                js.executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", button);
+                Thread.sleep(500);
+
+                String href = button.getAttribute("href");
+                System.out.println("📍 Case Study URL: " + href);
+
+                try {
+                    button.click();
+                } catch (Exception e) {
+                    js.executeScript("arguments[0].click();", button);
+                }
+                System.out.println("✓ Clicked Read Case Study button");
+            } else {
+                System.out.println("❌ Read Case Study button not found");
+            }
+
+        } catch (Exception e) {
+            System.out.println("❌ Error clicking Read Case Study: " + e.getMessage());
+        }
+    }
 }
