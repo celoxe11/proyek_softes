@@ -1,0 +1,40 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+<suite name="Get Started Module Test Suite" verbose="1">
+    
+    <test name="Get Started Navigation Tests" preserve-order="true">
+        <classes>
+            <class name="com.proyek_softes.landing.tests.GetStartedTest">
+                <methods>
+                    <!-- GST-001: SuiteCRM 7.15 release notes link -->
+                    <include name="testGst001" />
+                    
+                    <!-- GST-002: For upgrades link (7.15 section) -->
+                    <include name="testGst002" />
+                    
+                    <!-- GST-003: SuiteCRM 8.9 release notes link -->
+                    <include name="testGst003" />
+                    
+                    <!-- GST-004: For upgrades link (8.9 section) -->
+                    <include name="testGst004" />
+                    
+                    <!-- GST-005: Download SuiteCRM 7.15 -->
+                    <include name="testGst005" />
+                    
+                    <!-- GST-006: Download SuiteCRM 8.9 -->
+                    <include name="testGst006" />
+                    
+                    <!-- GST-007: Register for Free button -->
+                    <include name="testGst007" />
+                    
+                    <!-- GST-008: Discover If This Could be Right for You button -->
+                    <include name="testGst008" />
+                    
+                    <!-- GST-009: Find Out More button -->
+                    <include name="testGst009" />
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+</suite>

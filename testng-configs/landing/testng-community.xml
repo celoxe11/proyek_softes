@@ -1,0 +1,34 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+<suite name="Community Module Test Suite" verbose="1">
+    
+    <test name="Community Navigation Tests" preserve-order="true">
+        <classes>
+            <class name="com.proyek_softes.landing.tests.CommunityTest">
+                <methods>
+                    <!-- COM-001: Navigate to Community Support -->
+                    <include name="testCom001" />
+                    
+                    <!-- COM-002: Navigate to Sponsorship and click Sponsor Now -->
+                    <include name="testCom002" />
+                    
+                    <!-- COM-003: Navigate to Sponsorship and click Open Collective link -->
+                    <include name="testCom003" />
+                    
+                    <!-- COM-004: Navigate to Sponsorship and click Route4Me link -->
+                    <include name="testCom004" />
+                    
+                    <!-- COM-005: Button Become a Sponsor Today berfungsi dengan baik -->
+                    <include name="testCom005" />
+                    
+                    <!-- COM-006: Button Visit Techesperto berfungsi dengan baik -->
+                    <include name="testCom006" />
+                    
+                    <!-- COM-007: Halaman GitHub dapat ditampilkan dengan baik -->
+                    <include name="testCom007" />
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+</suite>

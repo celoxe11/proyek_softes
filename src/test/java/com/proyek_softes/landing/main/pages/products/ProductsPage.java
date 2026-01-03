@@ -12,10 +12,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
-/**
- * Page Object Model untuk halaman Products
- * Memisahkan locators dan interaksi UI dari logika test
- */
+
 public class ProductsPage {
 
     private WebDriver driver;
