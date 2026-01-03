@@ -1,13 +1,18 @@
 {
   "nameBeforeEdit": "Client Meeting - Project Kickoff 2026",
-  "name": "Client Meeting - Project Kickoff 2026 - UPDATED",
+  "name": "Client Follow-up Discussion - Q1 Review",
   "direction": "Inbound",
   "status": "Held",
-  "dateStart": "01/16/2026",
-  "hours": "10",
-  "minutes": "30",
-  "durationHours": "2",
-  "durationMinutes": "0",
-  "description": "UPDATED: Project kickoff meeting completed. Discussed all requirements in detail. Next steps: Create technical specification document and schedule follow-up meeting.",
-  "assignedUserName": "Chris Olliver"
+  "has_reminder": "true",
+  "reminder_popup": "true",
+  "reminder_popup_time": "3600",
+  "reminder_email": "true",
+  "reminder_email_time": "7200",
+  "date_start_date": "01/20/2026",
+  "date_start_hours": "15",
+  "date_start_minutes": "30",
+  "parent_type": "Contact",
+  "duration_hours": "2",
+  "duration_minutes": "15",
+  "description": "Follow-up discussion to review Q1 progress. Agenda: Review deliverables, address client feedback, plan next phase implementation. Action items documented."
 }

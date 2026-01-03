@@ -2,13 +2,15 @@
   "name": "Client Meeting - Project Kickoff 2026",
   "direction": "Outbound",
   "status": "Planned",
-  "dateStart": "01/15/2026",
-  "hours": "14",
-  "minutes": "00",
-  "parentType": "Account",
-  "parentName": "SELECT_FROM_POPUP",
-  "durationHours": "1",
-  "durationMinutes": "30",
+  "has_reminder": "true",
+  "reminder_popup": "true",
+  "reminder_popup_time": "1800",
+  "date_start_date": "01/15/2026",
+  "date_start_hours": "14",
+  "date_start_minutes": "00",
+  "parent_type": "Account",
+  "duration_hours": "1",
+  "duration_minutes": "30",
   "description": "Initial project kickoff meeting with the client to discuss requirements, timeline, and deliverables. Prepare presentation materials and technical documentation.",
-  "assignedUserName": "Will Westin"
+  "invitee_first_name": "Chris"
 }

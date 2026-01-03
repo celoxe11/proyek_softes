@@ -1,6 +1,5 @@
 package com.proyek_softes.demo.tests;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;

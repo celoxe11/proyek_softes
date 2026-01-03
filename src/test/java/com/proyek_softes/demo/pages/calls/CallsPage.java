@@ -17,8 +17,9 @@ public class CallsPage {
     private final By navTab = By.id("grouptab_5");
     private final By subTab = By.xpath("//a[@href=\"index.php?module=Calls&action=index&parentTab=All\"]");
 
-    private final By createCallLink = By.xpath("//a[@data-action-name='Create']");
+    private final By createCallLink = By.xpath("//a[@data-action-name='Schedule_Call']");
     private final By viewCallLink = By.xpath("//a[@data-action-name='List']");
+    private final By importCallLink = By.xpath("//a[@data-action-name='Import']");
 
     private final By firstRowCallName = By.cssSelector("table.list.view tbody tr:first-child td[type='name'] a");
     private final By firstRowLocator = By.cssSelector("table.list.view tbody tr[height='20']:first-of-type");
@@ -28,9 +29,10 @@ public class CallsPage {
     private final By filterButton = By.xpath("//a[@title='Filter']");
     private final By quickFilterTab = By.xpath("//li[contains(@class, 'searchTabHandler') and contains(@class, 'basic')]/a");
     private final By modalContent = By.className("modal-content");
-    private final By filterNameField = By.id("search_name_basic");
+    private final By filterNameField = By.id("name_basic");
     private final By filterMyItemsCheckbox = By.id("current_user_only_basic");
     private final By filterFavoritesCheckbox = By.id("favorites_only_basic");
+    private final By filterOpenItemsCheckbox = By.id("open_only_basic");
     private final By filterSubmitButton = By.id("search_form_submit");
     private final By filterClearButton = By.id("search_form_clear");
 
@@ -76,6 +78,12 @@ public class CallsPage {
         wait.until(ExpectedConditions.visibilityOfElementLocated(viewCallLink));
         wait.until(ExpectedConditions.elementToBeClickable(viewCallLink));
         driver.findElement(viewCallLink).click();
+    }
+
+    public void navigateToImportCall() {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(importCallLink));
+        wait.until(ExpectedConditions.elementToBeClickable(importCallLink));
+        driver.findElement(importCallLink).click();
     }
 
     public boolean isInFirstRow(String callName) {
@@ -135,7 +143,7 @@ public class CallsPage {
         driver.switchTo().alert().accept();
     }
 
-    public void filterQuick(String name, boolean myItems, boolean favorites) {
+    public void filterQuick(String name, boolean myItems, boolean favorites, boolean openItems) {
         wait.until(ExpectedConditions.visibilityOfElementLocated(filterButton));
         driver.findElement(filterButton).click();
 
@@ -155,6 +163,10 @@ public class CallsPage {
         WebElement favoritesCheckbox = driver.findElement(filterFavoritesCheckbox);
         if (favoritesCheckbox.isSelected() != favorites) {
             favoritesCheckbox.click();
+        }
+        WebElement openItemsCheckbox = driver.findElement(filterOpenItemsCheckbox);
+        if (openItemsCheckbox.isSelected() != openItems) {
+            openItemsCheckbox.click();
         }
 
         driver.findElement(filterSubmitButton).click();
@@ -189,12 +201,14 @@ public class CallsPage {
         wait.until(ExpectedConditions.presenceOfElementLocated(filterNameField));
         wait.until(ExpectedConditions.presenceOfElementLocated(filterMyItemsCheckbox));
         wait.until(ExpectedConditions.presenceOfElementLocated(filterFavoritesCheckbox));
+        wait.until(ExpectedConditions.presenceOfElementLocated(filterOpenItemsCheckbox));
 
         String nameFieldValue = driver.findElement(filterNameField).getAttribute("value").trim();
         boolean myItemsChecked = driver.findElement(filterMyItemsCheckbox).isSelected();
         boolean favoritesChecked = driver.findElement(filterFavoritesCheckbox).isSelected();
+        boolean openItemsChecked = driver.findElement(filterOpenItemsCheckbox).isSelected();
 
-        if (nameFieldValue.isEmpty() && !myItemsChecked && !favoritesChecked) {
+        if (nameFieldValue.isEmpty() && !myItemsChecked && !favoritesChecked && !openItemsChecked) {
             driver.findElement(filterSubmitButton).click();
             return;
         }
