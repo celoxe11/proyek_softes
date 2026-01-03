@@ -1,0 +1,22 @@
+{
+  "salutationBeforeEdit": "Mr.",
+  "firstNameBeforeEdit": "Michael",
+  "lastNameBeforeEdit": "Anderson",
+  "salutation": "Mr.",
+  "first_name": "Michael",
+  "last_name": "Anderson - Converted",
+  "phone_work": "+1-555-0123",
+  "title": "Chief Technology Officer",
+  "phone_mobile": "+1-555-0126",
+  "department": "Information Technology",
+  "phone_fax": "+1-555-0125",
+  "account_name": "TechCorp Solutions Inc.",
+  "primary_address_street": "456 Innovation Drive, Suite 300",
+  "primary_address_city": "San Francisco",
+  "primary_address_state": "California",
+  "primary_address_postalcode": "94105",
+  "primary_address_country": "United States",
+  "email": "m.anderson@techcorp.com",
+  "description": "High-value prospect interested in enterprise software solutions. Currently evaluating multiple vendors for digital transformation project. Budget approved for Q1 2026. Key decision maker for technology investments. Follow-up scheduled for next week.",
+  "do_not_call": "false"
+}

@@ -194,16 +194,37 @@ public class CasesPage {
         return filterResult;
     }
 
-    public void checkAndClearFilter() {
-        try {
-            if (driver.findElements(filterButton).size() > 0) {
-                driver.findElement(filterButton).click();
-                wait.until(ExpectedConditions.visibilityOfElementLocated(filterClearButton));
-                driver.findElement(filterClearButton).click();
-                Thread.sleep(1000);
-            }
-        } catch (Exception e) {
-            System.out.println("No filter to clear or error clearing filter: " + e.getMessage());
+     public void checkAndClearFilter() {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(filterButton));
+        driver.findElement(filterButton).click();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(modalContent));
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(quickFilterTab));
+        WebElement quickFilterElement = driver.findElement(quickFilterTab);
+        if (!quickFilterElement.getAttribute("class").contains("active")) {
+            quickFilterElement.click();
         }
+
+        wait.until(ExpectedConditions.presenceOfElementLocated(filterNameField));
+        wait.until(ExpectedConditions.presenceOfElementLocated(filterMyItemsCheckbox));
+        wait.until(ExpectedConditions.presenceOfElementLocated(filterFavoritesCheckbox));
+
+        // check if name field is filled or checkboxes are checked
+        String nameFieldValue = driver.findElement(filterNameField).getAttribute("value").trim();
+        boolean myItemsChecked = driver.findElement(filterMyItemsCheckbox).isSelected();
+        boolean favoritesChecked = driver.findElement(filterFavoritesCheckbox).isSelected();
+        boolean openItemsChecked = driver.findElement(filterOpenItemsCheckbox).isSelected();
+
+        if (nameFieldValue.isEmpty() && !myItemsChecked && !favoritesChecked && !openItemsChecked) {
+            // no filter applied
+            driver.findElement(filterSubmitButton).click();
+            return;
+        }
+
+        // clear all fields and then search, this will clear filter
+        wait.until(ExpectedConditions.presenceOfElementLocated(filterClearButton));
+        driver.findElement(filterClearButton).click();
+
+        driver.findElement(filterSubmitButton).click();
     }
 }

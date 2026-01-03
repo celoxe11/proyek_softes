@@ -4,9 +4,8 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
-import static org.testng.Assert.assertTrue;
-
 import org.openqa.selenium.WebElement;
+import static org.testng.Assert.assertTrue;
 
 /**
  * Generic CRUD test helper to eliminate duplicate test code patterns across entity tests.
