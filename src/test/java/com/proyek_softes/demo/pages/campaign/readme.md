@@ -1,0 +1,1 @@
+create email template dan view email template ada di folder `email_templates/`

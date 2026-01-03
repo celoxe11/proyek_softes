@@ -2,24 +2,22 @@ package com.proyek_softes.demo.utils;
 
 import org.testng.annotations.DataProvider;
 
-public class TaskDataProvider {
+public class TaskDataProvider extends BaseDataProvider {
 
-    private static final String CREATE_TASK_FILE = "task_demo/create_task_data.json";
-    private static final String VIEW_TASK_FILE = "task_demo/view_task_data.json";
-    private static final String EDIT_TASK_FILE = "task_demo/edit_task_data.json";
+    private static final String ENTITY_FOLDER = "task_demo";
 
     @DataProvider(name = "createTaskData")
     public static Object[][] getCreateTaskData() {
-        return JsonDataReader.getDirectObjectData(CREATE_TASK_FILE);
+        return getTestData(ENTITY_FOLDER, "create");
     }
 
     @DataProvider(name = "viewTaskData")
     public static Object[][] getViewTaskData() {
-        return JsonDataReader.getDirectObjectData(VIEW_TASK_FILE);
+        return getTestData(ENTITY_FOLDER, "view");
     }
 
     @DataProvider(name = "editTaskData")
     public static Object[][] getEditTaskData() {
-        return JsonDataReader.getDirectObjectData(EDIT_TASK_FILE);
+        return getTestData(ENTITY_FOLDER, "edit");
     }
 }

@@ -13,84 +13,71 @@ import com.proyek_softes.demo.utils.LeadDataProvider;
 
 import io.qameta.allure.Description;
 
-public class LeadTest extends BaseTest {
+public class LeadTest extends GenericCrudTestHelper<LeadsPage, CreateLeadPage> {
 
     @Test(dataProvider = "createLeadData", dataProviderClass = LeadDataProvider.class)
     @Description("DEM-020")
     public void testDem020(Map<String, String> testData) {
-        login("will", "will");
         LeadsPage leadsPage = new LeadsPage(driver);
-        leadsPage.navigateToLeadsModule();
-        leadsPage.navigateToCreateLead();
-
         CreateLeadPage createLeadPage = new CreateLeadPage(driver, wait);
-        createLeadPage.addInformationFromData(testData);
-        createLeadPage.save();
-
-        String fullName = testData.get("firstName") + " " + testData.get("lastName");
-        boolean isSaved = createLeadPage.isLeadSavedSuccessfully(fullName);
-        assertTrue(isSaved, "Lead should be saved successfully");
-
-        takeScreenshot("DEM-020_Create_Lead");
-
-        leadsPage.navigateToViewLeads();
-        boolean isInFirstRow = leadsPage.isInFirstRow(testData.get("lastName"));
-        assertTrue(isInFirstRow, "Created lead should appear in the first row of leads list");
-
-        takeElementScreenshot("DEM-020_Lead_In_List", leadsPage.getFirstRowLocator());
+        
+        testCreateEntity(
+            testData,
+            v -> leadsPage,
+            leadsPage::navigateToLeadsModule,
+            leadsPage::navigateToCreateLead,
+            v -> createLeadPage,
+            (page, data) -> page.addInformationFromData(data),
+            createLeadPage::save,
+            data -> data.get("firstName") + " " + data.get("lastName"),
+            name -> createLeadPage.isLeadSavedSuccessfully(name),
+            "DEM-020",
+            leadsPage::navigateToViewLeads,
+            name -> leadsPage.isInFirstRow(testData.get("lastName")),
+            v -> leadsPage.getFirstRowLocator()
+        );
     }
 
     @Test(dataProvider = "viewLeadData", dataProviderClass = LeadDataProvider.class)
     @Description("DEM-021")
     public void testDem021(Map<String, String> testData) {
-        login("will", "will");
         LeadsPage leadsPage = new LeadsPage(driver);
-        leadsPage.navigateToLeadsModule();
-        leadsPage.navigateToViewLeads();
-        leadsPage.clickFirstLead();
-
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-        }
-
-        String fullName = testData.get("firstName") + " " + testData.get("lastName");
-        boolean isOnLeadDetailPage = leadsPage.isLeadTitleCorrect(fullName);
-        assertTrue(isOnLeadDetailPage, "Should be on Lead Detail page for the selected lead");
-        takeScreenshot("DEM-021_View_Lead_Detail");
+        
+        testViewEntity(
+            testData,
+            v -> leadsPage,
+            leadsPage::navigateToLeadsModule,
+            leadsPage::navigateToViewLeads,
+            leadsPage::clickFirstLead,
+            data -> data.get("firstName") + " " + data.get("lastName"),
+            leadsPage::isLeadTitleCorrect,
+            "DEM-021"
+        );
     }
 
     @Test(dataProvider = "editLeadData", dataProviderClass = LeadDataProvider.class)
     @Description("DEM-022")
     public void testDem022(Map<String, String> testData) {
-        login("will", "will");
         LeadsPage leadsPage = new LeadsPage(driver);
-        leadsPage.navigateToLeadsModule();
-        leadsPage.navigateToViewLeads();
-        
-        leadsPage.clickFirstLead();
-
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-        }
-
-        String fullNameBeforeEdit = testData.get("firstNameBeforeEdit") + " " + testData.get("lastNameBeforeEdit");
-        boolean isOnLeadDetailPage = leadsPage.isLeadTitleCorrect(fullNameBeforeEdit);
-        assertTrue(isOnLeadDetailPage, "Should be on Lead Detail page for the selected lead");
-        takeScreenshot("DEM-022_View_Lead_Detail_Before_Edit");
-
-        leadsPage.editLead();
-
         CreateLeadPage editLeadPage = new CreateLeadPage(driver, wait);
-        editLeadPage.addInformationFromData(testData);
-        editLeadPage.save();
-
-        String fullName = testData.get("firstName") + " " + testData.get("lastName");
-        boolean isSaved = editLeadPage.isLeadSavedSuccessfully(fullName);
-        assertTrue(isSaved, "Lead should be saved successfully after editing");
-
-        takeScreenshot("DEM-022_Edit_Lead");
+        
+        testEditEntity(
+            testData,
+            v -> leadsPage,
+            leadsPage::navigateToLeadsModule,
+            leadsPage::navigateToViewLeads,
+            leadsPage::clickFirstLead,
+            data -> data.get("firstNameBeforeEdit") + " " + data.get("lastNameBeforeEdit"),
+            leadsPage::isLeadTitleCorrect,
+            "DEM-022_View_Lead_Detail",
+            leadsPage::editLead,
+            v -> editLeadPage,
+            (page, data) -> page.addInformationFromData(data),
+            editLeadPage::save,
+            data -> data.get("firstName") + " " + data.get("lastName"),
+            editLeadPage::isLeadSavedSuccessfully,
+            "DEM-022"
+        );
     }
 
     @Test

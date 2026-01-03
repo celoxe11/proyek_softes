@@ -11,85 +11,71 @@ import com.proyek_softes.demo.utils.SpotDataProvider;
 
 import io.qameta.allure.Description;
 
-public class SpotTest extends BaseTest {
+public class SpotTest extends GenericCrudTestHelper<SpotsPage, CreateSpotsPage> {
 
     @Test(dataProvider = "createSpotData", dataProviderClass = SpotDataProvider.class)
     @Description("DEM-044")
     public void testDem044(Map<String, String> testData) {
-        login("will", "will");
         SpotsPage spotsPage = new SpotsPage(driver);
-        spotsPage.navigateToSpotsModule();
-        spotsPage.navigateToCreateSpot();
-
         CreateSpotsPage createSpotsPage = new CreateSpotsPage(driver, wait);
-        createSpotsPage.addInformationFromData(testData);
-        createSpotsPage.save();
-
-        String spotName = testData.get("name");
-        boolean isSaved = createSpotsPage.isSpotSavedSuccessfully(spotName);
-        assertTrue(isSaved, "Spot should be saved successfully");
-
-        takeScreenshot("DEM-044_Create_Spot");
-
-        spotsPage.navigateToViewSpot();
-        boolean isInFirstRow = spotsPage.isInFirstRow(spotName);
-        assertTrue(isInFirstRow, "Created spot should appear in the first row of spots list");
-
-        takeElementScreenshot("DEM-044_Spot_In_List", spotsPage.getFirstRowLocator());
+        
+        testCreateEntity(
+            testData,
+            v -> spotsPage,
+            spotsPage::navigateToSpotsModule,
+            spotsPage::navigateToCreateSpot,
+            v -> createSpotsPage,
+            (page, data) -> page.addInformationFromData(data),
+            createSpotsPage::save,
+            data -> data.get("name"),
+            createSpotsPage::isSpotSavedSuccessfully,
+            "DEM-044",
+            spotsPage::navigateToViewSpot,
+            spotsPage::isInFirstRow,
+            v -> spotsPage.getFirstRowLocator()
+        );
     }
 
     @Test(dataProvider = "viewSpotData", dataProviderClass = SpotDataProvider.class)
     @Description("DEM-045")
     public void testDem045(Map<String, String> testData) {
-        try {
-            login("will", "will");
-            SpotsPage spotsPage = new SpotsPage(driver);
-            spotsPage.navigateToSpotsModule();
-            spotsPage.navigateToViewSpot();
-
-            spotsPage.clickFirstSpot();
-
-            Thread.sleep(2000);
-
-            String spotName = testData.get("name");
-            boolean isOnSpotDetailPage = spotsPage.isSpotTitleCorrect(spotName);
-            assertTrue(isOnSpotDetailPage, "Should be on Spot Detail page for the selected spot");
-            takeScreenshot("DEM-045_View_Spot_Detail");
-        } catch (InterruptedException e) {
-        }
+        SpotsPage spotsPage = new SpotsPage(driver);
+        
+        testViewEntity(
+            testData,
+            v -> spotsPage,
+            spotsPage::navigateToSpotsModule,
+            spotsPage::navigateToViewSpot,
+            spotsPage::clickFirstSpot,
+            data -> data.get("name"),
+            spotsPage::isSpotTitleCorrect,
+            "DEM-045"
+        );
     }
 
     @Test(dataProvider = "editSpotData", dataProviderClass = SpotDataProvider.class)
     @Description("DEM-046")
     public void testDem046(Map<String, String> testData) {
-        try {
-            login("will", "will");
-            SpotsPage spotsPage = new SpotsPage(driver);
-            spotsPage.navigateToSpotsModule();
-            spotsPage.navigateToViewSpot();
-
-            spotsPage.clickFirstSpot();
-
-            Thread.sleep(2000);
-
-            String spotNameBeforeEdit = testData.get("nameBeforeEdit");
-            boolean isOnSpotDetailPage = spotsPage.isSpotTitleCorrect(spotNameBeforeEdit);
-            assertTrue(isOnSpotDetailPage, "Should be on Spot Detail page for the selected spot");
-            takeScreenshot("DEM-046_View_Spot_Detail_Before_Edit");
-
-            spotsPage.editSpot();
-
-            CreateSpotsPage editSpotsPage = new CreateSpotsPage(driver, wait);
-            editSpotsPage.addInformationFromData(testData);
-            editSpotsPage.save();
-
-            String spotName = testData.get("name");
-            boolean isSaved = editSpotsPage.isSpotSavedSuccessfully(spotName);
-            assertTrue(isSaved, "Spot should be saved successfully after editing");
-
-            takeScreenshot("DEM-046_Edit_Spot");
-        } catch (InterruptedException e) {
-        }
+        SpotsPage spotsPage = new SpotsPage(driver);
+        CreateSpotsPage editSpotsPage = new CreateSpotsPage(driver, wait);
+        
+        testEditEntity(
+            testData,
+            v -> spotsPage,
+            spotsPage::navigateToSpotsModule,
+            spotsPage::navigateToViewSpot,
+            spotsPage::clickFirstSpot,
+            data -> data.get("nameBeforeEdit"),
+            spotsPage::isSpotTitleCorrect,
+            "DEM-046_View_Spot_Detail",
+            spotsPage::editSpot,
+            v -> editSpotsPage,
+            (page, data) -> page.addInformationFromData(data),
+            editSpotsPage::save,
+            data -> data.get("name"),
+            editSpotsPage::isSpotSavedSuccessfully,
+            "DEM-046"
+        );
     }
 
     @Test

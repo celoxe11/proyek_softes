@@ -12,85 +12,71 @@ import com.proyek_softes.demo.utils.TaskDataProvider;
 
 import io.qameta.allure.Description;
 
-public class TaskTest extends BaseTest {
+public class TaskTest extends GenericCrudTestHelper<TasksPage, CreateTaskPage> {
 
     @Test(dataProvider = "createTaskData", dataProviderClass = TaskDataProvider.class)
     @Description("DEM-070")
     public void testDem070(Map<String, String> testData) {
-        login("will", "will");
         TasksPage tasksPage = new TasksPage(driver);
-        tasksPage.navigateToTasksModule();
-        tasksPage.navigateToCreateTask();
-
         CreateTaskPage createTaskPage = new CreateTaskPage(driver, wait);
-        createTaskPage.addInformationFromData(testData);
-        createTaskPage.save();
-
-        String taskName = testData.get("name");
-        boolean isSaved = createTaskPage.isTaskSavedSuccessfully(taskName);
-        assertTrue(isSaved, "Task should be saved successfully");
-
-        takeScreenshot("DEM-070_Create_Task");
-
-        tasksPage.navigateToViewTask();
-        boolean isInFirstRow = tasksPage.isInFirstRow(taskName);
-        assertTrue(isInFirstRow, "Created task should appear in the first row of tasks list");
-
-        takeElementScreenshot("DEM-070_Task_In_List", tasksPage.getFirstRowLocator());
+        
+        testCreateEntity(
+            testData,
+            v -> tasksPage,
+            tasksPage::navigateToTasksModule,
+            tasksPage::navigateToCreateTask,
+            v -> createTaskPage,
+            (page, data) -> page.addInformationFromData(data),
+            createTaskPage::save,
+            data -> data.get("name"),
+            createTaskPage::isTaskSavedSuccessfully,
+            "DEM-070",
+            tasksPage::navigateToViewTask,
+            tasksPage::isInFirstRow,
+            v -> tasksPage.getFirstRowLocator()
+        );
     }
 
     @Test(dataProvider = "viewTaskData", dataProviderClass = TaskDataProvider.class)
     @Description("DEM-071")
     public void testDem071(Map<String, String> testData) {
-        try {
-            login("will", "will");
-            TasksPage tasksPage = new TasksPage(driver);
-            tasksPage.navigateToTasksModule();
-            tasksPage.navigateToViewTask();
-
-            tasksPage.clickFirstTask();
-
-            Thread.sleep(2000);
-
-            String taskName = testData.get("name");
-            boolean isOnTaskDetailPage = tasksPage.isTaskTitleCorrect(taskName);
-            assertTrue(isOnTaskDetailPage, "Should be on Task Detail page for the selected task");
-            takeScreenshot("DEM-071_View_Task_Detail");
-        } catch (InterruptedException e) {
-        }
-
+        TasksPage tasksPage = new TasksPage(driver);
+        
+        testViewEntity(
+            testData,
+            v -> tasksPage,
+            tasksPage::navigateToTasksModule,
+            tasksPage::navigateToViewTask,
+            tasksPage::clickFirstTask,
+            data -> data.get("name"),
+            tasksPage::isTaskTitleCorrect,
+            "DEM-071"
+        );
     }
 
     @Test(dataProvider = "editTaskData", dataProviderClass = TaskDataProvider.class)
     @Description("DEM-072")
     public void testDem072(Map<String, String> testData) {
-        try {
-            login("will", "will");
-            TasksPage tasksPage = new TasksPage(driver);
-            tasksPage.navigateToTasksModule();
-            tasksPage.navigateToViewTask();
-
-            tasksPage.clickFirstTask();
-
-            Thread.sleep(2000);
-
-            String taskNameBeforeEdit = testData.get("nameBeforeEdit");
-            boolean isOnTaskDetailPage = tasksPage.isTaskTitleCorrect(taskNameBeforeEdit);
-            assertTrue(isOnTaskDetailPage, "Should be on Task Detail page for the selected task");
-            takeScreenshot("DEM-072_View_Task_Detail_Before_Edit");
-            tasksPage.editTask();
-
-            CreateTaskPage editTaskPage = new CreateTaskPage(driver, wait);
-            editTaskPage.addInformationFromData(testData);
-            editTaskPage.save();
-
-            String taskName = testData.get("name");
-            boolean isSaved = editTaskPage.isTaskSavedSuccessfully(taskName);
-            assertTrue(isSaved, "Task should be saved successfully after editing");
-
-            takeScreenshot("DEM-072_Edit_Task");
-        } catch (InterruptedException e) {
-        }
+        TasksPage tasksPage = new TasksPage(driver);
+        CreateTaskPage editTaskPage = new CreateTaskPage(driver, wait);
+        
+        testEditEntity(
+            testData,
+            v -> tasksPage,
+            tasksPage::navigateToTasksModule,
+            tasksPage::navigateToViewTask,
+            tasksPage::clickFirstTask,
+            data -> data.get("nameBeforeEdit"),
+            tasksPage::isTaskTitleCorrect,
+            "DEM-072_View_Task_Detail",
+            tasksPage::editTask,
+            v -> editTaskPage,
+            (page, data) -> page.addInformationFromData(data),
+            editTaskPage::save,
+            data -> data.get("name"),
+            editTaskPage::isTaskSavedSuccessfully,
+            "DEM-072"
+        );
     }
 
     @Test

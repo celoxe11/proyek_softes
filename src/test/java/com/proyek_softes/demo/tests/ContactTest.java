@@ -12,86 +12,71 @@ import com.proyek_softes.demo.utils.ContactDataProvider;
 
 import io.qameta.allure.Description;
 
-public class ContactTest extends BaseTest {
+public class ContactTest extends GenericCrudTestHelper<ContactsPage, CreateContactPage> {
 
     @Test(dataProvider = "createContactData", dataProviderClass = ContactDataProvider.class)
     @Description("DEM-009")
     public void testDem009(Map<String, String> testData) {
-        login("will", "will");
         ContactsPage contactsPage = new ContactsPage(driver);
-        contactsPage.navigateToContactsModule();
-        contactsPage.navigateToCreateContact();
-
         CreateContactPage createContactPage = new CreateContactPage(driver, wait);
-        createContactPage.addInformationFromData(testData);
-        createContactPage.save();
-
-        String fullName = testData.get("salutation") + " " + testData.get("firstName") + " " + testData.get("lastName");
-        boolean isSaved = createContactPage.isContactSavedSuccessfully(fullName);
-        assertTrue(isSaved, "Contact with minimal data should be saved successfully");
-
-        takeScreenshot("DEM-009_Create_Contact");
-
-        contactsPage.navigateToViewContact();
-        boolean isInFirstRow = contactsPage.isInFirstRow(fullName);
-        assertTrue(isInFirstRow, "Created contact should appear in the first row of contacts list");
-
-        // take screenshot of the row containing the contact name
-        takeElementScreenshot("DEM-009_Contact_In_List", contactsPage.getFirstRowLocator());
+        
+        testCreateEntity(
+            testData,
+            v -> contactsPage,
+            contactsPage::navigateToContactsModule,
+            contactsPage::navigateToCreateContact,
+            v -> createContactPage,
+            (page, data) -> page.addInformationFromData(data),
+            createContactPage::save,
+            data -> data.get("salutation") + " " + data.get("firstName") + " " + data.get("lastName"),
+            createContactPage::isContactSavedSuccessfully,
+            "DEM-009",
+            contactsPage::navigateToViewContact,
+            contactsPage::isInFirstRow,
+            v -> contactsPage.getFirstRowLocator()
+        );
     }
 
     @Test(dataProvider = "viewContactData", dataProviderClass = ContactDataProvider.class)
     @Description("DEM-010")
     public void testDem010(Map<String, String> testData) {
-        try {
-            login("will", "will");
-            ContactsPage contactsPage = new ContactsPage(driver);
-            contactsPage.navigateToContactsModule();
-            contactsPage.navigateToViewContact();
-
-            contactsPage.clickFirstContact();
-
-            Thread.sleep(2000);
-
-            String fullName = testData.get("salutation") + " " + testData.get("firstName") + " " + testData.get("lastName");
-            boolean isOnContactDetailPage = contactsPage.isContactTitleCorrect(fullName);
-            assertTrue(isOnContactDetailPage, "Should be on Contact Detail page for the selected contact");
-            takeScreenshot("DEM-010_View_Contact_Detail");
-        } catch (InterruptedException e) {
-        }
+        ContactsPage contactsPage = new ContactsPage(driver);
+        
+        testViewEntity(
+            testData,
+            v -> contactsPage,
+            contactsPage::navigateToContactsModule,
+            contactsPage::navigateToViewContact,
+            contactsPage::clickFirstContact,
+            data -> data.get("salutation") + " " + data.get("firstName") + " " + data.get("lastName"),
+            contactsPage::isContactTitleCorrect,
+            "DEM-010"
+        );
     }
 
     @Test(dataProvider = "editContactData", dataProviderClass = ContactDataProvider.class)
     @Description("DEM-011")
     public void testDem011(Map<String, String> testData) {
-        try {
-            login("will", "will");
-            ContactsPage contactsPage = new ContactsPage(driver);
-            contactsPage.navigateToContactsModule();
-            contactsPage.navigateToViewContact();
-
-            contactsPage.clickFirstContact();
-
-            Thread.sleep(2000);
-
-            String fullNameBeforeEdit = testData.get("salutationBeforeEdit") + " " + testData.get("firstNameBeforeEdit") + " " + testData.get("lastNameBeforeEdit");
-            boolean isOnContactDetailPage = contactsPage.isContactTitleCorrect(fullNameBeforeEdit);
-            assertTrue(isOnContactDetailPage, "Should be on Contact Detail page for the selected contact");
-            takeScreenshot("DEM-011_View_Contact_Detail_Before_Edit");
-
-            contactsPage.editContact();
-
-            CreateContactPage editContactPage = new CreateContactPage(driver, wait);
-            editContactPage.addInformationFromData(testData);
-            editContactPage.save();
-
-            String fullName = testData.get("salutation") + " " + testData.get("firstName") + " " + testData.get("lastName");
-            boolean isSaved = editContactPage.isContactSavedSuccessfully(fullName);
-            assertTrue(isSaved, "Contact should be saved successfully after editing");
-
-            takeScreenshot("DEM-011_Edit_Contact");
-        } catch (InterruptedException e) {
-        }
+        ContactsPage contactsPage = new ContactsPage(driver);
+        CreateContactPage editContactPage = new CreateContactPage(driver, wait);
+        
+        testEditEntity(
+            testData,
+            v -> contactsPage,
+            contactsPage::navigateToContactsModule,
+            contactsPage::navigateToViewContact,
+            contactsPage::clickFirstContact,
+            data -> data.get("salutationBeforeEdit") + " " + data.get("firstNameBeforeEdit") + " " + data.get("lastNameBeforeEdit"),
+            contactsPage::isContactTitleCorrect,
+            "DEM-011_View_Contact_Detail",
+            contactsPage::editContact,
+            v -> editContactPage,
+            (page, data) -> page.addInformationFromData(data),
+            editContactPage::save,
+            data -> data.get("salutation") + " " + data.get("firstName") + " " + data.get("lastName"),
+            editContactPage::isContactSavedSuccessfully,
+            "DEM-011"
+        );
     }
 
     @Test

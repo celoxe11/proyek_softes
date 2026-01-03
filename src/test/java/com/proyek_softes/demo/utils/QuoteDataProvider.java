@@ -2,24 +2,22 @@ package com.proyek_softes.demo.utils;
 
 import org.testng.annotations.DataProvider;
 
-public class QuoteDataProvider {
+public class QuoteDataProvider extends BaseDataProvider {
 
-    private static final String CREATE_QUOTE_FILE = "quote_demo/create_quote_data.json";
-    private static final String EDIT_QUOTE_FILE = "quote_demo/edit_quote_data.json";
-    private static final String VIEW_QUOTE_FILE = "quote_demo/view_quote_data.json";
+    private static final String ENTITY_FOLDER = "quote_demo";
 
     @DataProvider(name = "createQuoteData")
     public static Object[][] getCreateQuoteData() {
-        return JsonDataReader.getDirectObjectData(CREATE_QUOTE_FILE);
+        return getTestData(ENTITY_FOLDER, "create");
     }
 
     @DataProvider(name = "viewQuoteData")
     public static Object[][] getViewQuoteData() {
-        return JsonDataReader.getDirectObjectData(VIEW_QUOTE_FILE);
+        return getTestData(ENTITY_FOLDER, "view");
     }
 
     @DataProvider(name = "editQuoteData")
     public static Object[][] getEditQuoteData() {
-        return JsonDataReader.getDirectObjectData(EDIT_QUOTE_FILE);
+        return getTestData(ENTITY_FOLDER, "edit");
     }
 }

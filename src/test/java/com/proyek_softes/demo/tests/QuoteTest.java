@@ -12,85 +12,71 @@ import com.proyek_softes.demo.utils.QuoteDataProvider;
 
 import io.qameta.allure.Description;
 
-public class QuoteTest extends BaseTest {
+public class QuoteTest extends GenericCrudTestHelper<QuotesPage, CreateQuotePage> {
 
     @Test(dataProvider = "createQuoteData", dataProviderClass = QuoteDataProvider.class)
     @Description("DEM-026")
     public void testDem026(Map<String, String> testData) {
-        login("will", "will");
         QuotesPage quotesPage = new QuotesPage(driver);
-        quotesPage.navigateToQuotesModule();
-        quotesPage.navigateToCreateQuote();
-
         CreateQuotePage createQuotePage = new CreateQuotePage(driver, wait);
-        createQuotePage.addInformationFromData(testData);
-        createQuotePage.save();
-
-        String quoteName = testData.get("name");
-        boolean isSaved = createQuotePage.isQuoteSavedSuccessfully(quoteName);
-        assertTrue(isSaved, "Quote with minimal data should be saved successfully");
-
-        takeScreenshot("DEM-026_Create_Quote");
-
-        quotesPage.navigateToViewQuote();
-        boolean isInFirstRow = quotesPage.isInFirstRow(quoteName);
-        assertTrue(isInFirstRow, "Created quote should appear in the first row of quotes list");
-
-        takeElementScreenshot("DEM-026_Quote_In_List", quotesPage.getFirstRowLocator());
+        
+        testCreateEntity(
+            testData,
+            v -> quotesPage,
+            quotesPage::navigateToQuotesModule,
+            quotesPage::navigateToCreateQuote,
+            v -> createQuotePage,
+            (page, data) -> page.addInformationFromData(data),
+            createQuotePage::save,
+            data -> data.get("name"),
+            createQuotePage::isQuoteSavedSuccessfully,
+            "DEM-026",
+            quotesPage::navigateToViewQuote,
+            quotesPage::isInFirstRow,
+            v -> quotesPage.getFirstRowLocator()
+        );
     }
 
     @Test(dataProvider = "viewQuoteData", dataProviderClass = QuoteDataProvider.class)
     @Description("DEM-027")
     public void testDem027(Map<String, String> testData) {
-        try {
-            login("will", "will");
-            QuotesPage quotesPage = new QuotesPage(driver);
-            quotesPage.navigateToQuotesModule();
-            quotesPage.navigateToViewQuote();
-
-            quotesPage.clickFirstQuote();
-
-            Thread.sleep(2000);
-
-            String quoteName = testData.get("name");
-            boolean isOnQuoteDetailPage = quotesPage.isQuoteTitleCorrect(quoteName);
-            assertTrue(isOnQuoteDetailPage, "Should be on Quote Detail page for the selected quote");
-            takeScreenshot("DEM-027_View_Quote_Detail");
-        } catch (InterruptedException e) {
-        }
+        QuotesPage quotesPage = new QuotesPage(driver);
+        
+        testViewEntity(
+            testData,
+            v -> quotesPage,
+            quotesPage::navigateToQuotesModule,
+            quotesPage::navigateToViewQuote,
+            quotesPage::clickFirstQuote,
+            data -> data.get("name"),
+            quotesPage::isQuoteTitleCorrect,
+            "DEM-027"
+        );
     }
 
     @Test(dataProvider = "editQuoteData", dataProviderClass = QuoteDataProvider.class)
     @Description("DEM-028")
     public void testDem028(Map<String, String> testData) {
-        try {
-            login("will", "will");
-            QuotesPage quotesPage = new QuotesPage(driver);
-            quotesPage.navigateToQuotesModule();
-            quotesPage.navigateToViewQuote();
-
-            quotesPage.clickFirstQuote();
-
-            Thread.sleep(2000);
-
-            String quoteNameBeforeEdit = testData.get("nameBeforeEdit");
-            boolean isOnQuoteDetailPage = quotesPage.isQuoteTitleCorrect(quoteNameBeforeEdit);
-            assertTrue(isOnQuoteDetailPage, "Should be on Quote Detail page for the selected quote");
-            takeScreenshot("DEM-028_View_Quote_Detail_Before_Edit");
-
-            quotesPage.editQuote();
-
-            CreateQuotePage editQuotePage = new CreateQuotePage(driver, wait);
-            editQuotePage.addInformationFromData(testData);
-            editQuotePage.save();
-
-            String quoteName = testData.get("name");
-            boolean isSaved = editQuotePage.isQuoteSavedSuccessfully(quoteName);
-            assertTrue(isSaved, "Quote should be saved successfully after editing");
-
-            takeScreenshot("DEM-028_Edit_Quote");
-        } catch (InterruptedException e) {
-        }
+        QuotesPage quotesPage = new QuotesPage(driver);
+        CreateQuotePage editQuotePage = new CreateQuotePage(driver, wait);
+        
+        testEditEntity(
+            testData,
+            v -> quotesPage,
+            quotesPage::navigateToQuotesModule,
+            quotesPage::navigateToViewQuote,
+            quotesPage::clickFirstQuote,
+            data -> data.get("nameBeforeEdit"),
+            quotesPage::isQuoteTitleCorrect,
+            "DEM-028_View_Quote_Detail",
+            quotesPage::editQuote,
+            v -> editQuotePage,
+            (page, data) -> page.addInformationFromData(data),
+            editQuotePage::save,
+            data -> data.get("name"),
+            editQuotePage::isQuoteSavedSuccessfully,
+            "DEM-028"
+        );
     }
 
     @Test

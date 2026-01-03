@@ -12,80 +12,71 @@ import com.proyek_softes.demo.utils.AccountDataProvider;
 
 import io.qameta.allure.Description;
 
-public class AccountTest extends BaseTest {
+public class AccountTest extends GenericCrudTestHelper<AccountsPage, CreateAccountsPage> {
 
     @Test(dataProvider = "createAccountData", dataProviderClass = AccountDataProvider.class)
     @Description("DEM-004")
     public void testDem004(Map<String, String> testData) {
-        login("will", "will");
         AccountsPage accountsPage = new AccountsPage(driver);
-        accountsPage.navigateToAccountsModule();
-        accountsPage.navigateToCreateAccount();
-
         CreateAccountsPage createAccountsPage = new CreateAccountsPage(driver);
-        createAccountsPage.addInformationFromData(testData);
-        createAccountsPage.save();
-
-        boolean isSaved = createAccountsPage.isAccountSavedSuccessfully(testData.get("name"));
-        assertTrue(isSaved, "Account with minimal data should be saved successfully");
-
-        takeScreenshot("DEM-004_Create_Account");
-
-        accountsPage.navigateToViewAccounts();
-        boolean isInFirstRow = accountsPage.isInFirstRow(testData.get("name"));
-        assertTrue(isInFirstRow, "Created account should appear in the first row of accounts list");
-
-        // take screenshot of the row containing the account name
-        takeElementScreenshot("DEM-004_Account_In_List", accountsPage.getFirstRowLocator());
+        
+        testCreateEntity(
+            testData,
+            v -> accountsPage,
+            accountsPage::navigateToAccountsModule,
+            accountsPage::navigateToCreateAccount,
+            v -> createAccountsPage,
+            (page, data) -> page.addInformationFromData(data),
+            createAccountsPage::save,
+            data -> data.get("name"),
+            createAccountsPage::isAccountSavedSuccessfully,
+            "DEM-004",
+            accountsPage::navigateToViewAccounts,
+            accountsPage::isInFirstRow,
+            v -> accountsPage.getFirstRowLocator()
+        );
     }
 
     @Test(dataProvider = "viewAccountData", dataProviderClass = AccountDataProvider.class)
     @Description("DEM-005")
     public void testDem005(Map<String, String> testData) {
-        login("will", "will");
         AccountsPage accountsPage = new AccountsPage(driver);
-        accountsPage.navigateToAccountsModule();
-        accountsPage.navigateToViewAccounts();
-        accountsPage.clickFirstAccount();
-
-        try {
-            Thread.sleep(2000); // wait for 2 seconds to ensure page is loaded
-        } catch (InterruptedException e) {
-        }
-
-        boolean isOnAccountDetailPage = accountsPage.isAccountTitleCorrect(testData.get("name")); // Replace with actual name to verify
-        assertTrue(isOnAccountDetailPage, "Should be on Account Detail page for the selected account");
-        takeScreenshot("DEM-005_View_Account_Detail");
+        
+        testViewEntity(
+            testData,
+            v -> accountsPage,
+            accountsPage::navigateToAccountsModule,
+            accountsPage::navigateToViewAccounts,
+            accountsPage::clickFirstAccount,
+            data -> data.get("name"),
+            accountsPage::isAccountTitleCorrect,
+            "DEM-005"
+        );
     }
 
     @Test(dataProvider = "editAccountData", dataProviderClass = AccountDataProvider.class)
     @Description("DEM-006")
     public void testDem006(Map<String, String> testData) {
-        login("will", "will");
         AccountsPage accountsPage = new AccountsPage(driver);
-        accountsPage.navigateToAccountsModule();
-        accountsPage.navigateToViewAccounts();
-        accountsPage.clickFirstAccount();
-
-        try {
-            Thread.sleep(2000); // wait for 2 seconds to ensure page is loaded
-        } catch (InterruptedException e) {
-        }
-
-        boolean isOnAccountDetailPage = accountsPage.isAccountTitleCorrect(testData.get("name_before_edit"));
-        assertTrue(isOnAccountDetailPage, "Should be on Account Detail page for the selected account");
-        takeScreenshot("DEM-006_View_Account_Detail_Before_Edit");
-
-        accountsPage.editAccount();
-
         CreateAccountsPage editAccountsPage = new CreateAccountsPage(driver);
-        editAccountsPage.addInformationFromData(testData);
-        editAccountsPage.save();
-
-        boolean isSaved = editAccountsPage.isAccountSavedSuccessfully(testData.get("name"));
-        assertTrue(isSaved, "Account should be saved successfully after editing");
-
-        takeScreenshot("DEM-006_Edit_Account");
+        
+        testEditEntity(
+            testData,
+            v -> accountsPage,
+            accountsPage::navigateToAccountsModule,
+            accountsPage::navigateToViewAccounts,
+            accountsPage::clickFirstAccount,
+            data -> data.get("name_before_edit"),
+            accountsPage::isAccountTitleCorrect,
+            "DEM-006_View_Account_Detail",
+            accountsPage::editAccount,
+            v -> editAccountsPage,
+            (page, data) -> page.addInformationFromData(data),
+            editAccountsPage::save,
+            data -> data.get("name"),
+            editAccountsPage::isAccountSavedSuccessfully,
+            "DEM-006"
+        );
     }
 
     @Test

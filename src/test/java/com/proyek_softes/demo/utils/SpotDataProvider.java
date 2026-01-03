@@ -2,24 +2,22 @@ package com.proyek_softes.demo.utils;
 
 import org.testng.annotations.DataProvider;
 
-public class SpotDataProvider {
+public class SpotDataProvider extends BaseDataProvider {
 
-    private static final String CREATE_SPOT_FILE = "spot_demo/create_spot_data.json";
-    private static final String EDIT_SPOT_FILE = "spot_demo/edit_spot_data.json";
-    private static final String VIEW_SPOT_FILE = "spot_demo/view_spot_data.json";
+    private static final String ENTITY_FOLDER = "spot_demo";
 
     @DataProvider(name = "createSpotData")
     public static Object[][] getCreateSpotData() {
-        return JsonDataReader.getDirectObjectData(CREATE_SPOT_FILE);
+        return getTestData(ENTITY_FOLDER, "create");
     }
 
     @DataProvider(name = "viewSpotData")
     public static Object[][] getViewSpotData() {
-        return JsonDataReader.getDirectObjectData(VIEW_SPOT_FILE);
+        return getTestData(ENTITY_FOLDER, "view");
     }
 
     @DataProvider(name = "editSpotData")
     public static Object[][] getEditSpotData() {
-        return JsonDataReader.getDirectObjectData(EDIT_SPOT_FILE);
+        return getTestData(ENTITY_FOLDER, "edit");
     }
 }

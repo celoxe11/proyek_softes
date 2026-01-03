@@ -2,24 +2,22 @@ package com.proyek_softes.demo.utils;
 
 import org.testng.annotations.DataProvider;
 
-public class CallDataProvider {
+public class CallDataProvider extends BaseDataProvider {
 
-    private static final String CREATE_CALL_FILE = "call_demo/create_call_data.json";
-    private static final String VIEW_CALL_FILE = "call_demo/view_call_data.json";
-    private static final String EDIT_CALL_FILE = "call_demo/edit_call_data.json";
+    private static final String ENTITY_FOLDER = "call_demo";
 
     @DataProvider(name = "createCallData")
     public static Object[][] getCreateCallData() {
-        return JsonDataReader.getDirectObjectData(CREATE_CALL_FILE);
+        return getTestData(ENTITY_FOLDER, "create");
     }
 
     @DataProvider(name = "viewCallData")
     public static Object[][] getViewCallData() {
-        return JsonDataReader.getDirectObjectData(VIEW_CALL_FILE);
+        return getTestData(ENTITY_FOLDER, "view");
     }
 
     @DataProvider(name = "editCallData")
     public static Object[][] getEditCallData() {
-        return JsonDataReader.getDirectObjectData(EDIT_CALL_FILE);
+        return getTestData(ENTITY_FOLDER, "edit");
     }
 }

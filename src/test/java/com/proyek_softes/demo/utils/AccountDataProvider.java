@@ -2,25 +2,23 @@ package com.proyek_softes.demo.utils;
 
 import org.testng.annotations.DataProvider;
 
-public class AccountDataProvider {
+public class AccountDataProvider extends BaseDataProvider {
 
-    private static final String CREATE_ACCOUNT_FILE = "account_demo/create_account_data.json";
-    private static final String EDIT_ACCOUNT_FILE = "account_demo/edit_account_data.json";
-    private static final String VIEW_ACCOUNT_FILE = "account_demo/view_account_data.json";
+    private static final String ENTITY_FOLDER = "account_demo";
 
     @DataProvider(name = "createAccountData")
     public static Object[][] getCreateAccountData() {
-        return JsonDataReader.getDirectObjectData(CREATE_ACCOUNT_FILE);
+        return getTestData(ENTITY_FOLDER, "create");
     }
 
     @DataProvider(name = "viewAccountData")
     public static Object[][] getViewAccountData() {
-        return JsonDataReader.getDirectObjectData(VIEW_ACCOUNT_FILE);
+        return getTestData(ENTITY_FOLDER, "view");
     }
 
     @DataProvider(name = "editAccountData")
     public static Object[][] getEditAccountData() {
-        return JsonDataReader.getDirectObjectData(EDIT_ACCOUNT_FILE);
+        return getTestData(ENTITY_FOLDER, "edit");
     }
 
     // private static final String DATA_FILE = "testdata/account_data.json";

@@ -12,79 +12,71 @@ import com.proyek_softes.demo.utils.OpportunityDataProvider;
 
 import io.qameta.allure.Description;
 
-public class OpportunityTest extends BaseTest {
+public class OpportunityTest extends GenericCrudTestHelper<OpportunityPage, CreateOpportunityPage> {
 
     @Test(dataProvider = "createOpportunityData", dataProviderClass = OpportunityDataProvider.class)
     @Description("DEM-015")
     public void testDem015(Map<String, String> testData) {
-        login("will", "will");
         OpportunityPage opportunityPage = new OpportunityPage(driver);
-        opportunityPage.navigateToOpportunitiesModule();
-        opportunityPage.navigateToCreateOpportunity();
-
         CreateOpportunityPage createOpportunityPage = new CreateOpportunityPage(driver, wait);
-        createOpportunityPage.addInformationFromData(testData);
-        createOpportunityPage.save();
-
-        boolean isSaved = createOpportunityPage.isOpportunitySavedSuccessfully(testData.get("name"));
-        assertTrue(isSaved, "Opportunity with minimal data should be saved successfully");
-
-        takeScreenshot("DEM-015_Create_Opportunity");
-
-        opportunityPage.navigateToViewOpportunities();
-        boolean isInFirstRow = opportunityPage.isInFirstRow(testData.get("name"));
-        assertTrue(isInFirstRow, "Created opportunity should appear in the first row of opportunities list");
-
-        takeElementScreenshot("DEM-015_Opportunity_In_List", opportunityPage.getFirstRowLocator());
+        
+        testCreateEntity(
+            testData,
+            v -> opportunityPage,
+            opportunityPage::navigateToOpportunitiesModule,
+            opportunityPage::navigateToCreateOpportunity,
+            v -> createOpportunityPage,
+            (page, data) -> page.addInformationFromData(data),
+            createOpportunityPage::save,
+            data -> data.get("name"),
+            createOpportunityPage::isOpportunitySavedSuccessfully,
+            "DEM-015",
+            opportunityPage::navigateToViewOpportunities,
+            opportunityPage::isInFirstRow,
+            v -> opportunityPage.getFirstRowLocator()
+        );
     }
 
     @Test(dataProvider = "viewOpportunityData", dataProviderClass = OpportunityDataProvider.class)
     @Description("DEM-016")
     public void testDem016(Map<String, String> testData) {
-        login("will", "will");
         OpportunityPage opportunityPage = new OpportunityPage(driver);
-        opportunityPage.navigateToOpportunitiesModule();
-        opportunityPage.navigateToViewOpportunities();
-        opportunityPage.clickFirstOpportunity();
-
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-        }
-
-        boolean isOnOpportunityDetailPage = opportunityPage.isOpportunityTitleCorrect(testData.get("name"));
-        assertTrue(isOnOpportunityDetailPage, "Should be on Opportunity Detail page for the selected opportunity");
-        takeScreenshot("DEM-016_View_Opportunity_Detail");
+        
+        testViewEntity(
+            testData,
+            v -> opportunityPage,
+            opportunityPage::navigateToOpportunitiesModule,
+            opportunityPage::navigateToViewOpportunities,
+            opportunityPage::clickFirstOpportunity,
+            data -> data.get("name"),
+            opportunityPage::isOpportunityTitleCorrect,
+            "DEM-016"
+        );
     }
 
     @Test(dataProvider = "editOpportunityData", dataProviderClass = OpportunityDataProvider.class)
     @Description("DEM-017")
     public void testDem017(Map<String, String> testData) {
-        login("will", "will");
         OpportunityPage opportunityPage = new OpportunityPage(driver);
-        opportunityPage.navigateToOpportunitiesModule();
-        opportunityPage.navigateToViewOpportunities();
-        opportunityPage.clickFirstOpportunity();
-
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-        }
-
-        boolean isOnOpportunityDetailPage = opportunityPage.isOpportunityTitleCorrect(testData.get("nameBeforeEdit"));
-        assertTrue(isOnOpportunityDetailPage, "Should be on Opportunity Detail page for the selected opportunity");
-        takeScreenshot("DEM-017_View_Opportunity_Detail_Before_Edit");
-
-        opportunityPage.editOpportunity();
-
         CreateOpportunityPage editOpportunityPage = new CreateOpportunityPage(driver, wait);
-        editOpportunityPage.addInformationFromData(testData);
-        editOpportunityPage.save();
-
-        boolean isSaved = editOpportunityPage.isOpportunitySavedSuccessfully(testData.get("name"));
-        assertTrue(isSaved, "Opportunity should be saved successfully after editing");
-
-        takeScreenshot("DEM-017_Edit_Opportunity");
+        
+        testEditEntity(
+            testData,
+            v -> opportunityPage,
+            opportunityPage::navigateToOpportunitiesModule,
+            opportunityPage::navigateToViewOpportunities,
+            opportunityPage::clickFirstOpportunity,
+            data -> data.get("nameBeforeEdit"),
+            opportunityPage::isOpportunityTitleCorrect,
+            "DEM-017_View_Opportunity_Detail",
+            opportunityPage::editOpportunity,
+            v -> editOpportunityPage,
+            (page, data) -> page.addInformationFromData(data),
+            editOpportunityPage::save,
+            data -> data.get("name"),
+            editOpportunityPage::isOpportunitySavedSuccessfully,
+            "DEM-017"
+        );
     }
 
     @Test
