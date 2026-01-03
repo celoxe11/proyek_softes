@@ -33,12 +33,15 @@ public class GetStartedPage {
 
     // Links on Download page - SuiteCRM 7.15 section
     private By suiteCRM715ReleaseNotesLinkLocator = By.cssSelector("a[href*='docs.suitecrm.com/admin/releases/7.15']");
-    private By suiteCRM715UpgradesLinkLocator = By.xpath("(//a[contains(@href, 'upgrade-suitecrm') or contains(@href, 'suitecrm.com/upgrade')])[1]");
+    private By suiteCRM715UpgradesLinkLocator = By
+            .xpath("(//a[contains(@href, 'upgrade-suitecrm') or contains(@href, 'suitecrm.com/upgrade')])[1]");
     private By suiteCRM715DownloadButtonLocator = By.cssSelector("a.fusion-button[href*='suitecrm-7-15']");
 
     // Links on Download page - SuiteCRM 8.9 section
-    private By suiteCRM89ReleaseNotesLinkLocator = By.cssSelector("a[href*='docs.suitecrm.com/8.x/admin/releases/8.9']");
-    private By suiteCRM89UpgradesLinkLocator = By.xpath("(//a[contains(@href, 'upgrade-suitecrm') or contains(@href, 'suitecrm.com/upgrade')])[2]");
+    private By suiteCRM89ReleaseNotesLinkLocator = By
+            .cssSelector("a[href*='docs.suitecrm.com/8.x/admin/releases/8.9']");
+    private By suiteCRM89UpgradesLinkLocator = By
+            .xpath("(//a[contains(@href, 'upgrade-suitecrm') or contains(@href, 'suitecrm.com/upgrade')])[2]");
     private By suiteCRM89DownloadButtonLocator = By.cssSelector("a.fusion-button[href*='suitecrm-8-9']");
 
     // Buttons on Download page - "A helping hand" section
@@ -50,10 +53,9 @@ public class GetStartedPage {
     private By stepByStepGuideLinkLocator = By.cssSelector("a[href*='downloading-installing']");
     private By userGuideLinkLocator = By.cssSelector("a[href*='docs.suitecrm.com/user']");
     private By chooseYoursTodayLinkLocator = By.cssSelector("a[href*='crowdin.com/project/suitecrmtranslations']");
-    
+
     // Button on Download page - SuiteCRM Hosted section
     private By get30DayFreeTrialButtonLocator = By.cssSelector("a.fusion-button[href*='suitecrmhosted']");
-
 
     // ========================================
     // CONSTRUCTOR
@@ -548,6 +550,158 @@ public class GetStartedPage {
             return true;
         } catch (Exception e) {
             System.out.println("Gagal click Find Out More button: " + e.getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Click "a step-by-step guide" link
+     * 
+     * @return true jika berhasil
+     */
+    public boolean clickStepByStepGuideLink() {
+        try {
+            System.out.println("Clicking step-by-step guide link");
+
+            waitForPageLoad();
+
+            // Scroll down to find the link
+            js.executeScript("window.scrollTo(0, document.body.scrollHeight / 2);");
+            Thread.sleep(500);
+
+            // Cari link
+            WebElement link = wait.until(ExpectedConditions.elementToBeClickable(stepByStepGuideLinkLocator));
+
+            // Scroll ke element
+            js.executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", link);
+            Thread.sleep(500);
+
+            // Klik link
+            try {
+                link.click();
+            } catch (Exception e) {
+                js.executeScript("arguments[0].click();", link);
+            }
+
+            Thread.sleep(2000);
+            System.out.println("Berhasil click step-by-step guide link");
+            return true;
+        } catch (Exception e) {
+            System.out.println("Gagal click step-by-step guide link: " + e.getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Click "Check out our user guide" link
+     * 
+     * @return true jika berhasil
+     */
+    public boolean clickUserGuideLink() {
+        try {
+            System.out.println("Clicking user guide link");
+
+            waitForPageLoad();
+
+            // Scroll down to find the link
+            js.executeScript("window.scrollTo(0, document.body.scrollHeight / 2);");
+            Thread.sleep(500);
+
+            // Cari link
+            WebElement link = wait.until(ExpectedConditions.elementToBeClickable(userGuideLinkLocator));
+
+            // Scroll ke element
+            js.executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", link);
+            Thread.sleep(500);
+
+            // Klik link
+            try {
+                link.click();
+            } catch (Exception e) {
+                js.executeScript("arguments[0].click();", link);
+            }
+
+            Thread.sleep(2000);
+            System.out.println("Berhasil click user guide link");
+            return true;
+        } catch (Exception e) {
+            System.out.println("Gagal click user guide link: " + e.getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Click "Choose yours today" link
+     * 
+     * @return true jika berhasil
+     */
+    public boolean clickChooseYoursTodayLink() {
+        try {
+            System.out.println("Clicking Choose yours today link");
+
+            waitForPageLoad();
+
+            // Scroll down to find the link
+            js.executeScript("window.scrollTo(0, document.body.scrollHeight / 2);");
+            Thread.sleep(500);
+
+            // Cari link
+            WebElement link = wait.until(ExpectedConditions.elementToBeClickable(chooseYoursTodayLinkLocator));
+
+            // Scroll ke element
+            js.executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", link);
+            Thread.sleep(500);
+
+            // Klik link
+            try {
+                link.click();
+            } catch (Exception e) {
+                js.executeScript("arguments[0].click();", link);
+            }
+
+            Thread.sleep(2000);
+            System.out.println("Berhasil click Choose yours today link");
+            return true;
+        } catch (Exception e) {
+            System.out.println("Gagal click Choose yours today link: " + e.getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Click "Get 30-Day Free Trial" button
+     * 
+     * @return true jika berhasil
+     */
+    public boolean clickGet30DayFreeTrialButton() {
+        try {
+            System.out.println("Clicking Get 30-Day Free Trial button");
+
+            waitForPageLoad();
+
+            // Scroll down to find the button
+            js.executeScript("window.scrollTo(0, document.body.scrollHeight * 0.8);");
+            Thread.sleep(500);
+
+            // Cari button
+            WebElement button = wait.until(ExpectedConditions.elementToBeClickable(get30DayFreeTrialButtonLocator));
+
+            // Scroll ke element
+            js.executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", button);
+            Thread.sleep(500);
+
+            // Klik button
+            try {
+                button.click();
+            } catch (Exception e) {
+                js.executeScript("arguments[0].click();", button);
+            }
+
+            Thread.sleep(2000);
+            System.out.println("✓ Berhasil click Get 30-Day Free Trial button");
+            return true;
+        } catch (Exception e) {
+            System.out.println("Gagal click Get 30-Day Free Trial button: " + e.getMessage());
             return false;
         }
     }

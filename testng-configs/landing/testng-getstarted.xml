@@ -32,6 +32,18 @@
                     
                     <!-- GST-009: Find Out More button -->
                     <include name="testGst009" />
+                    
+                    <!-- GST-010: a step-by-step guide link -->
+                    <include name="testGst010" />
+                    
+                    <!-- GST-011: Check out our user guide link -->
+                    <include name="testGst011" />
+                    
+                    <!-- GST-012: Choose yours today link -->
+                    <include name="testGst012" />
+                    
+                    <!-- GST-013: Get 30-Day Free Trial button -->
+                    <include name="testGst013" />
                 </methods>
             </class>
         </classes>
