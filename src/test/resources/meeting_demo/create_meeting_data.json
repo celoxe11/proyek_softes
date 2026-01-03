@@ -1,0 +1,17 @@
+{
+  "name": "Strategic Planning Meeting - Q1 2026",
+  "status": "Planned",
+  "date_start_date": "01/10/2026",
+  "date_start_hours": "09",
+  "date_start_minutes": "00",
+  "date_start_meridiem": "am",
+  "parent_type": "Accounts",
+  "date_end_date": "01/10/2026",
+  "date_end_hours": "11",
+  "date_end_minutes": "00",
+  "date_end_meridiem": "am",
+  "location": "Conference Room A - Building 2",
+  "duration": "7200",
+  "description": "Quarterly strategic planning meeting to discuss Q1 objectives, resource allocation, and key performance indicators. All department heads required to attend.",
+  "invitee_first_name": "Chris"
+}

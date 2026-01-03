@@ -1,0 +1,11 @@
+{
+  "nameBeforeEdit": "System Integration Issue - API Timeout",
+  "name": "[RESOLVED] System Integration - API Performance Optimized",
+  "priority": "P2",
+  "state": "Closed",
+  "status": "Closed_Closed",
+  "type": "Product",
+  "account_name": "",
+  "description": "Customer reported intermittent timeout issues when calling the REST API endpoints. Error occurred approximately 30% of the time during peak hours. Root cause identified and resolved.",
+  "resolution": "Issue was caused by inefficient database queries during peak load. Implemented query optimization, added connection pooling, and configured caching layer. Performance tests show 95% improvement in response times. No timeout errors observed after deployment."
+}

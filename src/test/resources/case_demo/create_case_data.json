@@ -1,0 +1,10 @@
+{
+  "name": "System Integration Issue - API Timeout",
+  "priority": "P1",
+  "state": "Open",
+  "status": "Open_New",
+  "type": "Product",
+  "account_name": "",
+  "description": "Customer reporting intermittent timeout issues when calling the REST API endpoints. Error occurs approximately 30% of the time during peak hours. Investigation needed to identify root cause and implement solution.",
+  "resolution": ""
+}

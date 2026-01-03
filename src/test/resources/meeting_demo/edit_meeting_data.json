@@ -1,0 +1,17 @@
+{
+  "nameBeforeEdit": "Strategic Planning Meeting - Q1 2026",
+  "name": "Q1 Strategy Review & Planning Session",
+  "status": "Held",
+  "date_start_date": "01/12/2026",
+  "date_start_hours": "02",
+  "date_start_minutes": "00",
+  "date_start_meridiem": "pm",
+  "parent_type": "Contacts",
+  "date_end_date": "01/12/2026",
+  "date_end_hours": "04",
+  "date_end_minutes": "30",
+  "date_end_meridiem": "pm",
+  "location": "Executive Boardroom - 10th Floor",
+  "duration": "5400",
+  "description": "Comprehensive strategy review session covering Q1 performance analysis, market trends, competitive positioning, and Q2 planning initiatives. Action items and follow-ups to be documented and distributed post-meeting."
+}
