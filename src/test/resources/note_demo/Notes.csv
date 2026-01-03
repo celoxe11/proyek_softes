@@ -1,0 +1,4 @@
+"Subject","ID","Note","Attachment","Parent Type","Parent ID","Contact ID","Display in Portal?","Assigned to","Assigned User Id","Date Created","Date Modified","Created By","Modified by","Deleted"
+"Attended CRM Exceleration Event in Asia","3b9f4c12-6a7e-4c8b-9d21-0e7f6a5b4c33","Contact participated as a guest speaker.","","Accounts","c2a4f9b1-5e6d-4f8a-9c21-1a2b3c4d5e66","","0","max","seed_max_id","01/01/2026 05:00","01/01/2026 05:00","1","1","0"
+"Attended CRM Exceleration Event in Asia","4e7a9d21-8b6c-4f5e-a321-9c8b7a6d5e44","Contact attended networking session only.","","Accounts","d9e8c7b6-a5f4-4321-9e8d-7c6b5a4f3e22","","0","will","seed_will_id","01/01/2026 05:00","01/01/2026 05:00","1","1","0"
+"Attended CRM Exceleration Event in Asia","5f2a8c9e-1d7b-4a6f-b912-3c4d5e6f7a88","Contact received complimentary workshop access.","","Accounts","e1f2a3b4-c5d6-4789-a012-9b8c7d6e5f99","","0","sarah","seed_sarah_id","01/01/2026 05:00","01/01/2026 05:00","1","1","0"
