@@ -463,4 +463,65 @@ public class GetStartedTest extends BaseLandingTest {
 
                 takeScreenshot("GST-013_SuiteCRM_Hosted_Page");
         }
+
+        @Test(priority = 14)
+        @Description("GST-014")
+        public void testGst014() {
+                navigateToHome();
+
+                GetStartedPage getStartedPage = new GetStartedPage(driver);
+
+                boolean hoverSuccess = getStartedPage.hoverGetStartedMenu();
+                assertTrue(hoverSuccess, "Harus berhasil hover ke menu Get Started");
+
+                boolean navSuccess = getStartedPage.navigateToDemo();
+                assertTrue(navSuccess, "Harus berhasil navigate ke Demo SuiteCRM");
+
+                getStartedPage.waitForPageLoad();
+                takeScreenshot("GST-014_Demo_Page");
+
+                // Tekan button Get 30-Day Free Trial
+                boolean clickSuccess = getStartedPage.clickGet30DayFreeTrialButton();
+                assertTrue(clickSuccess, "Harus berhasil klik button Get 30-Day Free Trial");
+
+                getStartedPage.waitForPageLoad();
+                waitSeconds(2);
+
+                String currentUrl = getStartedPage.getCurrentUrl();
+                System.out.println("Current URL: " + currentUrl);
+
+                boolean urlCorrect = currentUrl.startsWith(EXPECTED_SUITECRM_HOSTED_URL)
+                                || currentUrl.contains("suitecrmhosted");
+                assertTrue(urlCorrect,
+                                "URL harus " + EXPECTED_SUITECRM_HOSTED_URL + " tapi actual: " + currentUrl);
+
+                takeScreenshot("GST-014_SuiteCRM_Hosted_Page");
+        }
+
+        @Test(priority = 15)
+        @Description("GST-015")
+        public void testGst015() {
+                navigateToHome();
+
+                GetStartedPage getStartedPage = new GetStartedPage(driver);
+
+                boolean hoverSuccess = getStartedPage.hoverGetStartedMenu();
+                assertTrue(hoverSuccess, "Harus berhasil hover ke menu Get Started");
+
+                boolean navSuccess = getStartedPage.navigateToSuiteCRMHosted();
+                assertTrue(navSuccess, "Harus berhasil navigate ke SuiteCRM Hosted");
+
+                getStartedPage.waitForPageLoad();
+                waitSeconds(2);
+
+                String currentUrl = getStartedPage.getCurrentUrl();
+                System.out.println("Current URL: " + currentUrl);
+
+                boolean urlCorrect = currentUrl.startsWith(EXPECTED_SUITECRM_HOSTED_URL)
+                                || currentUrl.contains("suitecrmhosted");
+                assertTrue(urlCorrect,
+                                "URL harus " + EXPECTED_SUITECRM_HOSTED_URL + " tapi actual: " + currentUrl);
+
+                takeScreenshot("GST-015_SuiteCRM_Hosted_Page");
+        }
 }

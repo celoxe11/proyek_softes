@@ -134,6 +134,80 @@ public class GetStartedPage {
     }
 
     /**
+     * Navigate ke sub-menu Demo SuiteCRM
+     * 
+     * @return true jika berhasil
+     */
+    public boolean navigateToDemo() {
+        try {
+            System.out.println("Navigating ke Demo SuiteCRM");
+
+            // Hover dulu ke Get Started menu
+            hoverGetStartedMenu();
+            Thread.sleep(500);
+
+            // Cari dan klik Demo submenu
+            WebElement subMenu = wait.until(ExpectedConditions.elementToBeClickable(demoSubMenuLocator));
+
+            // Scroll ke element jika perlu
+            js.executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", subMenu);
+            Thread.sleep(300);
+
+            // Klik submenu
+            try {
+                subMenu.click();
+            } catch (Exception e) {
+                // Fallback to JavaScript click
+                js.executeScript("arguments[0].click();", subMenu);
+            }
+
+            Thread.sleep(1000);
+            System.out.println("Berhasil navigate ke Demo SuiteCRM");
+            return true;
+        } catch (Exception e) {
+            System.out.println("Gagal navigate ke Demo SuiteCRM: " + e.getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Navigate ke sub-menu SuiteCRM Hosted
+     * 
+     * @return true jika berhasil
+     */
+    public boolean navigateToSuiteCRMHosted() {
+        try {
+            System.out.println("Navigating ke SuiteCRM Hosted");
+
+            // Hover dulu ke Get Started menu
+            hoverGetStartedMenu();
+            Thread.sleep(500);
+
+            // Cari dan klik Hosted submenu
+            WebElement subMenu = wait.until(ExpectedConditions.elementToBeClickable(hostedSubMenuLocator));
+
+            // Scroll ke element jika perlu
+            js.executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", subMenu);
+            Thread.sleep(300);
+
+            // Klik submenu
+            try {
+                subMenu.click();
+            } catch (Exception e) {
+                // Fallback to JavaScript click
+                js.executeScript("arguments[0].click();", subMenu);
+            }
+
+            Thread.sleep(1000);
+            System.out.println("Berhasil navigate ke SuiteCRM Hosted");
+            return true;
+        } catch (Exception e) {
+            System.out.println("Gagal navigate ke SuiteCRM Hosted: " + e.getMessage());
+            return false;
+        }
+    }
+
+    /**
      * Click SuiteCRM 7.15 release notes link
      * 
      * @return true jika berhasil

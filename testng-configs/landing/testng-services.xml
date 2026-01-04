@@ -1,0 +1,53 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+<suite name="Services Module Test Suite" verbose="1">
+    
+    <!-- Support Services Tests -->
+    <test name="Support Services Tests" preserve-order="true">
+        <classes>
+            <class name="com.proyek_softes.landing.tests.services.SupportServicesTest">
+                <methods>
+                    <!-- SRV-001: Support Services - Gold package Contact Us -->
+                    <include name="testSrv001" />
+                    
+                    <!-- SRV-002: Support Services - Enterprise Verification Service link -->
+                    <include name="testSrv002" />
+                    
+                    <!-- SRV-003: Support Services - Fully Managed Hosting Services link -->
+                    <include name="testSrv003" />
+                    
+                    <!-- SRV-004: Support Services - Terms and Conditions PDF link -->
+                    <include name="testSrv004" />
+                </methods>
+            </class>
+        </classes>
+    </test>
+    
+    <!-- Consultancy and Implementation Tests -->
+    <test name="Consultancy Tests" preserve-order="true">
+        <classes>
+            <class name="com.proyek_softes.landing.tests.services.ConsultancyTest">
+                <methods>
+                    <!-- SRV-005: Consultancy and Implementation - Get Started button -->
+                    <include name="testSrv005" />
+                </methods>
+            </class>
+        </classes>
+    </test>
+    
+    <!-- SuiteCRM Hosted Tests -->
+    <test name="SuiteCRM Hosted Tests" preserve-order="true">
+        <classes>
+            <class name="com.proyek_softes.landing.tests.services.SuiteCRMHostedTest">
+                <methods>
+                    <!-- SRV-009: SuiteCRM Hosted - Premium Start Free Trial button -->
+                    <include name="testSrv009" />
+                    
+                    <!-- SRV-010: SuiteCRM Hosted - Migration Services link -->
+                    <include name="testSrv010" />
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+</suite>
