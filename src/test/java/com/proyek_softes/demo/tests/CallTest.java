@@ -5,9 +5,9 @@ import java.util.Map;
 import static org.testng.Assert.assertTrue;
 import org.testng.annotations.Test;
 
-import com.proyek_softes.demo.pages.accounts.AccountsPage;
 import com.proyek_softes.demo.pages.calls.CallsPage;
 import com.proyek_softes.demo.pages.calls.CreateCallPage;
+import com.proyek_softes.demo.pages.calls.ImportCallPage;
 import com.proyek_softes.demo.utils.CallDataProvider;
 
 import io.qameta.allure.Description;
@@ -106,7 +106,7 @@ public class CallTest extends GenericCrudTestHelper<CallsPage, CreateCallPage> {
             boolean isFilterResultEmpty = callsPage.isFilterResultEmpty();
             assertTrue(isFilterResultEmpty, "Deleted call should no longer exist in the calls list");
             takeElementScreenshot("DEM-063_Deleted_Call_Filter_Result", driver.findElement(callsPage.getFilterResult()));
-            
+
             callsPage.checkAndClearFilter();
         } catch (InterruptedException e) {
         }
@@ -115,6 +115,26 @@ public class CallTest extends GenericCrudTestHelper<CallsPage, CreateCallPage> {
     @Test
     @Description("DEM-064")
     public void testDem064() {
-        // import call test to be implemented
+        login("will", "will");
+        CallsPage callsPage = new CallsPage(driver);
+        callsPage.navigateToCallsModule();
+        callsPage.navigateToImportCall();
+
+        ImportCallPage importCallPage = new ImportCallPage(driver);
+        boolean isCSV = importCallPage.verifyDownloadedTemplateIsCSV(10, "DEM-064_Download_History");
+        assertTrue(isCSV, "Downloaded template should be in CSV format and named contains 'calls'");
+
+        // upload file and complete import process
+        importCallPage.uploadFile("Calls.csv");
+
+        importCallPage.clickImportCreate();
+        importCallPage.clickNext();
+        importCallPage.clickNext();
+        importCallPage.clickNext();
+        importCallPage.clickImportNow();
+
+        boolean isRecordsImported = importCallPage.isRecordsImported();
+        assertTrue(isRecordsImported, "Records from Calls.csv should be imported successfully");
+        takeElementScreenshot("DEM-064_Import_Calls_Success", importCallPage.getSummaryElement());
     }
 }
