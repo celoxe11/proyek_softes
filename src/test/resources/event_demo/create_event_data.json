@@ -1,0 +1,14 @@
+{
+  "name": "Marketing Strategy Workshop",
+  "date_start_date": "01/05/2026",
+  "date_start_hours": "08",
+  "date_start_minutes": "00",
+  "date_start_meridiem": "am",
+  "duration": "1 hour",
+  "date_end_date": "01/05/2026",
+  "date_end_hours": "09",
+  "date_end_minutes": "00",
+  "date_end_meridiem": "am",
+  "budget": "1500",
+  "description": "Workshop to brainstorm and finalize Q1 marketing campaigns."
+}

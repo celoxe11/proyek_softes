@@ -44,7 +44,7 @@ public class NotesPage {
     private final By editButtonInDetail = By.id("edit_button");
     private final By deleteButtonInDetail = By.id("delete_button");
 
-    private final By pageTitle = By.className("module-title-text");
+    private final By pageTitle = By.id("moduleTab_FP_events");
 
     public NotesPage(WebDriver driver) {
         this.driver = driver;
