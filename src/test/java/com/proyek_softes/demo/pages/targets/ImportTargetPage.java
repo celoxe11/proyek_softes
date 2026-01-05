@@ -167,7 +167,6 @@ public class ImportTargetPage {
     }
 
     public void clickNext() {
-        Actions actions = new Actions(driver);
         actions.moveToElement(driver.findElement(nextButton)).perform();
         wait.until(ExpectedConditions.elementToBeClickable(nextButton)).click();
     }
@@ -183,6 +182,7 @@ public class ImportTargetPage {
     }
 
     public void clickImportNow() {
+        wait.until(ExpectedConditions.elementToBeClickable(importNowButton));
         driver.findElement(importNowButton).click();
     }
 
