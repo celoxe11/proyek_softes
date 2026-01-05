@@ -17,66 +17,81 @@ public class AccountTest extends GenericCrudTestHelper<AccountsPage, CreateAccou
     @Test(dataProvider = "createAccountData", dataProviderClass = AccountDataProvider.class)
     @Description("DEM-004")
     public void testDem004(Map<String, String> testData) {
-        AccountsPage accountsPage = new AccountsPage(driver);
-        CreateAccountsPage createAccountsPage = new CreateAccountsPage(driver);
-        
-        testCreateEntity(
-            testData,
-            v -> accountsPage,
-            accountsPage::navigateToAccountsModule,
-            accountsPage::navigateToCreateAccount,
-            v -> createAccountsPage,
-            (page, data) -> page.addInformationFromData(data),
-            createAccountsPage::save,
-            data -> data.get("name"),
-            createAccountsPage::isAccountSavedSuccessfully,
-            "DEM-004",
-            accountsPage::navigateToViewAccounts,
-            accountsPage::isInFirstRow,
-            v -> accountsPage.getFirstRowLocator()
-        );
+        try {
+            AccountsPage accountsPage = new AccountsPage(driver);
+            CreateAccountsPage createAccountsPage = new CreateAccountsPage(driver);
+            
+            testCreateEntity(
+                testData,
+                v -> accountsPage,
+                accountsPage::navigateToAccountsModule,
+                accountsPage::navigateToCreateAccount,
+                v -> createAccountsPage,
+                (page, data) -> page.addInformationFromData(data),
+                createAccountsPage::save,
+                data -> data.get("name"),
+                createAccountsPage::isAccountSavedSuccessfully,
+                "DEM-004",
+                accountsPage::navigateToViewAccounts,
+                accountsPage::isInFirstRow,
+                v -> accountsPage.getFirstRowLocator()
+            );
+        } catch (Throwable e) {
+            takeScreenshot("DEM-004_Error_Current_Page");
+            throw new AssertionError("Test failed: " + e.getMessage(), e);
+        }
     }
 
     @Test(dataProvider = "viewAccountData", dataProviderClass = AccountDataProvider.class)
     @Description("DEM-005")
     public void testDem005(Map<String, String> testData) {
-        AccountsPage accountsPage = new AccountsPage(driver);
-        
-        testViewEntity(
-            testData,
-            v -> accountsPage,
-            accountsPage::navigateToAccountsModule,
-            accountsPage::navigateToViewAccounts,
-            accountsPage::clickFirstAccount,
-            data -> data.get("name"),
-            accountsPage::isAccountTitleCorrect,
-            "DEM-005"
-        );
+        try {
+            AccountsPage accountsPage = new AccountsPage(driver);
+            
+            testViewEntity(
+                testData,
+                v -> accountsPage,
+                accountsPage::navigateToAccountsModule,
+                accountsPage::navigateToViewAccounts,
+                accountsPage::clickFirstAccount,
+                data -> data.get("name"),
+                accountsPage::isAccountTitleCorrect,
+                "DEM-005"
+            );
+        } catch (Throwable e) {
+            takeScreenshot("DEM-005_Error_Current_Page");
+            throw new AssertionError("Test failed: " + e.getMessage(), e);
+        }
     }
 
     @Test(dataProvider = "editAccountData", dataProviderClass = AccountDataProvider.class)
     @Description("DEM-006")
     public void testDem006(Map<String, String> testData) {
-        AccountsPage accountsPage = new AccountsPage(driver);
-        CreateAccountsPage editAccountsPage = new CreateAccountsPage(driver);
-        
-        testEditEntity(
-            testData,
-            v -> accountsPage,
-            accountsPage::navigateToAccountsModule,
-            accountsPage::navigateToViewAccounts,
-            accountsPage::clickFirstAccount,
-            data -> data.get("name_before_edit"),
-            accountsPage::isAccountTitleCorrect,
-            "DEM-006_View_Account_Detail",
-            accountsPage::editAccount,
-            v -> editAccountsPage,
-            (page, data) -> page.addInformationFromData(data),
-            editAccountsPage::save,
-            data -> data.get("name"),
-            editAccountsPage::isAccountSavedSuccessfully,
-            "DEM-006"
-        );
+        try {
+            AccountsPage accountsPage = new AccountsPage(driver);
+            CreateAccountsPage editAccountsPage = new CreateAccountsPage(driver);
+            
+            testEditEntity(
+                testData,
+                v -> accountsPage,
+                accountsPage::navigateToAccountsModule,
+                accountsPage::navigateToViewAccounts,
+                accountsPage::clickFirstAccount,
+                data -> data.get("name_before_edit"),
+                accountsPage::isAccountTitleCorrect,
+                "DEM-006_View_Account_Detail",
+                accountsPage::editAccount,
+                v -> editAccountsPage,
+                (page, data) -> page.addInformationFromData(data),
+                editAccountsPage::save,
+                data -> data.get("name"),
+                editAccountsPage::isAccountSavedSuccessfully,
+                "DEM-006"
+            );
+        } catch (Throwable e) {
+            takeScreenshot("DEM-006_Error_Current_Page");
+            throw new AssertionError("Test failed: " + e.getMessage(), e);
+        }
     }
 
     @Test

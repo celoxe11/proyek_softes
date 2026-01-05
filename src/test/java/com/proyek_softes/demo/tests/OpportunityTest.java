@@ -17,66 +17,81 @@ public class OpportunityTest extends GenericCrudTestHelper<OpportunityPage, Crea
     @Test(dataProvider = "createOpportunityData", dataProviderClass = OpportunityDataProvider.class)
     @Description("DEM-015")
     public void testDem015(Map<String, String> testData) {
-        OpportunityPage opportunityPage = new OpportunityPage(driver);
-        CreateOpportunityPage createOpportunityPage = new CreateOpportunityPage(driver, wait);
-        
-        testCreateEntity(
-            testData,
-            v -> opportunityPage,
-            opportunityPage::navigateToOpportunitiesModule,
-            opportunityPage::navigateToCreateOpportunity,
-            v -> createOpportunityPage,
-            (page, data) -> page.addInformationFromData(data),
-            createOpportunityPage::save,
-            data -> data.get("name"),
-            createOpportunityPage::isOpportunitySavedSuccessfully,
-            "DEM-015",
-            opportunityPage::navigateToViewOpportunities,
-            opportunityPage::isInFirstRow,
-            v -> opportunityPage.getFirstRowLocator()
-        );
+        try {
+            OpportunityPage opportunityPage = new OpportunityPage(driver);
+            CreateOpportunityPage createOpportunityPage = new CreateOpportunityPage(driver, wait);
+            
+            testCreateEntity(
+                testData,
+                v -> opportunityPage,
+                opportunityPage::navigateToOpportunitiesModule,
+                opportunityPage::navigateToCreateOpportunity,
+                v -> createOpportunityPage,
+                (page, data) -> page.addInformationFromData(data),
+                createOpportunityPage::save,
+                data -> data.get("name"),
+                createOpportunityPage::isOpportunitySavedSuccessfully,
+                "DEM-015",
+                opportunityPage::navigateToViewOpportunities,
+                opportunityPage::isInFirstRow,
+                v -> opportunityPage.getFirstRowLocator()
+            );
+        } catch (Throwable e) {
+            takeScreenshot("DEM-015_Error_Current_Page");
+            throw new AssertionError("Test failed: " + e.getMessage(), e);
+        }
     }
 
     @Test(dataProvider = "viewOpportunityData", dataProviderClass = OpportunityDataProvider.class)
     @Description("DEM-016")
     public void testDem016(Map<String, String> testData) {
-        OpportunityPage opportunityPage = new OpportunityPage(driver);
-        
-        testViewEntity(
-            testData,
-            v -> opportunityPage,
-            opportunityPage::navigateToOpportunitiesModule,
-            opportunityPage::navigateToViewOpportunities,
-            opportunityPage::clickFirstOpportunity,
-            data -> data.get("name"),
-            opportunityPage::isOpportunityTitleCorrect,
-            "DEM-016"
-        );
+        try {
+            OpportunityPage opportunityPage = new OpportunityPage(driver);
+            
+            testViewEntity(
+                testData,
+                v -> opportunityPage,
+                opportunityPage::navigateToOpportunitiesModule,
+                opportunityPage::navigateToViewOpportunities,
+                opportunityPage::clickFirstOpportunity,
+                data -> data.get("name"),
+                opportunityPage::isOpportunityTitleCorrect,
+                "DEM-016"
+            );
+        } catch (Throwable e) {
+            takeScreenshot("DEM-016_Error_Current_Page");
+            throw new AssertionError("Test failed: " + e.getMessage(), e);
+        }
     }
 
     @Test(dataProvider = "editOpportunityData", dataProviderClass = OpportunityDataProvider.class)
     @Description("DEM-017")
     public void testDem017(Map<String, String> testData) {
-        OpportunityPage opportunityPage = new OpportunityPage(driver);
-        CreateOpportunityPage editOpportunityPage = new CreateOpportunityPage(driver, wait);
-        
-        testEditEntity(
-            testData,
-            v -> opportunityPage,
-            opportunityPage::navigateToOpportunitiesModule,
-            opportunityPage::navigateToViewOpportunities,
-            opportunityPage::clickFirstOpportunity,
-            data -> data.get("nameBeforeEdit"),
-            opportunityPage::isOpportunityTitleCorrect,
-            "DEM-017_View_Opportunity_Detail",
-            opportunityPage::editOpportunity,
-            v -> editOpportunityPage,
-            (page, data) -> page.addInformationFromData(data),
-            editOpportunityPage::save,
-            data -> data.get("name"),
-            editOpportunityPage::isOpportunitySavedSuccessfully,
-            "DEM-017"
-        );
+        try {
+            OpportunityPage opportunityPage = new OpportunityPage(driver);
+            CreateOpportunityPage editOpportunityPage = new CreateOpportunityPage(driver, wait);
+            
+            testEditEntity(
+                testData,
+                v -> opportunityPage,
+                opportunityPage::navigateToOpportunitiesModule,
+                opportunityPage::navigateToViewOpportunities,
+                opportunityPage::clickFirstOpportunity,
+                data -> data.get("nameBeforeEdit"),
+                opportunityPage::isOpportunityTitleCorrect,
+                "DEM-017_View_Opportunity_Detail",
+                opportunityPage::editOpportunity,
+                v -> editOpportunityPage,
+                (page, data) -> page.addInformationFromData(data),
+                editOpportunityPage::save,
+                data -> data.get("name"),
+                editOpportunityPage::isOpportunitySavedSuccessfully,
+                "DEM-017"
+            );
+        } catch (Throwable e) {
+            takeScreenshot("DEM-017_Error_Current_Page");
+            throw new AssertionError("Test failed: " + e.getMessage(), e);
+        }
     }
 
     @Test

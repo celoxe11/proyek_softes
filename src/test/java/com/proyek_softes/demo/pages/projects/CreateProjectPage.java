@@ -18,6 +18,8 @@ public class CreateProjectPage {
     private final By buttonSave = By.xpath("//input[@title='Save' and @id='SAVE_HEADER']");
     private final By buttonCancel = By.xpath("//input[@title='Cancel [Alt+l]' and @id='CANCEL']");
 
+    private final By errorMessage = By.className("error");
+
     private final By inviteesSearchFirstName = By.id("search_first_name");
     private final By inviteesSearchLastName = By.id("search_last_name");
     private final By inviteesSearchEmail = By.id("search_email");
@@ -235,6 +237,16 @@ public class CreateProjectPage {
             throw new RuntimeException("Thread was interrupted while adding invitees", e);
         } catch (Exception e) {
             System.out.println("  Warning: Could not add invitee: " + e.getMessage());
+        }
+    }
+
+    public boolean isErrorMessagePresent() {
+        try {
+            wait.until(ExpectedConditions.presenceOfElementLocated(errorMessage));
+            String errorText = driver.findElement(errorMessage).getText().trim();
+            return errorText.toLowerCase().contains("you do not have access to this area.");
+        } catch (Exception e) {
+            return false;
         }
     }
 }

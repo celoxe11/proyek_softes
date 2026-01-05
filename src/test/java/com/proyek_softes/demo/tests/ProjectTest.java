@@ -17,64 +17,73 @@ public class ProjectTest extends GenericCrudTestHelper<ProjectsPage, CreateProje
     @Test(dataProvider = "createProjectData", dataProviderClass = ProjectDataProvider.class)
     @Description("DEM-105")
     public void testDem105(Map<String, String> testData) {
-        ProjectsPage projectsPage = new ProjectsPage(driver);
-        CreateProjectPage createProjectPage = new CreateProjectPage(driver, wait);
-        testCreateEntity(
-                testData,
-                v -> projectsPage,
-                projectsPage::navigateToProjectsModule,
-                projectsPage::navigateToCreateProject,
-                v -> createProjectPage,
-                (page, data) -> page.addInformationFromData(data),
-                createProjectPage::save,
-                data -> data.get("name"),
-                createProjectPage::isProjectSavedSuccessfully,
-                "DEM-105",
-                projectsPage::navigateToViewProject,
-                projectsPage::isInFirstRow,
-                v -> projectsPage.getFirstRowLocator()
-        );
+        try {
+            login("will", "will");
+            ProjectsPage projectsPage = new ProjectsPage(driver);
+            projectsPage.navigateToProjectsModule();
+            projectsPage.navigateToCreateProject();
+
+            CreateProjectPage createProjectPage = new CreateProjectPage(driver, wait);
+            createProjectPage.addInformationFromData(testData);
+            createProjectPage.save();
+            boolean isErrorMessagePresent = createProjectPage.isErrorMessagePresent();
+            assertTrue(isErrorMessagePresent, "User without proper permissions should see an error message when trying to create a project");
+            takeScreenshot("DEM-105_Create_Project_Without_Permission");
+        } catch (Throwable e) {
+            takeScreenshot("DEM-105_Error_Current_Page");
+            throw new AssertionError("Test failed: " + e.getMessage(), e);
+        }
     }
 
     @Test(dataProvider = "viewProjectData", dataProviderClass = ProjectDataProvider.class)
     @Description("DEM-106")
     public void testDem106(Map<String, String> testData) {
-        ProjectsPage projectsPage = new ProjectsPage(driver);
-        testViewEntity(
-                testData,
-                v -> projectsPage,
-                projectsPage::navigateToProjectsModule,
-                projectsPage::navigateToViewProject,
-                projectsPage::clickFirstProject,
-                data -> data.get("name"),
-                projectsPage::isProjectTitleCorrect,
-                "DEM-106"
-        );
+        try {
+            ProjectsPage projectsPage = new ProjectsPage(driver);
+            testViewEntity(
+                    testData,
+                    v -> projectsPage,
+                    projectsPage::navigateToProjectsModule,
+                    projectsPage::navigateToViewProject,
+                    projectsPage::clickFirstProject,
+                    data -> data.get("name"),
+                    projectsPage::isProjectTitleCorrect,
+                    "DEM-106"
+            );
+        } catch (Throwable e) {
+            takeScreenshot("DEM-106_Error_Current_Page");
+            throw new AssertionError("Test failed: " + e.getMessage(), e);
+        }
     }
 
     @Test(dataProvider = "editProjectData", dataProviderClass = ProjectDataProvider.class)
     @Description("DEM-107")
     public void testDem107(Map<String, String> testData) {
-        ProjectsPage projectsPage = new ProjectsPage(driver);
-        CreateProjectPage editProjectPage = new CreateProjectPage(driver, wait);
-        testEditEntity(
-                testData,
-                v -> projectsPage,
-                projectsPage::navigateToProjectsModule,
-                projectsPage::navigateToViewProject,
-                projectsPage::clickFirstProject,
-                data -> data.get("nameBeforeEdit"),
-                projectsPage::isProjectTitleCorrect,
-                "DEM-107_View_Project_Detail",
-                projectsPage::editProject,
-                v -> editProjectPage,
-                (page, data) -> page.addInformationFromData(data),
-                editProjectPage::save,
-                data -> data.get("name"),
-                editProjectPage::isProjectSavedSuccessfully,
-                "DEM-107"
-        );
+        try {
+            login("will", "will");
+            ProjectsPage projectsPage = new ProjectsPage(driver);
+            projectsPage.navigateToProjectsModule();
+            projectsPage.navigateToViewProject();
+            projectsPage.clickFirstProject();
 
+            Thread.sleep(2000);
+
+            boolean isOnDetailPage = projectsPage.isProjectTitleCorrect(testData.get("nameBeforeEdit"));
+            assertTrue(isOnDetailPage, "Should be on detail page for the selected entity");
+            takeScreenshot("DEM-107_View_Project_Detail");
+
+            projectsPage.editProject();
+
+            CreateProjectPage editProjectPage = new CreateProjectPage(driver, wait);
+            editProjectPage.addInformationFromData(testData);
+            editProjectPage.save();
+            boolean isErrorMessagePresent = editProjectPage.isErrorMessagePresent();
+            assertTrue(isErrorMessagePresent, "User without proper permissions should see an error message when trying to edit a project");
+            takeScreenshot("DEM-107_Edit_Project_Without_Permission");
+        } catch (Throwable e) {
+            takeScreenshot("DEM-107_Error_Current_Page");
+            throw new AssertionError("Test failed: " + e.getMessage(), e);
+        }
     }
 
     @Test
@@ -138,6 +147,13 @@ public class ProjectTest extends GenericCrudTestHelper<ProjectsPage, CreateProje
     @Description("DEM-110")
     public void testDem110() {
         // test resource calendar
+        login("will", "will");
+        ProjectsPage projectsPage = new ProjectsPage(driver);
+        projectsPage.navigateToProjectsModule();
+        projectsPage.navigateToResourceCalendar();
+        boolean isErrorMessagePresent = projectsPage.isErrorMessagePresent();
+        assertTrue(isErrorMessagePresent, "User without proper permissions should see an error message when trying to access resource calendar");
+        takeScreenshot("DEM-110_Resource_Calendar_Without_Permission");
     }
 
     @Test

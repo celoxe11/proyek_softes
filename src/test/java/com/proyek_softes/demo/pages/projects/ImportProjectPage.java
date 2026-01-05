@@ -150,9 +150,6 @@ public class ImportProjectPage {
     }
 
     public void uploadFile(String fileName) {
-
-
-        
         // Get the absolute path to the file in test resources
         String resourcePath = Paths.get("src", "test", "resources", "project_demo", fileName).toAbsolutePath().toString();
         File file = new File(resourcePath);

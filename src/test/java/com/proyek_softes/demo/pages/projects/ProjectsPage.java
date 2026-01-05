@@ -27,6 +27,8 @@ public class ProjectsPage {
     private final By firstRowLocator = By.cssSelector("table.list.view tbody tr[height='20']:first-of-type");
     private final By filterResult = By.className("msg");
 
+    private final By errorMessage = By.className("error");
+
     // filter locators
     private final By filterButton = By.xpath("//a[@title='Filter']");
     private final By quickFilterTab = By.xpath("//li[contains(@class, 'searchTabHandler') and contains(@class, 'basic')]/a");
@@ -239,5 +241,15 @@ public class ProjectsPage {
         String title = driver.findElement(By.className("moduleTitle")).getText().trim();
         System.out.println("Page title: " + title);
         return title.toLowerCase().contains("project task");
+    }
+
+     public boolean isErrorMessagePresent() {
+        try {
+            wait.until(ExpectedConditions.presenceOfElementLocated(errorMessage));
+            String errorText = driver.findElement(errorMessage).getText().trim();
+            return errorText.toLowerCase().contains("you do not have access to this area.");
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

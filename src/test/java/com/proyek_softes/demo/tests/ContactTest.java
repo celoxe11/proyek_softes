@@ -17,66 +17,81 @@ public class ContactTest extends GenericCrudTestHelper<ContactsPage, CreateConta
     @Test(dataProvider = "createContactData", dataProviderClass = ContactDataProvider.class)
     @Description("DEM-009")
     public void testDem009(Map<String, String> testData) {
-        ContactsPage contactsPage = new ContactsPage(driver);
-        CreateContactPage createContactPage = new CreateContactPage(driver, wait);
-        
-        testCreateEntity(
-            testData,
-            v -> contactsPage,
-            contactsPage::navigateToContactsModule,
-            contactsPage::navigateToCreateContact,
-            v -> createContactPage,
-            (page, data) -> page.addInformationFromData(data),
-            createContactPage::save,
-            data -> data.get("salutation") + " " + data.get("firstName") + " " + data.get("lastName"),
-            createContactPage::isContactSavedSuccessfully,
-            "DEM-009",
-            contactsPage::navigateToViewContact,
-            contactsPage::isInFirstRow,
-            v -> contactsPage.getFirstRowLocator()
-        );
+        try {
+            ContactsPage contactsPage = new ContactsPage(driver);
+            CreateContactPage createContactPage = new CreateContactPage(driver, wait);
+            
+            testCreateEntity(
+                testData,
+                v -> contactsPage,
+                contactsPage::navigateToContactsModule,
+                contactsPage::navigateToCreateContact,
+                v -> createContactPage,
+                (page, data) -> page.addInformationFromData(data),
+                createContactPage::save,
+                data -> data.get("salutation") + " " + data.get("firstName") + " " + data.get("lastName"),
+                createContactPage::isContactSavedSuccessfully,
+                "DEM-009",
+                contactsPage::navigateToViewContact,
+                contactsPage::isInFirstRow,
+                v -> contactsPage.getFirstRowLocator()
+            );
+        } catch (Throwable e) {
+            takeScreenshot("DEM-009_Error_Current_Page");
+            throw new AssertionError("Test failed: " + e.getMessage(), e);
+        }
     }
 
     @Test(dataProvider = "viewContactData", dataProviderClass = ContactDataProvider.class)
     @Description("DEM-010")
     public void testDem010(Map<String, String> testData) {
-        ContactsPage contactsPage = new ContactsPage(driver);
-        
-        testViewEntity(
-            testData,
-            v -> contactsPage,
-            contactsPage::navigateToContactsModule,
-            contactsPage::navigateToViewContact,
-            contactsPage::clickFirstContact,
-            data -> data.get("salutation") + " " + data.get("firstName") + " " + data.get("lastName"),
-            contactsPage::isContactTitleCorrect,
-            "DEM-010"
-        );
+        try {
+            ContactsPage contactsPage = new ContactsPage(driver);
+            
+            testViewEntity(
+                testData,
+                v -> contactsPage,
+                contactsPage::navigateToContactsModule,
+                contactsPage::navigateToViewContact,
+                contactsPage::clickFirstContact,
+                data -> data.get("salutation") + " " + data.get("firstName") + " " + data.get("lastName"),
+                contactsPage::isContactTitleCorrect,
+                "DEM-010"
+            );
+        } catch (Throwable e) {
+            takeScreenshot("DEM-010_Error_Current_Page");
+            throw new AssertionError("Test failed: " + e.getMessage(), e);
+        }
     }
 
     @Test(dataProvider = "editContactData", dataProviderClass = ContactDataProvider.class)
     @Description("DEM-011")
     public void testDem011(Map<String, String> testData) {
-        ContactsPage contactsPage = new ContactsPage(driver);
-        CreateContactPage editContactPage = new CreateContactPage(driver, wait);
-        
-        testEditEntity(
-            testData,
-            v -> contactsPage,
-            contactsPage::navigateToContactsModule,
-            contactsPage::navigateToViewContact,
-            contactsPage::clickFirstContact,
-            data -> data.get("salutationBeforeEdit") + " " + data.get("firstNameBeforeEdit") + " " + data.get("lastNameBeforeEdit"),
-            contactsPage::isContactTitleCorrect,
-            "DEM-011_View_Contact_Detail",
-            contactsPage::editContact,
-            v -> editContactPage,
-            (page, data) -> page.addInformationFromData(data),
-            editContactPage::save,
-            data -> data.get("salutation") + " " + data.get("firstName") + " " + data.get("lastName"),
-            editContactPage::isContactSavedSuccessfully,
-            "DEM-011"
-        );
+        try {
+            ContactsPage contactsPage = new ContactsPage(driver);
+            CreateContactPage editContactPage = new CreateContactPage(driver, wait);
+            
+            testEditEntity(
+                testData,
+                v -> contactsPage,
+                contactsPage::navigateToContactsModule,
+                contactsPage::navigateToViewContact,
+                contactsPage::clickFirstContact,
+                data -> data.get("salutationBeforeEdit") + " " + data.get("firstNameBeforeEdit") + " " + data.get("lastNameBeforeEdit"),
+                contactsPage::isContactTitleCorrect,
+                "DEM-011_View_Contact_Detail",
+                contactsPage::editContact,
+                v -> editContactPage,
+                (page, data) -> page.addInformationFromData(data),
+                editContactPage::save,
+                data -> data.get("salutation") + " " + data.get("firstName") + " " + data.get("lastName"),
+                editContactPage::isContactSavedSuccessfully,
+                "DEM-011"
+            );
+        } catch (Throwable e) {
+            takeScreenshot("DEM-011_Error_Current_Page");
+            throw new AssertionError("Test failed: " + e.getMessage(), e);
+        }
     }
 
     @Test

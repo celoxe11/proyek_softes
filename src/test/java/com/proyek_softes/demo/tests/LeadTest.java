@@ -18,66 +18,81 @@ public class LeadTest extends GenericCrudTestHelper<LeadsPage, CreateLeadPage> {
     @Test(dataProvider = "createLeadData", dataProviderClass = LeadDataProvider.class)
     @Description("DEM-020")
     public void testDem020(Map<String, String> testData) {
-        LeadsPage leadsPage = new LeadsPage(driver);
-        CreateLeadPage createLeadPage = new CreateLeadPage(driver, wait);
-        
-        testCreateEntity(
-            testData,
-            v -> leadsPage,
-            leadsPage::navigateToLeadsModule,
-            leadsPage::navigateToCreateLead,
-            v -> createLeadPage,
-            (page, data) -> page.addInformationFromData(data),
-            createLeadPage::save,
-            data -> data.get("firstName") + " " + data.get("lastName"),
-            name -> createLeadPage.isLeadSavedSuccessfully(name),
-            "DEM-020",
-            leadsPage::navigateToViewLeads,
-            name -> leadsPage.isInFirstRow(testData.get("lastName")),
-            v -> leadsPage.getFirstRowLocator()
-        );
+        try {
+            LeadsPage leadsPage = new LeadsPage(driver);
+            CreateLeadPage createLeadPage = new CreateLeadPage(driver, wait);
+            
+            testCreateEntity(
+                testData,
+                v -> leadsPage,
+                leadsPage::navigateToLeadsModule,
+                leadsPage::navigateToCreateLead,
+                v -> createLeadPage,
+                (page, data) -> page.addInformationFromData(data),
+                createLeadPage::save,
+                data -> data.get("firstName") + " " + data.get("lastName"),
+                name -> createLeadPage.isLeadSavedSuccessfully(name),
+                "DEM-020",
+                leadsPage::navigateToViewLeads,
+                name -> leadsPage.isInFirstRow(testData.get("lastName")),
+                v -> leadsPage.getFirstRowLocator()
+            );
+        } catch (Throwable e) {
+            takeScreenshot("DEM-020_Error_Current_Page");
+            throw new AssertionError("Test failed: " + e.getMessage(), e);
+        }
     }
 
     @Test(dataProvider = "viewLeadData", dataProviderClass = LeadDataProvider.class)
     @Description("DEM-021")
     public void testDem021(Map<String, String> testData) {
-        LeadsPage leadsPage = new LeadsPage(driver);
-        
-        testViewEntity(
-            testData,
-            v -> leadsPage,
-            leadsPage::navigateToLeadsModule,
-            leadsPage::navigateToViewLeads,
-            leadsPage::clickFirstLead,
-            data -> data.get("firstName") + " " + data.get("lastName"),
-            leadsPage::isLeadTitleCorrect,
-            "DEM-021"
-        );
+        try {
+            LeadsPage leadsPage = new LeadsPage(driver);
+            
+            testViewEntity(
+                testData,
+                v -> leadsPage,
+                leadsPage::navigateToLeadsModule,
+                leadsPage::navigateToViewLeads,
+                leadsPage::clickFirstLead,
+                data -> data.get("firstName") + " " + data.get("lastName"),
+                leadsPage::isLeadTitleCorrect,
+                "DEM-021"
+            );
+        } catch (Throwable e) {
+            takeScreenshot("DEM-021_Error_Current_Page");
+            throw new AssertionError("Test failed: " + e.getMessage(), e);
+        }
     }
 
     @Test(dataProvider = "editLeadData", dataProviderClass = LeadDataProvider.class)
     @Description("DEM-022")
     public void testDem022(Map<String, String> testData) {
-        LeadsPage leadsPage = new LeadsPage(driver);
-        CreateLeadPage editLeadPage = new CreateLeadPage(driver, wait);
-        
-        testEditEntity(
-            testData,
-            v -> leadsPage,
-            leadsPage::navigateToLeadsModule,
-            leadsPage::navigateToViewLeads,
-            leadsPage::clickFirstLead,
-            data -> data.get("firstNameBeforeEdit") + " " + data.get("lastNameBeforeEdit"),
-            leadsPage::isLeadTitleCorrect,
-            "DEM-022_View_Lead_Detail",
-            leadsPage::editLead,
-            v -> editLeadPage,
-            (page, data) -> page.addInformationFromData(data),
-            editLeadPage::save,
-            data -> data.get("firstName") + " " + data.get("lastName"),
-            editLeadPage::isLeadSavedSuccessfully,
-            "DEM-022"
-        );
+        try {
+            LeadsPage leadsPage = new LeadsPage(driver);
+            CreateLeadPage editLeadPage = new CreateLeadPage(driver, wait);
+            
+            testEditEntity(
+                testData,
+                v -> leadsPage,
+                leadsPage::navigateToLeadsModule,
+                leadsPage::navigateToViewLeads,
+                leadsPage::clickFirstLead,
+                data -> data.get("firstNameBeforeEdit") + " " + data.get("lastNameBeforeEdit"),
+                leadsPage::isLeadTitleCorrect,
+                "DEM-022_View_Lead_Detail",
+                leadsPage::editLead,
+                v -> editLeadPage,
+                (page, data) -> page.addInformationFromData(data),
+                editLeadPage::save,
+                data -> data.get("firstName") + " " + data.get("lastName"),
+                editLeadPage::isLeadSavedSuccessfully,
+                "DEM-022"
+            );
+        } catch (Throwable e) {
+            takeScreenshot("DEM-022_Error_Current_Page");
+            throw new AssertionError("Test failed: " + e.getMessage(), e);
+        }
     }
 
     @Test
