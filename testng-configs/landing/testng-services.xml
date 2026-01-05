@@ -45,6 +45,36 @@
                     
                     <!-- SRV-010: SuiteCRM Hosted - Migration Services link -->
                     <include name="testSrv010" />
+                    
+                    <!-- SRV-011: SuiteCRM Hosted - Contact our sales team link -->
+                    <include name="testSrv011" />
+                    
+                    <!-- SRV-012: SuiteCRM Hosted - Get Started with SuiteCRM Hosted button -->
+                    <include name="testSrv012" />
+                </methods>
+            </class>
+        </classes>
+    </test>
+    
+    <!-- SuiteCRM Migration Tests -->
+    <test name="SuiteCRM Migration Tests" preserve-order="true">
+        <classes>
+            <class name="com.proyek_softes.landing.tests.services.SuiteCRMMigrationTest">
+                <methods>
+                    <!-- SRV-013: SuiteCRM Migration - Contact Us for Migrations button -->
+                    <include name="testSrv013" />
+                </methods>
+            </class>
+        </classes>
+    </test>
+    
+    <!-- Enterprise Verification Service Tests -->
+    <test name="EVS Tests" preserve-order="true">
+        <classes>
+            <class name="com.proyek_softes.landing.tests.services.EVSTest">
+                <methods>
+                    <!-- SRV-014: EVS - Contact Us button -->
+                    <include name="testSrv014" />
                 </methods>
             </class>
         </classes>
