@@ -22,7 +22,9 @@ public class SuiteCRMHostedPage extends ServicesPage {
 
     // Links on SuiteCRM Hosted page
     private By migrationServicesLinkLocator = By.cssSelector("a[href*='enterprise/migrations']");
-    private By getStartedWithSuiteCRMHostedButtonLocator = By.cssSelector("a.fusion-button[href*='suitecrmhosted']");
+    private By getStartedWithSuiteCRMHostedButtonLocator = By
+            .cssSelector("a.fusion-one-page-text-link[href*='#viewpackages']");
+    private By contactSalesTeamLinkLocator = By.cssSelector("a[href*='about/about-us/contact']");
 
     // ========================================
     // CONSTRUCTOR
@@ -94,5 +96,15 @@ public class SuiteCRMHostedPage extends ServicesPage {
     public boolean clickGetStartedWithSuiteCRMHostedButton() {
         scrollToPercentage(0.8);
         return scrollAndClick(getStartedWithSuiteCRMHostedButtonLocator, "Get Started With SuiteCRM Hosted button");
+    }
+
+    /**
+     * Click "contact our sales team" link
+     * 
+     * @return true jika berhasil
+     */
+    public boolean clickContactSalesTeamLink() {
+        scrollToPercentage(0.7);
+        return scrollAndClick(contactSalesTeamLinkLocator, "Contact our sales team link");
     }
 }
