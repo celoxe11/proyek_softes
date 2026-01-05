@@ -1,4 +1,6 @@
 {
   "name": "Sales Performance Analysis 2026",
-  "type": "Sales"
+  "type": "Sales",
+  "renderer": "Table",
+  "aggregator": "Count"
 }
