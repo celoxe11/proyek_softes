@@ -1,0 +1,22 @@
+{
+  "nameBeforeEdit": "Q1 2026 Marketing Services Invoice",
+  "name": "Q1 2026 Updated Marketing Services Invoice",
+  "quote_number": "87654321",
+  "quote_date": "01/05/2026",
+  "due_date": "03/05/2026",
+  "invoice_date": "01/05/2026",
+  "assigned_user_name": "Will Westin",
+  "status": "Paid",
+  "description": "Updated invoice for marketing services and products provided in Q1 2026 - Payment received",
+  "billing_address_street": "123 Business Ave Suite 200",
+  "billing_address_city": "New York",
+  "billing_address_state": "NY",
+  "billing_address_postalcode": "10001",
+  "billing_address_country": "USA",
+  "shipping_address_street": "123 Business Ave Suite 200",
+  "shipping_address_city": "New York",
+  "shipping_address_state": "NY",
+  "shipping_address_postalcode": "10001",
+  "shipping_address_country": "USA",
+  "shipping_amount": "75.00"
+}

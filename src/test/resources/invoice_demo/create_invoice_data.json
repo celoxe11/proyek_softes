@@ -1,0 +1,22 @@
+{
+  "name": "Q1 2026 Marketing Services Invoice",
+  "quote_number": "12345678",
+  "quote_date": "01/05/2026",
+  "due_date": "02/05/2026",
+  "invoice_date": "01/05/2026",
+  "assigned_user_name": "Will Westin",
+  "status": "Unpaid",
+  "description": "Invoice for marketing services and products provided in Q1 2026",
+  "billing_address_street": "123 Business Ave",
+  "billing_address_city": "New York",
+  "billing_address_state": "NY",
+  "billing_address_postalcode": "10001",
+  "billing_address_country": "USA",
+  "shipping_address_street": "123 Business Ave",
+  "shipping_address_city": "New York",
+  "shipping_address_state": "NY",
+  "shipping_address_postalcode": "10001",
+  "shipping_address_country": "USA",
+  "shipping_amount": "50.00",
+  "services": "[{\"name\":\"Digital Marketing Campaign\",\"list_price\":\"2500.00\",\"discount\":\"10\",\"discount_type\":\"Percentage\",\"tax\":\"7.5\"},{\"name\":\"Social Media Management\",\"list_price\":\"1500.00\",\"discount\":\"0\",\"discount_type\":\"Percentage\",\"tax\":\"7.5\"}]"
+}
