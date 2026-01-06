@@ -68,4 +68,85 @@
         </classes>
     </test>
     
+    <!-- Compare SuiteCRM Tests -->
+    <test name="Compare SuiteCRM Tests" preserve-order="true">
+        <classes>
+            <class name="com.proyek_softes.landing.tests.resources.CompareSuiteCRMTest">
+                <methods>
+                    <!-- RES-011: Compare with Salesforce - Whitepaper form submission -->
+                    <include name="testRes011" />
+                    
+                    <!-- RES-012: Compare with Salesforce - Whitepaper and Privacy Policy -->
+                    <include name="testRes012" />
+                    
+                    <!-- RES-013: Compare with Salesforce - DEMO button -->
+                    <include name="testRes013" />
+                    
+                    <!-- RES-014: Compare with Microsoft Dynamics - DEMO button -->
+                    <include name="testRes014" />
+                </methods>
+            </class>
+        </classes>
+    </test>
+    
+    <!-- Translations Tests -->
+    <test name="Translations Tests" preserve-order="true">
+        <classes>
+            <class name="com.proyek_softes.landing.tests.resources.TranslationsTest">
+                <methods>
+                    <!-- RES-015: Navigate to Translations and verify SourceForge URL -->
+                    <include name="testRes015" />
+                </methods>
+            </class>
+        </classes>
+    </test>
+    
+    <!-- Training Tests -->
+    <test name="Training Tests" preserve-order="true">
+        <classes>
+            <class name="com.proyek_softes.landing.tests.resources.TrainingTest">
+                <methods>
+                    <!-- RES-016: User Training - Play YouTube video -->
+                    <include name="testRes016" />
+                    
+                    <!-- RES-017: User Training - Try for Free button -->
+                    <include name="testRes017" />
+                    
+                    <!-- RES-018: User Training - Contact Us to Receive Pricing for Training -->
+                    <include name="testRes018" />
+                    
+                    <!-- RES-019: Developer Training - Masterclasses and Play YouTube video -->
+                    <include name="testRes019" />
+                    
+                    <!-- RES-020: Developer Training - Masterclasses, select course, pay and verify -->
+                    <include name="testRes020" />
+                    
+                    <!-- RES-021: Developer Training - Masterclasses, select course, pay, back and verify payment failed -->
+                    <include name="testRes021" />
+                    
+                    <!-- RES-022: User Training - Contact Us to Receive Pricing for Training -->
+                    <include name="testRes022" />
+                </methods>
+            </class>
+        </classes>
+    </test>
+    
+    <!-- Client Login Tests -->
+    <test name="Client Login Tests" preserve-order="true">
+        <classes>
+            <class name="com.proyek_softes.landing.tests.resources.ClientLoginTest">
+                <methods>
+                    <!-- RES-023: Navigate to Client Login and verify URL -->
+                    <include name="testRes023" />
+                    
+                    <!-- RES-024: Client Login with invalid credentials and verify error message -->
+                    <include name="testRes024" />
+                    
+                    <!-- RES-025: Forgot your username and verify success message -->
+                    <include name="testRes025" />
+                </methods>
+            </class>
+        </classes>
+    </test>
+    
 </suite>

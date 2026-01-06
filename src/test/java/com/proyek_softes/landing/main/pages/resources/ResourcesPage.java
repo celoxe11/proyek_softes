@@ -32,6 +32,12 @@ public class ResourcesPage {
     private By addOnsStoreSubMenuLocator = By.cssSelector("li#menu-item-564406 a");
     private By addOnsOutlookPluginSubMenuLocator = By.cssSelector("li#menu-item-564382 a");
     private By successStoriesSubMenuLocator = By.cssSelector("li#menu-item-564407 a");
+    private By compareSuiteCRMSalesforceSubMenuLocator = By.cssSelector("li#menu-item-564408 a");
+    private By compareSuiteCRMMicrosoftDynamicsSubMenuLocator = By.cssSelector("li#menu-item-564409 a");
+    private By translationsSubMenuLocator = By.cssSelector("li#menu-item-564410 a");
+    private By trainingUserTrainingSubMenuLocator = By.cssSelector("li#menu-item-564365 a");
+    private By trainingDeveloperTrainingSubMenuLocator = By.cssSelector("li#menu-item-564366 a");
+    private By clientLoginSubMenuLocator = By.cssSelector("li#menu-item-564396 a");
 
     // ========================================
     // CONSTRUCTOR
@@ -115,6 +121,60 @@ public class ResourcesPage {
      */
     public boolean navigateToSuccessStories() {
         return navigateToSubMenu(successStoriesSubMenuLocator, "Success Stories");
+    }
+
+    /**
+     * Navigate ke sub-menu Compare SuiteCRM > Compare with Salesforce
+     * 
+     * @return true jika berhasil
+     */
+    public boolean navigateToCompareSalesforce() {
+        return navigateToSubMenu(compareSuiteCRMSalesforceSubMenuLocator, "Compare SuiteCRM > Compare with Salesforce");
+    }
+
+    /**
+     * Navigate ke sub-menu Compare SuiteCRM > Compare with Microsoft Dynamics
+     * 
+     * @return true jika berhasil
+     */
+    public boolean navigateToCompareMicrosoftDynamics() {
+        return navigateToSubMenu(compareSuiteCRMMicrosoftDynamicsSubMenuLocator, "Compare SuiteCRM > Compare with Microsoft Dynamics");
+    }
+
+    /**
+     * Navigate ke sub-menu Translations
+     * 
+     * @return true jika berhasil
+     */
+    public boolean navigateToTranslations() {
+        return navigateToSubMenu(translationsSubMenuLocator, "Translations");
+    }
+
+    /**
+     * Navigate ke sub-menu Training > User Training
+     * 
+     * @return true jika berhasil
+     */
+    public boolean navigateToUserTraining() {
+        return navigateToSubMenu(trainingUserTrainingSubMenuLocator, "Training > User Training");
+    }
+
+    /**
+     * Navigate ke sub-menu Training > Developer Training
+     * 
+     * @return true jika berhasil
+     */
+    public boolean navigateToDeveloperTraining() {
+        return navigateToSubMenu(trainingDeveloperTrainingSubMenuLocator, "Training > Developer Training");
+    }
+
+    /**
+     * Navigate ke sub-menu Client Login
+     * 
+     * @return true jika berhasil
+     */
+    public boolean navigateToClientLogin() {
+        return navigateToSubMenu(clientLoginSubMenuLocator, "Client Login");
     }
 
     /**
