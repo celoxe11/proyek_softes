@@ -1,0 +1,11 @@
+{
+  "name": "Premium Coffee Beans",
+  "cost": "1",
+  "contact_name": "Selma Cogburn",
+  "description": "High-quality Arabica coffee beans sourced from local farmers.",
+  "part_number": "PRD-001",
+  "type": "Good",
+  "price": "1",
+  "url": "http://example.com/product/coffee-beans",
+  "attachment": "Product_attachment.jpg"
+}
