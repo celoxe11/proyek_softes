@@ -1,9 +1,6 @@
 package com.proyek_softes.demo.pages.pdf_templates;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -151,7 +148,7 @@ public class ImportPdfTemplatePage {
 
     public void uploadFile(String fileName) {
         // Get the absolute path to the file in test resources
-        String resourcePath = Paths.get("src", "test", "resources", "pdf_templates_demo", fileName).toAbsolutePath().toString();
+        String resourcePath = Paths.get("src", "test", "resources", "pdf_template_demo", fileName).toAbsolutePath().toString();
         File file = new File(resourcePath);
 
         // Upload the file by sending the absolute path to the input field

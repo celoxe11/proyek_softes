@@ -1,0 +1,10 @@
+{
+  "name": "Quarterly Sales Report",
+  "report_module": "Opportunities",
+  "graphs_per_row": "2",
+  "description": "This report provides a comprehensive overview of quarterly sales opportunities and performance metrics.",
+  "module_tree_folder": "Opportunities",
+  "fields_to_add": ["Account Name", "Amount", "Date Created"],
+  "field_configurations": "[{\"field_index\":0,\"display\":true,\"link\":false,\"label\":\"Account\",\"function\":\"\",\"sort\":\"ASC\",\"group_by\":false,\"total\":\"\"},{\"field_index\":1,\"display\":true,\"link\":false,\"label\":\"Total Amount\",\"function\":\"SUM\",\"sort\":\"DESC\",\"group_by\":false,\"total\":\"SUM\"},{\"field_index\":2,\"display\":true,\"link\":false,\"label\":\"\",\"function\":\"\",\"sort\":\"\",\"group_by\":false,\"total\":\"\"}]",
+  "main_group": "1"
+}

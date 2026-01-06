@@ -110,30 +110,26 @@ public class PdfTemplateTest extends GenericCrudTestHelper<PdfTemplatesPage, Cre
     @Test
     @Description("DEM-140")
     public void testDem140() {
-        try {
-            login("will", "will");
-            PdfTemplatesPage pdfTemplatesPage = new PdfTemplatesPage(driver);
-            pdfTemplatesPage.navigateToPdfTemplateModule();
-            pdfTemplatesPage.navigateToImportPdfTemplates();
+        login("will", "will");
+        PdfTemplatesPage pdfTemplatesPage = new PdfTemplatesPage(driver);
+        pdfTemplatesPage.navigateToPdfTemplateModule();
+        pdfTemplatesPage.navigateToImportPdfTemplates();
 
-            ImportPdfTemplatePage importPdfTemplatePage = new ImportPdfTemplatePage(driver);
-            boolean isCSV = importPdfTemplatePage.verifyDownloadedTemplateIsCSV(10, "DEM-140_Download_History");
-            assertTrue(isCSV, "Downloaded template should be in CSV format and named contains 'PDF - Templates'");
+        ImportPdfTemplatePage importPdfTemplatePage = new ImportPdfTemplatePage(driver);
+        boolean isCSV = importPdfTemplatePage.verifyDownloadedTemplateIsCSV(10, "DEM-140_Download_History");
+        assertTrue(isCSV, "Downloaded template should be in CSV format and named contains 'PDF - Templates'");
 
-            // upload file and complete import process
-            importPdfTemplatePage.uploadFile("PDF - Templates.csv");
+        // upload file and complete import process
+        importPdfTemplatePage.uploadFile("PDF_Templates.csv");
 
-            importPdfTemplatePage.clickImportCreate();
-            importPdfTemplatePage.clickNext();
-            importPdfTemplatePage.clickNext();
-            importPdfTemplatePage.clickNext();
-            importPdfTemplatePage.clickImportNow();
+        importPdfTemplatePage.clickImportCreate();
+        importPdfTemplatePage.clickNext();
+        importPdfTemplatePage.clickNext();
+        importPdfTemplatePage.clickNext();
+        importPdfTemplatePage.clickImportNow();
 
-            boolean isRecordsImported = importPdfTemplatePage.isRecordsImported();
-            assertTrue(isRecordsImported, "Records from PDF - Templates.csv should be imported successfully");
-            takeElementScreenshot("DEM-140_Import_PDF_Templates_Success", importPdfTemplatePage.getSummaryElement());
-
-        } catch (Exception e) {
-        }
+        boolean isRecordsImported = importPdfTemplatePage.isRecordsImported();
+        assertTrue(isRecordsImported, "Records from PDF - Templates.csv should be imported successfully");
+        takeElementScreenshot("DEM-140_Import_PDF_Templates_Success", importPdfTemplatePage.getSummaryElement());
     }
 }

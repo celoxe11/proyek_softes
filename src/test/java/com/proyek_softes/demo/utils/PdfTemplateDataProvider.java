@@ -2,7 +2,7 @@ package com.proyek_softes.demo.utils;
 
 import org.testng.annotations.DataProvider;
 
-public class PdfTemplateDataProvider {
+public class PdfTemplateDataProvider extends BaseDataProvider {
 
     private static final String ENTITY_FOLDER = "pdf_template_demo";
 
