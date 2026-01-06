@@ -7,6 +7,7 @@ import org.testng.annotations.Test;
 
 import com.proyek_softes.demo.pages.invoices.CreateInvoicePage;
 import com.proyek_softes.demo.pages.invoices.ImportInvoicePage;
+import com.proyek_softes.demo.pages.invoices.ImportLineItemPage;
 import com.proyek_softes.demo.pages.invoices.InvoicesPage;
 import com.proyek_softes.demo.utils.InvoiceDataProvider;
 
@@ -105,7 +106,6 @@ public class InvoiceTest extends GenericCrudTestHelper<InvoicesPage, CreateInvoi
             invoicesPage.checkAndClearFilter();
         } catch (InterruptedException e) {
         }
-
     }
 
     @Test
@@ -144,7 +144,28 @@ public class InvoiceTest extends GenericCrudTestHelper<InvoicesPage, CreateInvoi
     @Description("DEM-085")
     public void testDem085() {
         try {
-            
+            login("will", "will");
+            InvoicesPage invoicesPage = new InvoicesPage(driver);
+            invoicesPage.navigateToInvoicesModule();
+            invoicesPage.navigateToImportLineItems();
+
+            ImportLineItemPage importLineItemPage = new ImportLineItemPage(driver);
+            boolean isCSV = importLineItemPage.verifyDownloadedTemplateIsCSV(10, "DEM-085_Download_History");
+            assertTrue(isCSV, "Downloaded template should be in CSV format and named contains 'Line Items'");
+
+            // upload file and complete import process
+            importLineItemPage.uploadFile("Invoices_Line_Items.csv");
+
+            importLineItemPage.clickImportCreate();
+            importLineItemPage.clickNext();
+            importLineItemPage.clickNext();
+            importLineItemPage.clickNext();
+            importLineItemPage.clickImportNow();
+
+            boolean isRecordsImported = importLineItemPage.isRecordsImported();
+            assertTrue(isRecordsImported, "Records from Invoices_Line_Items.csv should be imported successfully");
+            takeElementScreenshot("DEM-085_Import_Line_Items_Success", importLineItemPage.getSummaryElement());
+
         } catch (Throwable e) {
             takeScreenshot("DEM-085_Error_Current_Page");
             throw new AssertionError("Test failed: " + e.getMessage(), e);
