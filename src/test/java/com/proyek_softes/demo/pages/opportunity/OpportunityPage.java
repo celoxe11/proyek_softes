@@ -103,17 +103,13 @@ public class OpportunityPage {
         return driver.findElement(firstRowLocator);
     }
 
-    public void clickFirstAccount() {
-        getFirstRowNameLocator().click();
-    }
-
     public WebElement getFirstRowNameLocator() {
         wait.until(ExpectedConditions.presenceOfElementLocated(firstRowOpportunityName));
         return driver.findElement(firstRowOpportunityName);
     }
 
     public void clickFirstOpportunity() {
-        getFirstRowLocator().click();
+        getFirstRowNameLocator().click();
     }
 
     public boolean isOpportunityTitleCorrect(String opportunityName) {
