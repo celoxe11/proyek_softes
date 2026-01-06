@@ -1,0 +1,8 @@
+{
+  "name": "Q1 2026 Software Development Project Template",
+  "status": "Draft",
+  "override_business_hours": "true",
+  "priority": "High",
+  "invitee_first_name": "Sarah",
+  "tasks": "[{\"milestone_type\":\"Task\",\"task_name\":\"Project Kickoff Meeting\",\"predecessor\":\"\",\"relation_type\":\"\",\"duration\":\"2\",\"duration_unit\":\"Days\",\"resources\":\"\",\"complete\":\"0\"},{\"milestone_type\":\"Task\",\"task_name\":\"Requirements Analysis\",\"predecessor\":\"Project Kickoff Meeting\",\"relation_type\":\"Finish to Start (FS)\",\"duration\":\"5\",\"duration_unit\":\"Days\",\"resources\":\"\",\"complete\":\"0\"},{\"milestone_type\":\"Milestone\",\"task_name\":\"Requirements Sign-off\",\"predecessor\":\"Requirements Analysis\",\"relation_type\":\"Finish to Start (FS)\",\"duration\":\"1\",\"duration_unit\":\"Days\",\"resources\":\"\",\"complete\":\"0\"},{\"milestone_type\":\"Task\",\"task_name\":\"System Design\",\"predecessor\":\"Requirements Sign-off\",\"relation_type\":\"Finish to Start (FS)\",\"duration\":\"7\",\"duration_unit\":\"Days\",\"resources\":\"\",\"complete\":\"0\"},{\"milestone_type\":\"Task\",\"task_name\":\"Development Phase\",\"predecessor\":\"System Design\",\"relation_type\":\"Finish to Start (FS)\",\"duration\":\"15\",\"duration_unit\":\"Days\",\"resources\":\"\",\"complete\":\"0\"}]"
+}

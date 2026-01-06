@@ -186,13 +186,13 @@ public class CreateProjectPage {
         }
     }
 
-    public boolean isProjectSavedSuccessfully(String projectName) {
+    public boolean isProjectTemplateSavedSuccessfully(String projectTemplateName) {
         try {
             By pageTitle = By.className("module-title-text");
             String title = wait.until(ExpectedConditions.presenceOfElementLocated(pageTitle)).getText();
             System.out.println("Page title after saving: " + title.toLowerCase());
-            System.out.println(projectName.toLowerCase());
-            return title.toLowerCase().contains(projectName.toLowerCase());
+            System.out.println(projectTemplateName.toLowerCase());
+            return title.toLowerCase().contains(projectTemplateName.toLowerCase());
         } catch (Exception e) {
             return false;
         }

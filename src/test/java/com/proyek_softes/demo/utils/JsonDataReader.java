@@ -30,7 +30,7 @@ public class JsonDataReader {
             }
             Reader reader = new InputStreamReader(inputStream);
             return JsonParser.parseReader(reader).getAsJsonObject();
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             throw new RuntimeException("Failed to read JSON file: " + filePath, e);
         }
     }
