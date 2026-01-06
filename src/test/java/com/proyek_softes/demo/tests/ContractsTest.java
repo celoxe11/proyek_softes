@@ -118,10 +118,10 @@ public class ContractsTest extends GenericCrudTestHelper<ContractsPage, CreateCo
 
             ImportContractPage importContractPage = new ImportContractPage(driver);
             boolean isCSV = importContractPage.verifyDownloadedTemplateIsCSV(10, "DEM-090_Download_History");
-            assertTrue(isCSV, "Downloaded template should be in CSV format and named contains 'invoices'");
+            assertTrue(isCSV, "Downloaded template should be in CSV format and named contains 'contracts'");
 
             // upload file and complete import process
-            importContractPage.uploadFile("Invoices.csv");
+            importContractPage.uploadFile("Contracts.csv");
 
             importContractPage.clickImportCreate();
             importContractPage.clickNext();
@@ -130,8 +130,8 @@ public class ContractsTest extends GenericCrudTestHelper<ContractsPage, CreateCo
             importContractPage.clickImportNow();
 
             boolean isRecordsImported = importContractPage.isRecordsImported();
-            assertTrue(isRecordsImported, "Records from Invoices.csv should be imported successfully");
-            takeElementScreenshot("DEM-090_Import_Invoices_Success", importContractPage.getSummaryElement());
+            assertTrue(isRecordsImported, "Records from contracts.csv should be imported successfully");
+            takeElementScreenshot("DEM-090_Import_Contracts_Success", importContractPage.getSummaryElement());
 
         } catch (Throwable e) {
             takeScreenshot("DEM-090_Error_Current_Page");
