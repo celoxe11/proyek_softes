@@ -7,6 +7,7 @@ import org.testng.annotations.Test;
 
 import com.proyek_softes.demo.pages.meetings.MeetingsPage;
 import com.proyek_softes.demo.pages.meetings.ScheduleMeetingPage;
+import com.proyek_softes.demo.pages.meetings.ImportMeetingPage;
 import com.proyek_softes.demo.utils.MeetingDataProvider;
 
 import io.qameta.allure.Description;
@@ -114,6 +115,26 @@ public class MeetingTest extends GenericCrudTestHelper<MeetingsPage, ScheduleMee
     @Test
     @Description("DEM-069")
     public void testDem069() {
-        // import meeting test to be implemented
+        login("will", "will");
+        MeetingsPage meetingsPage = new MeetingsPage(driver);
+        meetingsPage.navigateToMeetingsModule();
+        meetingsPage.navigateToImportMeeting();
+
+        ImportMeetingPage importMeetingPage = new ImportMeetingPage(driver);
+        boolean isCSV = importMeetingPage.verifyDownloadedTemplateIsCSV(10, "DEM-069_Download_History");
+        assertTrue(isCSV, "Downloaded template should be in CSV format and named contains 'meetings'");
+        
+        // upload file and complete import process
+        importMeetingPage.uploadFile("Meetings.csv");
+
+        importMeetingPage.clickImportCreate();
+        importMeetingPage.clickNext();
+        importMeetingPage.clickNext();
+        importMeetingPage.clickNext();
+        importMeetingPage.clickImportNow();
+        
+        boolean isRecordsImported = importMeetingPage.isRecordsImported();
+        assertTrue(isRecordsImported, "Records from Meetings.csv should be imported successfully");
+        takeElementScreenshot("DEM-069_Import_Meetings_Success", importMeetingPage.getSummaryElement());
     }
 }
