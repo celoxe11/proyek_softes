@@ -1,0 +1,15 @@
+{
+  "name": "Q1 2026 Software Development Contract",
+  "status": "Not Started",
+  "total_contract_value": "50000.00",
+  "assigned_user_name": "Will Westin",
+  "start_date": "01/06/2026",
+  "end_date": "06/30/2026",
+  "renewal_reminder_date": "05/30/2026 12:00pm",
+  "customer_signed_date": "01/06/2026",
+  "contract_type": "Type",
+  "company_signed_date": "01/06/2026",
+  "description": "Software development and consulting services contract for Q1-Q2 2026. Includes web application development, API integration, and technical support.",
+  "shipping_amount": "0.00",
+  "services": "[{\"name\":\"Web Application Development\",\"list_price\":\"15000.00\",\"discount\":\"5\",\"discount_type\":\"Percentage\",\"tax\":\"7.5\"},{\"name\":\"API Integration Services\",\"list_price\":\"10000.00\",\"discount\":\"0\",\"discount_type\":\"Percentage\",\"tax\":\"7.5\"}]"
+}

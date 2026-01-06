@@ -126,6 +126,9 @@ public class CreateContractPage {
                 clickSelectOpportunity();
                 selectFirstItem(data.get("opportunity"));
             }
+            else {
+                selectFirstItem();
+            }
 
             fillInputFieldFromData("customer_signed_date", data.get("customer_signed_date"));
 

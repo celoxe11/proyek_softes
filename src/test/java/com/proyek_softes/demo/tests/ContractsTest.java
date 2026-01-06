@@ -8,6 +8,7 @@ import org.testng.annotations.Test;
 import com.proyek_softes.demo.pages.contracts.ContractsPage;
 import com.proyek_softes.demo.pages.contracts.CreateContractPage;
 import com.proyek_softes.demo.pages.contracts.ImportContractPage;
+import com.proyek_softes.demo.utils.ContractDataProvider;
 
 import io.qameta.allure.Description;
 
