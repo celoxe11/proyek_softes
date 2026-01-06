@@ -1,0 +1,19 @@
+{
+  "nameBeforeEdit": "Invoice Template Test",
+  "name": "Updated Invoice Template",
+  "type": "AOS_Quotes",
+  "page_size": "Letter",
+  "orientation": "Landscape",
+  "active": "1",
+  "module_name": "AOS_Quotes",
+  "variable_name": "$aos_quotes_number",
+  "margin_left": "20",
+  "margin_right": "20",
+  "margin_top": "18",
+  "margin_bottom": "18",
+  "margin_header": "10",
+  "margin_footer": "10",
+  "description": "This is the updated body of the quote template. Quote Number: $aos_quotes_number. Valid Until: $aos_quotes_expiration. Total Amount: $aos_quotes_total_amt",
+  "pdfheader": "Company Quotation - Contact: sales@company.com",
+  "pdffooter": "Page {PAGE_NUM} of {PAGE_COUNT} - Terms and conditions apply"
+}
