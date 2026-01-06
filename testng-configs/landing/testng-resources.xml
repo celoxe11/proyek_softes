@@ -1,0 +1,71 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+<suite name="Resources Module Test Suite" verbose="1">
+    
+    <!-- All SuiteCRM Releases Tests -->
+    <test name="All SuiteCRM Releases Tests" preserve-order="true">
+        <classes>
+            <class name="com.proyek_softes.landing.tests.resources.AllSuiteCRMReleasesTest">
+                <methods>
+                    <!-- RES-001: Navigate to All SuiteCRM Releases and verify Open Collective link -->
+                    <include name="testRes001" />
+                    
+                    <!-- RES-002: Download 7.15 ESR zip and verify file name -->
+                    <include name="testRes002" />
+                    
+                    <!-- RES-003: Click Release notes for 7.15 ESR and verify URL -->
+                    <include name="testRes003" />
+                    
+                    <!-- RES-004: Click Install Guide for 7.15 ESR and verify URL -->
+                    <include name="testRes004" />
+                    
+                    <!-- RES-005: Click Upgrade Guide for 7.15.0 Upgrade from 7.14.x and verify URL -->
+                    <include name="testRes005" />
+                </methods>
+            </class>
+        </classes>
+    </test>
+    
+    <!-- Documentation Tests -->
+    <test name="Documentation Tests" preserve-order="true">
+        <classes>
+            <class name="com.proyek_softes.landing.tests.resources.DocumentationTest">
+                <methods>
+                    <!-- RES-006: Navigate to Documentation and verify URL -->
+                    <include name="testRes006" />
+                </methods>
+            </class>
+        </classes>
+    </test>
+    
+    <!-- Add-ons Tests -->
+    <test name="Add-ons Tests" preserve-order="true">
+        <classes>
+            <class name="com.proyek_softes.landing.tests.resources.AddOnsTest">
+                <methods>
+                    <!-- RES-007: Navigate to Add-ons > Store and verify URL -->
+                    <include name="testRes007" />
+                    
+                    <!-- RES-008: Navigate to Add-ons > Outlook Plugin and verify URL -->
+                    <include name="testRes008" />
+                </methods>
+            </class>
+        </classes>
+    </test>
+    
+    <!-- Success Stories Tests -->
+    <test name="Success Stories Tests" preserve-order="true">
+        <classes>
+            <class name="com.proyek_softes.landing.tests.resources.SuccessStoriesTest">
+                <methods>
+                    <!-- RES-009: Download featured item PDF from Success Stories -->
+                    <include name="testRes009" />
+                    
+                    <!-- RES-010: Download 4th item PDF from Success Stories -->
+                    <include name="testRes010" />
+                </methods>
+            </class>
+        </classes>
+    </test>
+    
+</suite>
