@@ -1,0 +1,8 @@
+{
+  "name": "Welcome Email - New Customer Onboarding",
+  "type": "email",
+  "description": "Standard welcome email template sent to new customers after successful account creation and onboarding completion.",
+  "assigned_user_name": "Will Westin",
+  "subject": "Welcome to Our Platform - Let's Get Started!",
+  "body_html": "Dear Customer,\n\nWelcome to our platform! We're excited to have you on board.\n\nYour account has been successfully created and you can now access all our features. Here are some quick links to help you get started:\n\n- Dashboard: Access your personalized dashboard\n- Support Center: Find answers to common questions\n- Training Resources: Learn how to make the most of our platform\n\nIf you need any assistance, our support team is here to help 24/7.\n\nBest regards,\nThe Team"
+}

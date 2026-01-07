@@ -7,5 +7,5 @@
   "module_tree_folder": "Accounts",
   "fields_to_add": ["Name", "Address", "Assigned to"],
   "field_configurations": "[{\"field_index\":0,\"display\":true,\"link\":false,\"label\":\"Account Name\",\"function\":\"\",\"sort\":\"ASC\",\"group_by\":false,\"total\":\"\"},{\"field_index\":1,\"display\":true,\"link\":false,\"label\":\"Location\",\"function\":\"\",\"sort\":\"\",\"group_by\":false,\"total\":\"\"},{\"field_index\":2,\"display\":true,\"link\":false,\"label\":\"Owner\",\"function\":\"COUNT\",\"sort\":\"\",\"group_by\":false,\"total\":\"COUNT\"}]",
-  "main_group": "0"
+  "main_group": "3"
 }

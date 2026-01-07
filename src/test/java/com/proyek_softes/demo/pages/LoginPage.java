@@ -32,14 +32,17 @@ public class LoginPage {
     private final By demoSuiteCRM7Link = By.xpath("//span[contains(text(),'ACCESS THE SUITECRM 7 ESR DEMO')]/parent::a");
     private final By demoSuiteCRM8Link = By.xpath("//span[contains(text(),'Access the SuiteCRM 8 Demo')]/parent::a");
 
+    // Logout
+    private final By profileDropdownButton = By.id("with-label");
+    private final By logoutLink = By.cssSelector(".user-dropdown.user-menu li:nth-child(5) a");
+
     public LoginPage(WebDriver driver) {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+        this.actions = new Actions(driver);
     }
 
     public void navigateToDemo7() {
-        // hover over Get Started
-        actions = new Actions(driver);
         actions.moveToElement(driver.findElement(getStartedButton)).perform();
 
         // wait until sub-menu is visible and click on Demo link
@@ -70,8 +73,6 @@ public class LoginPage {
     }
 
     public void navigateToDemo8() {
-        // hover over Get Started
-        actions = new Actions(driver);
         actions.moveToElement(driver.findElement(getStartedButton)).perform();
 
         // wait until sub-menu is visible and click on Demo link
@@ -170,6 +171,43 @@ public class LoginPage {
             }
         } else {
             System.out.println("Already logged in or redirected to dashboard.");
+        }
+    }
+
+    public void logout() {
+        try {
+            wait.until(ExpectedConditions.presenceOfElementLocated(profileDropdownButton));
+            wait.until(ExpectedConditions.visibilityOfElementLocated(profileDropdownButton));
+
+            // Hover over the profile button to trigger dropdown
+            actions.moveToElement(driver.findElement(profileDropdownButton)).perform();
+
+            // Wait for about link to be present in DOM
+            wait.until(ExpectedConditions.presenceOfElementLocated(logoutLink));
+
+            // Give time for CSS transition to complete
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+
+            // Use JavaScript click since normal click may not work with hover dropdown
+            org.openqa.selenium.JavascriptExecutor js = (org.openqa.selenium.JavascriptExecutor) driver;
+            js.executeScript("arguments[0].click();", driver.findElement(logoutLink));
+
+        } catch (Exception e) {
+            System.out.println("Error during logout: " + e.getMessage());
+        }
+    }
+
+    public boolean isInLoginPage() {
+        try {
+            wait.until(ExpectedConditions.visibilityOfElementLocated(loginButton));
+            return driver.findElement(loginButton).isDisplayed();
+        } catch (Exception e) {
+            System.out.println("Error verifying login page: " + e.getMessage());
+            return false;
         }
     }
 }

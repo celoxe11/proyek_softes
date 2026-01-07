@@ -102,4 +102,15 @@ public class LoginTest extends BaseTest {
         // take screenshot
         takeScreenshot("DEM-104_Login_Page");
     }
+
+    @Test
+    @Description("DEM-173")
+    public void testDem173() {
+        login("will", "will");
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.logout();
+        boolean isInLoginPage = loginPage.isInLoginPage();
+        assertTrue(isInLoginPage, "Should be in login page after logout");
+        takeScreenshot("DEM-173_Login_Page_After_Logout");
+    }
 }

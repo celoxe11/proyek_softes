@@ -163,8 +163,24 @@ public class ImportReportPage {
     }
 
     public void clickNext() {
-        actions.moveToElement(driver.findElement(nextButton)).perform();
-        wait.until(ExpectedConditions.elementToBeClickable(nextButton)).click();
+        try {
+            // Wait for page to be ready after previous action
+            Thread.sleep(500);
+            
+            // Wait for the next button to be present and clickable
+            WebElement nextBtn = wait.until(ExpectedConditions.elementToBeClickable(nextButton));
+            
+            // Scroll into view and click
+            actions.moveToElement(nextBtn).perform();
+            Thread.sleep(200);
+            nextBtn.click();
+            
+            // Wait for page transition
+            Thread.sleep(800);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException("Thread was interrupted while clicking Next", e);
+        }
     }
 
     public boolean confirmInStep(String stepName) {

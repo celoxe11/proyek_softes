@@ -1,0 +1,9 @@
+{
+  "nameBeforeEdit": "Welcome Email - New Customer Onboarding",
+  "name": "Welcome Email - Premium Customer Onboarding 2026",
+  "type": "campaign",
+  "description": "Updated premium welcome email template for new customers with enhanced personalization and 2026 feature highlights. Includes links to new training materials and premium support options.",
+  "assigned_user_name": "Will Westin",
+  "subject": "Welcome to Premium - Your Journey Starts Here!",
+  "body_html": "Dear Valued Customer,\n\nWelcome to our Premium Platform! We're thrilled to have you as a premium member.\n\nYour premium account is now active with exclusive benefits:\n\n- Priority Support: 24/7 dedicated support team\n- Advanced Features: Full access to all premium tools\n- Training Sessions: One-on-one onboarding with our experts\n- Community Access: Join our exclusive premium member community\n\nYour premium benefits include:\n• Unlimited storage and bandwidth\n• Advanced analytics and reporting\n• API access for integrations\n• Monthly strategy consultations\n\nGet started with your premium dashboard or schedule your complimentary onboarding session.\n\nWe're here to ensure your success!\n\nBest regards,\nThe Premium Team"
+}
