@@ -65,19 +65,63 @@ public class BrowserDetector {
     private static boolean isBrowserInstalled(String browserCommand) {
         try {
             String os = System.getProperty("os.name").toLowerCase();
-            String[] command;
-
+            
+            // Untuk Windows, cek langsung di lokasi instalasi default
             if (os.contains("win")) {
-                command = new String[] { "where", browserCommand };
+                return isBrowserInstalledWindows(browserCommand);
             } else {
-                command = new String[] { "which", browserCommand };
+                // Untuk Linux/Mac, gunakan 'which'
+                String[] command = new String[] { "which", browserCommand };
+                Process process = Runtime.getRuntime().exec(command);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                String line = reader.readLine();
+                return line != null && !line.isEmpty();
             }
-
-            Process process = Runtime.getRuntime().exec(command);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            String line = reader.readLine();
-
-            return line != null && !line.isEmpty();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    
+    /**
+     * Cek browser installation di Windows menggunakan path langsung
+     */
+    private static boolean isBrowserInstalledWindows(String browserCommand) {
+        try {
+            java.io.File browserFile = null;
+            
+            // Cek Chrome
+            if (browserCommand.contains("chrome") && !browserCommand.contains("chromium")) {
+                browserFile = new java.io.File("C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe");
+                if (!browserFile.exists()) {
+                    browserFile = new java.io.File("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe");
+                }
+                if (!browserFile.exists()) {
+                    browserFile = new java.io.File(System.getenv("LOCALAPPDATA") + "\\Google\\Chrome\\Application\\chrome.exe");
+                }
+            }
+            // Cek Chromium
+            else if (browserCommand.contains("chromium")) {
+                browserFile = new java.io.File("C:\\Program Files\\Chromium\\Application\\chrome.exe");
+                if (!browserFile.exists()) {
+                    browserFile = new java.io.File(System.getenv("LOCALAPPDATA") + "\\Chromium\\Application\\chrome.exe");
+                }
+            }
+            // Cek Firefox
+            else if (browserCommand.contains("firefox")) {
+                browserFile = new java.io.File("C:\\Program Files\\Mozilla Firefox\\firefox.exe");
+                if (!browserFile.exists()) {
+                    browserFile = new java.io.File("C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe");
+                }
+            }
+            // Cek Edge
+            else if (browserCommand.contains("edge")) {
+                browserFile = new java.io.File("C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe");
+                if (!browserFile.exists()) {
+                    browserFile = new java.io.File("C:\\Program Files\\Microsoft\\Edge\\Application\\msedge.exe");
+                }
+            }
+            
+            return browserFile != null && browserFile.exists();
         } catch (Exception e) {
             return false;
         }

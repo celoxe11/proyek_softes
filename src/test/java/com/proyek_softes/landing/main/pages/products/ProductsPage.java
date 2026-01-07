@@ -24,21 +24,16 @@ public class ProductsPage {
     // LOCATORS - Element UI
     // ========================================
 
-    // Main Products Menu
-    @FindBy(xpath = "//a[contains(@class, 'menu-item') and contains(translate(., 'PRODUCTS', 'products'), 'products')]")
-    private WebElement productsMenu;
-
-    // Alternative locator for Products menu
-    private By productsMenuLocator = By.xpath(
-            "//li[contains(@class, 'menu-item')]//a[contains(translate(text(), 'PRODUCTS', 'products'), 'products')]");
+    // Main Products Menu - using multiple locators for robustness
+    private By productsMenuLocator = By.cssSelector("li#menu-item-563881 > a");
+    private By productsMenuAlt1 = By.xpath("//nav[@id='menu-main-menu-1']//a[text()='Products']");
+    private By productsMenuAlt2 = By.xpath("//a[contains(text(), 'Products') and contains(@class, 'fusion-')]");
+    private By productsMenuAlt3 = By.linkText("Products");
 
     // Sub-menu SuiteCRM
-    @FindBy(xpath = "//a[contains(@href, 'suitecrm') and contains(@class, 'menu-item')]")
-    private WebElement suiteCRMSubMenu;
-
-    // Alternative locators for SuiteCRM submenu
-    private By suiteCRMSubMenuLocator = By.xpath(
-            "//li[contains(@class, 'menu-item')]//a[contains(translate(text(), 'SUITECRM', 'suitecrm'), 'suitecrm')]");
+    private By suiteCRMSubMenuLocator = By.cssSelector("li#menu-item-563882 a");
+    private By suiteCRMSubMenuAlt1 = By.xpath("//nav[@id='menu-main-menu-1']//a[contains(text(), 'SuiteCRM')]");
+    private By suiteCRMSubMenuAlt2 = By.linkText("SuiteCRM");
 
     // ========================================
     // CONSTRUCTOR
@@ -63,18 +58,47 @@ public class ProductsPage {
      */
     public boolean hoverProductsMenu() {
         try {
-            System.out.println("🔄 Hovering ke menu Products...");
+            System.out.println("Hovering ke menu Products");
 
-            WebElement menu = wait.until(ExpectedConditions.visibilityOfElementLocated(productsMenuLocator));
-            actions.moveToElement(menu).perform();
+            WebElement menu = null;
+            
+            // Try primary locator
+            try {
+                menu = wait.until(ExpectedConditions.visibilityOfElementLocated(productsMenuLocator));
+                System.out.println("Menu Products ditemukan dengan CSS selector (menu-item-563881)");
+            } catch (Exception e1) {
+                System.out.println("Primary locator gagal, mencoba alternative");
+                
+                // Try alternative locators
+                try {
+                    menu = wait.until(ExpectedConditions.visibilityOfElementLocated(productsMenuAlt1));
+                    System.out.println("Menu Products ditemukan dengan XPath nav");
+                } catch (Exception e2) {
+                    try {
+                        menu = wait.until(ExpectedConditions.visibilityOfElementLocated(productsMenuAlt2));
+                        System.out.println("Menu Products ditemukan dengan XPath fusion");
+                    } catch (Exception e3) {
+                        menu = wait.until(ExpectedConditions.visibilityOfElementLocated(productsMenuAlt3));
+                        System.out.println("Menu Products ditemukan dengan linkText");
+                    }
+                }
+            }
+            
+            if (menu != null) {
+                // Scroll to menu if needed
+                js.executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", menu);
+                Thread.sleep(300);
+                
+                actions.moveToElement(menu).perform();
+                Thread.sleep(500);
 
-            // Tunggu dropdown muncul
-            Thread.sleep(500);
-
-            System.out.println("✓ Berhasil hover ke menu Products");
-            return true;
+                System.out.println("Berhasil hover ke menu Products");
+                return true;
+            }
+            
+            return false;
         } catch (Exception e) {
-            System.out.println("❌ Gagal hover ke menu Products: " + e.getMessage());
+            System.out.println("Gagal hover ke menu Products: " + e.getMessage());
             return false;
         }
     }
@@ -86,29 +110,51 @@ public class ProductsPage {
      */
     public boolean clickSuiteCRMSubMenu() {
         try {
-            System.out.println("🔄 Mengklik sub-menu SuiteCRM...");
+            System.out.println("Mengklik sub-menu SuiteCRM");
 
             // Hover dulu ke Products menu
             hoverProductsMenu();
 
-            // Cari dan klik SuiteCRM submenu
-            WebElement subMenu = wait.until(ExpectedConditions.elementToBeClickable(suiteCRMSubMenuLocator));
-
-            // Scroll ke element jika perlu
-            js.executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", subMenu);
-            Thread.sleep(300);
-
-            // Klik
+            WebElement subMenu = null;
+            
+            // Try primary locator
             try {
-                subMenu.click();
-            } catch (Exception e) {
-                js.executeScript("arguments[0].click();", subMenu);
+                subMenu = wait.until(ExpectedConditions.elementToBeClickable(suiteCRMSubMenuLocator));
+                System.out.println("SuiteCRM submenu ditemukan dengan CSS selector");
+            } catch (Exception e1) {
+                System.out.println("Primary locator gagal, mencoba alternative...");
+                
+                // Try alternative locators
+                try {
+                    subMenu = wait.until(ExpectedConditions.elementToBeClickable(suiteCRMSubMenuAlt1));
+                    System.out.println("SuiteCRM submenu ditemukan dengan XPath nav");
+                } catch (Exception e2) {
+                    subMenu = wait.until(ExpectedConditions.elementToBeClickable(suiteCRMSubMenuAlt2));
+                    System.out.println("SuiteCRM submenu ditemukan dengan linkText");
+                }
             }
+            
+            if (subMenu != null) {
+                // Scroll ke element jika perlu
+                js.executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", subMenu);
+                Thread.sleep(300);
 
-            System.out.println("✓ Berhasil klik sub-menu SuiteCRM");
-            return true;
+                // Klik menggunakan Actions
+                try {
+                    actions.moveToElement(subMenu).click().perform();
+                } catch (Exception e) {
+                    // Fallback ke JS click
+                    js.executeScript("arguments[0].click();", subMenu);
+                }
+
+                Thread.sleep(500);
+                System.out.println("Berhasil klik sub-menu SuiteCRM");
+                return true;
+            }
+            
+            return false;
         } catch (Exception e) {
-            System.out.println("❌ Gagal klik sub-menu SuiteCRM: " + e.getMessage());
+            System.out.println("Gagal klik sub-menu SuiteCRM: " + e.getMessage());
             return false;
         }
     }
@@ -127,13 +173,13 @@ public class ProductsPage {
             }
 
             // Method 2: Direct URL navigation sebagai fallback
-            System.out.println("⚠️ Mencoba navigasi langsung via URL...");
+            System.out.println("Mencoba navigasi langsung via URL...");
             driver.get("https://suitecrm.com/suitecrm/");
             waitForPageLoad();
             return true;
 
         } catch (Exception e) {
-            System.out.println("❌ Gagal navigate ke SuiteCRM: " + e.getMessage());
+            System.out.println("Gagal navigate ke SuiteCRM: " + e.getMessage());
             return false;
         }
     }
@@ -155,7 +201,7 @@ public class ProductsPage {
             wait.until(driver -> js.executeScript("return document.readyState").equals("complete"));
             Thread.sleep(1000); // Extra wait untuk dynamic content
         } catch (Exception e) {
-            System.out.println("⚠️ Warning: Page load wait timeout");
+            System.out.println("Warning: Page load wait timeout");
         }
     }
 
@@ -196,17 +242,17 @@ public class ProductsPage {
 
             if (subMenu != null) {
                 js.executeScript("arguments[0].click();", subMenu);
-                System.out.println("✓ Berhasil klik sub-menu SuiteASSURED");
+                System.out.println("Berhasil klik sub-menu SuiteASSURED");
                 return true;
             }
 
             // Fallback: direct URL
-            System.out.println("⚠️ Submenu not found, navigating directly...");
+            System.out.println("Submenu not found, navigating directly...");
             driver.get("https://suitecrm.com/enterprise/suiteassured/");
             return true;
 
         } catch (Exception e) {
-            System.out.println("❌ Gagal navigate ke SuiteASSURED: " + e.getMessage());
+            System.out.println("Gagal navigate ke SuiteASSURED: " + e.getMessage());
             return false;
         }
     }
@@ -233,7 +279,7 @@ public class ProductsPage {
                 try {
                     button = wait.until(ExpectedConditions.elementToBeClickable(selector));
                     if (button != null && button.isDisplayed()) {
-                        System.out.println("✓ Found Contact Us button");
+                        System.out.println("Found Contact Us button");
                         break;
                     }
                 } catch (Exception e) {
@@ -250,13 +296,13 @@ public class ProductsPage {
                 } catch (Exception e) {
                     js.executeScript("arguments[0].click();", button);
                 }
-                System.out.println("✓ Clicked Contact Us button");
+                System.out.println("Clicked Contact Us button");
             } else {
-                System.out.println("❌ Contact Us button not found");
+                System.out.println("Contact Us button not found");
             }
 
         } catch (Exception e) {
-            System.out.println("❌ Error clicking Contact Us: " + e.getMessage());
+            System.out.println("Error clicking Contact Us: " + e.getMessage());
         }
     }
 }
