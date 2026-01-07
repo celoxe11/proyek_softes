@@ -2,6 +2,7 @@ package com.proyek_softes.demo.tests;
 
 import java.util.Map;
 
+import org.openqa.selenium.WebElement;
 import static org.testng.Assert.assertTrue;
 
 import org.testng.annotations.Test;
@@ -143,41 +144,58 @@ public class NoteTest extends GenericCrudTestHelper<NotesPage, CreateNotePage> {
     @Test
     @Description("DEM-079")
     public void testDem079() {
-        login("will", "will");
+        try {
+            login("will", "will");
 
-        NotesPage notesPage = new NotesPage(driver);
-        notesPage.navigateToNotesModule();
-        notesPage.navigateToImportNote();
+            NotesPage notesPage = new NotesPage(driver);
+            notesPage.navigateToNotesModule();
+            notesPage.navigateToImportNote();
 
-        ImportNotePage importNotePage = new ImportNotePage(driver);
+            ImportNotePage importNotePage = new ImportNotePage(driver);
 
-        boolean isCSV = importNotePage.verifyDownloadedTemplateIsCSV(
-            10,
-            "DEM-079_Download_History"
-        );
+            boolean isCSV = importNotePage.verifyDownloadedTemplateIsCSV(
+                10,
+                "DEM-079_Download_History"
+            );
 
-        assertTrue(
-            isCSV,
-            "Downloaded template should be in CSV format and named contains 'notes'"
-        );
+            assertTrue(
+                isCSV,
+                "Downloaded template should be in CSV format and named contains 'notes'"
+            );
 
-        importNotePage.uploadFile("Notes.csv");
+            importNotePage.uploadFile("Notes.csv");
 
-        importNotePage.clickImportCreate();
-        importNotePage.clickNext();
-        importNotePage.clickNext();
-        importNotePage.clickNext();
-        importNotePage.clickImportNow();
+            importNotePage.clickImportCreate();
+            importNotePage.clickNext();
+            importNotePage.clickNext();
+            importNotePage.clickNext();
+            importNotePage.clickImportNow();
 
-        boolean isRecordsImported = importNotePage.isRecordsImported();
-        assertTrue(
-            isRecordsImported,
-            "Records from Notes.csv should be imported successfully"
-        );
+            // Wait a bit for the import to complete
+            Thread.sleep(3000);
 
-        takeElementScreenshot(
-            "DEM-079_Import_Notes_Success",
-            importNotePage.getSummaryElement()
-        );
+            boolean isRecordsImported = importNotePage.isRecordsImported();
+            
+            // Debug: Try to get the summary element directly
+            WebElement summaryElement = importNotePage.getSummaryElement();
+            if (summaryElement != null) {
+                System.out.println("Summary element found: " + summaryElement.getText());
+            } else {
+                System.out.println("Summary element is null");
+            }
+
+            assertTrue(
+                isRecordsImported,
+                "Records from Notes.csv should be imported successfully"
+            );
+
+            takeElementScreenshot(
+                "DEM-079_Import_Notes_Success",
+                importNotePage.getSummaryElement()
+            );
+        } catch (Throwable e) {
+            takeScreenshot("DEM-079_Error_Current_Page");
+            throw new AssertionError("Test failed: " + e.getMessage(), e);
+        }
     }
 }

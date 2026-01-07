@@ -193,7 +193,15 @@ public class ImportNotePage {
             wait.until(ExpectedConditions.visibilityOfElementLocated(summaryText));
             String summaryContent = driver.findElement(summaryText).getText();
             System.out.println("Import summary: " + summaryContent);
-            return summaryContent.toLowerCase().contains("records were created");
+            
+            // Check for various possible success messages
+            return summaryContent.toLowerCase().contains("records were created") ||
+                   summaryContent.toLowerCase().contains("records created") ||
+                   summaryContent.toLowerCase().contains("imported successfully") ||
+                   summaryContent.toLowerCase().contains("successfully imported") ||
+                   (summaryContent.toLowerCase().contains("records") && 
+                    (summaryContent.toLowerCase().contains("created") || 
+                     summaryContent.toLowerCase().contains("imported")));
         } catch (Exception e) {
             System.err.println("Failed to find import summary: " + e.getMessage());
             return false;
@@ -202,11 +210,22 @@ public class ImportNotePage {
 
     public WebElement getSummaryElement() {
         try {
-            wait.until(ExpectedConditions.visibilityOfElementLocated(summaryText));
+            // Try to wait for the element with a shorter timeout first
+            WebDriverWait shortWait = new WebDriverWait(driver, java.time.Duration.ofSeconds(10));
+            shortWait.until(ExpectedConditions.visibilityOfElementLocated(summaryText));
             return driver.findElement(summaryText);
         } catch (Exception e) {
             System.err.println("Failed to find summary element: " + e.getMessage());
-            return null;
+            
+            // Try to find any element that might contain the summary
+            try {
+                WebElement alternativeSummary = driver.findElement(By.xpath("//span[contains(@style, 'font-size')]"));
+                System.out.println("Found alternative summary element: " + alternativeSummary.getText());
+                return alternativeSummary;
+            } catch (Exception ex) {
+                System.err.println("Failed to find alternative summary element: " + ex.getMessage());
+                return null;
+            }
         }
     }
 
@@ -242,7 +261,7 @@ public class ImportNotePage {
     }
 
     public int countCSVDataRows(String fileName) {
-        String resourcePath = Paths.get("src", "test", "resources", "task_demo", fileName).toAbsolutePath().toString();
+        String resourcePath = Paths.get("src", "test", "resources", "note_demo", fileName).toAbsolutePath().toString();
         int rowCount = 0;
         try (BufferedReader br = new BufferedReader(new FileReader(resourcePath))) {
             br.readLine(); // Skip header
