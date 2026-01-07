@@ -17,12 +17,7 @@ import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.Date;
 
-/**
- * Utility class untuk mengambil screenshot
- * 
- * Screenshot disimpan di folder "screenshots/" di root project (bukan target/)
- * agar tidak terhapus saat mvn clean
- */
+
 public class ScreenshotUtils {
 
     // Pindah ke root folder agar tidak terhapus saat mvn clean

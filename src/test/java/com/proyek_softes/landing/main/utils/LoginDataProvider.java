@@ -3,9 +3,7 @@ package com.proyek_softes.landing.main.utils;
 import com.proyek_softes.demo.utils.BaseDataProvider;
 import org.testng.annotations.DataProvider;
 
-/**
- * Data Provider untuk Client Login
- */
+
 public class LoginDataProvider extends BaseDataProvider {
     private static final String ENTITY_FOLDER = "login_landing";
 

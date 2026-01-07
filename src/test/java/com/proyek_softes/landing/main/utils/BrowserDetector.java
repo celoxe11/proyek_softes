@@ -9,10 +9,7 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-/**
- * BrowserDetector - Utility untuk mendeteksi browser yang tersedia di sistem
- * dan membuat WebDriver secara otomatis
- */
+
 public class BrowserDetector {
 
     public enum BrowserType {

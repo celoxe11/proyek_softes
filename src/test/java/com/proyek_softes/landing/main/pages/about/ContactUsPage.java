@@ -1,19 +1,19 @@
-package com.proyek_softes.landing.main.pages;
+package com.proyek_softes.landing.main.pages.about;
+
+import java.time.Duration;
+import java.util.List;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.time.Duration;
-import java.util.List;
-
-public class ContactPage {
-    private WebDriver driver;
-    private WebDriverWait wait;
-    private JavascriptExecutor js;
+/**
+ * Page Object untuk halaman Contact Us
+ * Extends AboutBasePage untuk menggunakan method umum
+ */
+public class ContactUsPage extends AboutBasePage {
 
     // Locators berdasarkan inspect element screenshot
     private By firstNameInput = By.id("mauticform_input_suitecrmcontactform_first_name");
@@ -38,11 +38,128 @@ public class ContactPage {
     // Error message locator
     private By errorMessage = By.cssSelector("span.mauticform-errormsg");
     private By firstNameError = By.cssSelector("#mauticform_suitecrrmcontactform_first_name span.mauticform-errormsg");
+    
+    // Locators for ABT-010 and ABT-011
+    private By freeTrialLinkLocator = By.xpath("//a[contains(text(),'Get your free 30-day trial')]");
+    private By freeTrialLinkAltLocator = By.cssSelector("a[href*='/demo/']");
+    private By tailoredSupportLinkLocator = By.xpath("//a[contains(text(),'tailored support packages')]");
+    private By tailoredSupportLinkAltLocator = By.cssSelector("a[href*='support-services']");
 
-    public ContactPage(WebDriver driver) {
-        this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        this.js = (JavascriptExecutor) driver;
+    public ContactUsPage(WebDriver driver) {
+        super(driver);
+    }
+    
+    /**
+     * Klik link "Get your free 30-day trial..."
+     * For test case ABT-010
+     * 
+     * @return true jika berhasil klik link
+     */
+    public boolean clickFreeTrialLink() {
+        try {
+            System.out.println("Mencari link Get your free 30-day trial...");
+            
+            // Scroll to middle of page
+            scrollToPercentage(40);
+            waitSeconds(1);
+            
+            WebElement link = null;
+            
+            // Try primary locator
+            try {
+                link = wait.until(ExpectedConditions.presenceOfElementLocated(freeTrialLinkLocator));
+                System.out.println("Link ditemukan dengan XPath text");
+            } catch (Exception e1) {
+                // Try alternative locator
+                link = wait.until(ExpectedConditions.presenceOfElementLocated(freeTrialLinkAltLocator));
+                System.out.println("Link ditemukan dengan CSS href");
+            }
+            
+            if (link != null) {
+                // Scroll to link
+                js.executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", link);
+                Thread.sleep(500);
+                
+                // Click link
+                try {
+                    link.click();
+                } catch (Exception e) {
+                    js.executeScript("arguments[0].click();", link);
+                }
+                
+                System.out.println("Berhasil klik link Free Trial");
+                waitSeconds(2);
+                return true;
+            }
+            
+            return false;
+            
+        } catch (Exception e) {
+            System.out.println("Error klik Free Trial link: " + e.getMessage());
+            return false;
+        }
+    }
+    
+    /**
+     * Klik link "tailored support packages"
+     * For test case ABT-011
+     * 
+     * @return true jika berhasil klik link
+     */
+    public boolean clickTailoredSupportLink() {
+        try {
+            System.out.println("Mencari link tailored support packages...");
+            
+            // Scroll to middle of page
+            scrollToPercentage(40);
+            waitSeconds(1);
+            
+            WebElement link = null;
+            
+            // Try primary locator
+            try {
+                link = wait.until(ExpectedConditions.presenceOfElementLocated(tailoredSupportLinkLocator));
+                System.out.println("Link ditemukan dengan XPath text");
+            } catch (Exception e1) {
+                // Try alternative locator
+                link = wait.until(ExpectedConditions.presenceOfElementLocated(tailoredSupportLinkAltLocator));
+                System.out.println("Link ditemukan dengan CSS href");
+            }
+            
+            if (link != null) {
+                // Scroll to link
+                js.executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", link);
+                Thread.sleep(500);
+                
+                // Click link
+                try {
+                    link.click();
+                } catch (Exception e) {
+                    js.executeScript("arguments[0].click();", link);
+                }
+                
+                System.out.println("Berhasil klik link Tailored Support");
+                waitSeconds(2);
+                return true;
+            }
+            
+            return false;
+            
+        } catch (Exception e) {
+            System.out.println("Error klik Tailored Support link: " + e.getMessage());
+            return false;
+        }
+    }
+    
+    /**
+     * Helper method untuk wait
+     */
+    private void waitSeconds(int seconds) {
+        try {
+            Thread.sleep(seconds * 1000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
     
     // Wait sampai form contact benar-benar muncul

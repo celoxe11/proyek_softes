@@ -1,0 +1,101 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+<suite name="About Module Test Suite" verbose="1">
+    
+    <!-- About Us Tests -->
+    <test name="About Us Tests" preserve-order="true">
+        <classes>
+            <class name="com.proyek_softes.landing.tests.about.AboutUsTest">
+                <methods>
+                    <!-- ABT-001: Navigate to About Us and click Always Open Source link -->
+                    <include name="testAbt001" />
+                    
+                    <!-- ABT-002: Navigate to About Us and click Contact Us button -->
+                    <include name="testAbt002" />
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+    <!-- News & Press Tests -->
+    <test name="News & Press Tests" preserve-order="true">
+        <classes>
+            <class name="com.proyek_softes.landing.tests.about.NewsTest">
+                <methods>
+                    <!-- ABT-003: Navigate to News & Press and click 5th article -->
+                    <include name="testAbt003" />
+                </methods>
+            </class>
+        </classes>
+    </test>
+    
+    <!-- SuiteCRM Roadmap Tests -->
+    <test name="SuiteCRM Roadmap Tests" preserve-order="true">
+        <classes>
+            <class name="com.proyek_softes.landing.tests.about.SuiteCRMRoadmapTest">
+                <methods>
+                    <!-- ABT-004: Navigate to SuiteCRM Roadmap and verify URL -->
+                    <include name="testAbt004" />
+                </methods>
+            </class>
+        </classes>
+    </test>
+    
+    <!-- SuiteCRM Journey Tests -->
+    <test name="SuiteCRM Journey Tests" preserve-order="true">
+        <classes>
+            <class name="com.proyek_softes.landing.tests.about.SuiteCRMJourneyTest">
+                <methods>
+                    <!-- ABT-005: Navigate to SuiteCRM Journey and click GitHub button -->
+                    <include name="testAbt005" />
+                    
+                    <!-- ABT-006: Navigate to SuiteCRM Journey and click Join Community button -->
+                    <include name="testAbt006" />
+                </methods>
+            </class>
+        </classes>
+    </test>
+    
+    <!-- Careers Tests -->
+    <test name="Careers Tests" preserve-order="true">
+        <classes>
+            <class name="com.proyek_softes.landing.tests.about.CareersTest">
+                <methods>
+                    <!-- ABT-007: Navigate to Careers and click Find Out More button -->
+                    <include name="testAbt007" />
+                </methods>
+            </class>
+        </classes>
+    </test>
+    
+    <!-- Contact Us Tests -->
+    <test name="Contact Us Tests" preserve-order="true">
+        <classes>
+            <class name="com.proyek_softes.landing.tests.about.ContactUsTest">
+                <methods>
+                    <!-- ABT-010: Contact Us > Free Trial link -->
+                    <include name="testAbt010" />
+                    
+                    <!-- ABT-011: Contact Us > Tailored Support link -->
+                    <include name="testAbt011" />
+                </methods>
+            </class>
+        </classes>
+    </test>
+    
+    <!-- Newsletter Sign Up Tests -->
+    <test name="Newsletter Sign Up Tests" preserve-order="true">
+        <classes>
+            <class name="com.proyek_softes.landing.tests.about.NewsletterSignUpTest">
+                <methods>
+                    <!-- ABT-008: Newsletter Sign-Up form submission -->
+                    <include name="testAbt008" />
+                    
+                    <!-- ABT-009: Newsletter Sign-Up validation error -->
+                    <include name="testAbt009" />
+                </methods>
+            </class>
+        </classes>
+    </test>
+    
+</suite>
