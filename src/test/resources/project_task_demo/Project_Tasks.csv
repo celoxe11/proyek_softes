@@ -1,0 +1,25 @@
+"Name","Id","Notes","Assigned To","Assigned To","Date Created","Date Modified","Created By","Modified User Id","Deleted","Project Id","Project Task Id","Status","Relationship Type","Predecessor","Start Date","Start Time","Finish Time","Finish Date","Duration","Duration Unit","Actual Duration","% Cpl","Due Date","Due Time","Parent Task Id","Priority","Milestone","Order","Task Number","Estimated Effort (hrs)","Actual Effort (hrs)","Utilization (%)"
+"Communicate with internal stakeholders","94a4aefc-d6b7-49c2-a3b4-6fc51f604564","Schedule individual meetings with Will, Max, and Sarah.","admin","1","01/06/2026 08:00 am","01/06/2026 08:00 am","1","1","0","9825f7db-e9a7-443e-a4ae-421430e111c7","1","","","","","","","","6","Days","","100","","","","","","1","","","","100"
+"Gather data from meetings","a24ba2ef-a19d-4c24-956f-9d0522c164a9","Need to organize the data and create charts to represent the data.","admin","1","01/06/2026 08:00 am","01/06/2026 08:00 am","1","1","0","9825f7db-e9a7-443e-a4ae-421430e111c7","5","","","","11/20/2010","","","11/20/2010","1","Days","","0","","","","","","1","","","","100"
+"Update draft of the plan","caaaca67-1ee9-4eb0-a024-0de9a66a22dd","Schedule a meeting with the heads of the business units to review the plan.","admin","1","01/06/2026 08:00 am","01/06/2026 08:00 am","1","1","0","9825f7db-e9a7-443e-a4ae-421430e111c7","4","","","","11/12/2010","","","11/19/2010","6","Days","","0","","","","","","1","","","","100"
+"Create draft of the plan","e4c7f6d5-a47f-4b07-8be9-fc2f62664e93","Start new plan document, including all of the information from the initial discussion meetings.","admin","1","01/06/2026 08:00 am","01/06/2026 08:00 am","1","1","0","9825f7db-e9a7-443e-a4ae-421430e111c7","2","","","","","","","11/20/2010","12","Days","","38","","","","","","1","","","","100"
+"Perform field studies to collect data","fe93fe1d-7d9e-46cd-8254-5540ffc82633","Obtain approval from all stakeholders of the plan.","admin","1","01/06/2026 08:00 am","01/06/2026 08:00 am","1","1","0","9825f7db-e9a7-443e-a4ae-421430e111c7","3","","","","","","","11/13/2010","17","Days","","75","","","","","","1","","","","100"
+
+
+"This is a sample import file which provides an example of the expected contents of a file that is ready for import."
+"The file is a comma-delimited .csv file, using double-quotes as the field qualifier."
+
+"The header row is the top-most row in the file and contains the field labels as you would see them in the application."
+"These labels are used for mapping the data in the file to the fields in the application."
+
+"Notes: The database names could also be used in the header row. This is useful when you are using phpMyAdmin or another database tool to provide an exported list of data to import."
+"The column order is not critical as the import process matches the data to the appropriate fields based on the header row."
+
+
+"To use this file as a template, do the following:"
+"1. Remove the sample rows of data"
+"2. Remove the help text that you are reading right now"
+"3. Input your own data into the appropriate rows and columns"
+"4. Save the file to a known location on your system"
+"5. Click on the Import option from the Actions menu in the application and choose the file to upload"
+   
