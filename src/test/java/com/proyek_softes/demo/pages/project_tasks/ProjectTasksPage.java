@@ -15,11 +15,14 @@ public class ProjectTasksPage {
 
     // Navbar untuk navigasi ke Project Tasks
     private final By navTab = By.id("grouptab_5");
-    private final By subTab = By.xpath("//a[@href='index.php?module=ProjectTask&action=index&parentTab=All']");
+    private final By subTab = By.xpath("//a[@href='index.php?module=Project&action=index&parentTab=All']");
 
-    private final By createProjectTaskLink = By.xpath("//a[@data-action-name='Create']");
-    private final By viewProjectTaskLink = By.xpath("//a[@data-action-name='List']");
-    private final By importProjectTaskLink = By.xpath("//a[@data-action-name='Import']");
+    private final By projectTaskLink = By.xpath("//div[@class='actionmenulink' and text()='Project Tasks']");
+    private final By projectListLink = By.xpath("//div[@class='actionmenulink' and text()='Project List']");
+    private final By createProjectTaskLink = By.xpath("//div[@class='actionmenulink' and text()='Create Project']");
+    private final By viewProjectTaskLink = By.xpath("//div[@class='actionmenulink' and text()='View Project Tasks']");
+    private final By importProjectTaskLink = By
+            .xpath("//div[@class='actionmenulink' and text()='Import Project Tasks']");
 
     private final By firstRowProjectTaskName = By.cssSelector("table.list.view tbody tr:first-child td[type='name'] a");
     private final By firstRowLocator = By.cssSelector("table.list.view tbody tr[height='20']:first-of-type");
@@ -27,7 +30,8 @@ public class ProjectTasksPage {
 
     // filter locators
     private final By filterButton = By.xpath("//a[@title='Filter']");
-    private final By quickFilterTab = By.xpath("//li[contains(@class, 'searchTabHandler') and contains(@class, 'basic')]/a");
+    private final By quickFilterTab = By
+            .xpath("//li[contains(@class, 'searchTabHandler') and contains(@class, 'basic')]/a");
     private final By modalContent = By.className("modal-content");
     private final By filterNameField = By.id("name_basic");
     private final By filterMyItemsCheckbox = By.id("current_user_only_basic");
@@ -59,24 +63,36 @@ public class ProjectTasksPage {
     }
 
     public void navigateToProjectTasksModule() {
+        // First navigate to Projects module (same as ProjectsPage)
         wait.until(ExpectedConditions.presenceOfElementLocated(navTab));
         wait.until(ExpectedConditions.visibilityOfElementLocated(navTab));
         actions.moveToElement(driver.findElement(navTab)).perform();
         wait.until(ExpectedConditions.presenceOfElementLocated(subTab));
         wait.until(ExpectedConditions.visibilityOfElementLocated(subTab));
         driver.findElement(subTab).click();
+
+        // Then navigate to View Project Tasks (using updated locator)
+        wait.until(ExpectedConditions.visibilityOfElementLocated(viewProjectTaskLink));
+        wait.until(ExpectedConditions.elementToBeClickable(viewProjectTaskLink));
+        driver.findElement(viewProjectTaskLink).click();
     }
 
-    public void navigateToCreateProjectTask() {
+    public void navigateToCreateProject() {
         wait.until(ExpectedConditions.visibilityOfElementLocated(createProjectTaskLink));
         wait.until(ExpectedConditions.elementToBeClickable(createProjectTaskLink));
         driver.findElement(createProjectTaskLink).click();
     }
 
-    public void navigateToViewProjectTask() {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(viewProjectTaskLink));
-        wait.until(ExpectedConditions.elementToBeClickable(viewProjectTaskLink));
-        driver.findElement(viewProjectTaskLink).click();
+    public void navigateToProjectList() {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(projectListLink));
+        wait.until(ExpectedConditions.elementToBeClickable(projectListLink));
+        driver.findElement(projectListLink).click();
+    }
+
+    public void navigateToProjectTasks() {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(projectTaskLink));
+        wait.until(ExpectedConditions.elementToBeClickable(projectTaskLink));
+        driver.findElement(projectTaskLink).click();
     }
 
     public void navigateToImportProjectTask() {
@@ -218,5 +234,33 @@ public class ProjectTasksPage {
         driver.findElement(filterClearButton).click();
 
         driver.findElement(filterSubmitButton).click();
+    }
+
+    public boolean isInCreateProjectPage() {
+        try {
+            String title = wait.until(ExpectedConditions.presenceOfElementLocated(pageTitle)).getText();
+            System.out.println("Page title: " + title);
+            return title.toUpperCase().contains("CREATE");
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean isInProjectListPage() {
+        try {
+            String title = wait.until(ExpectedConditions.presenceOfElementLocated(pageTitle)).getText();
+            System.out.println("Page title: " + title);
+            return title.toUpperCase().contains("PROJECTS");
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean isInProjectTasksPage() {
+        try {
+            return wait.until(ExpectedConditions.urlContains("module=ProjectTask&action=index"));
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
