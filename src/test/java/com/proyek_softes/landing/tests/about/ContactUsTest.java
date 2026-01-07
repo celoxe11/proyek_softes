@@ -6,13 +6,11 @@ import org.testng.annotations.Test;
 
 import com.proyek_softes.landing.main.base.BaseLandingTest;
 import com.proyek_softes.landing.main.pages.about.ContactUsPage;
+import com.proyek_softes.landing.main.utils.ContactUsDataProvider;
 
 import io.qameta.allure.Description;
 
-/**
- * Test class untuk halaman Contact Us
- * Berisi test case ABT-010, ABT-011
- */
+
 public class ContactUsTest extends BaseLandingTest {
 
     private static final String EXPECTED_DEMO_URL = "https://suitecrm.com/demo/";
@@ -100,5 +98,183 @@ public class ContactUsTest extends BaseLandingTest {
 
         // Step 5: Screenshot hasil assert
         takeScreenshot("ABT-011_Support_Services_Page");
+    }
+
+    @Test(priority = 3, dataProvider = "contactUsData", dataProviderClass = ContactUsDataProvider.class)
+    @Description("ABT-012")
+    public void testAbt012(String firstName, String lastName, String businessEmail, String phone,
+                          String company, String jobTitle, String country, String message,
+                          boolean checkPrivacyPolicy, boolean checkMarketingComms,
+                          String expectedSuccessMessage) {
+        navigateToHome();
+
+        ContactUsPage contactUsPage = new ContactUsPage(driver);
+
+        boolean hoverSuccess = contactUsPage.hoverAboutMenu();
+        assertTrue(hoverSuccess, "Harus berhasil hover ke menu About");
+
+        boolean navSuccess = contactUsPage.navigateToContactUs();
+        assertTrue(navSuccess, "Harus berhasil navigate ke Contact Us");
+
+        contactUsPage.waitForPageLoad();
+        waitSeconds(2);
+
+        boolean formLoaded = contactUsPage.waitForFormToLoad();
+        assertTrue(formLoaded, "Form Contact Us harus berhasil dimuat");
+
+        contactUsPage.fillField(
+            contactUsPage.getFirstNameLocator(), 
+            firstName, 
+            "First Name"
+        );
+        contactUsPage.fillField(
+            contactUsPage.getLastNameLocator(), 
+            lastName, 
+            "Last Name"
+        );
+        waitSeconds(1);
+
+        contactUsPage.fillField(
+            contactUsPage.getEmailLocator(), 
+            businessEmail, 
+            "Business Email"
+        );
+        contactUsPage.fillField(
+            contactUsPage.getCompanyLocator(), 
+            company, 
+            "Company"
+        );
+        waitSeconds(1);
+
+        contactUsPage.selectCountry(country);
+        contactUsPage.fillField(
+            contactUsPage.getPhoneLocator(), 
+            phone, 
+            "Phone"
+        );
+        contactUsPage.fillField(
+            contactUsPage.getJobTitleLocator(), 
+            jobTitle, 
+            "Job Title"
+        );
+        waitSeconds(1);
+
+        contactUsPage.fillField(
+            contactUsPage.getMessageLocator(), 
+            message, 
+            "Message"
+        );
+        waitSeconds(1);
+
+        if (checkPrivacyPolicy) {
+            contactUsPage.checkPrivacyPolicy();
+            waitSeconds(1);
+        }
+
+        if (checkMarketingComms) {
+            contactUsPage.checkMarketingCommunications();
+            waitSeconds(1);
+        }
+
+        System.out.println("CAPTCHA needs to be solved manually during test execution");
+        System.out.println("Please solve the CAPTCHA within 30 seconds");
+        waitSeconds(30); // Give time for manual CAPTCHA solving
+
+        contactUsPage.clickSubmit();
+        waitSeconds(3);
+
+        boolean hasSuccessMessage = contactUsPage.verifySuccessMessage(expectedSuccessMessage);
+        assertTrue(hasSuccessMessage,
+                "Success message harus muncul dengan teks: " + expectedSuccessMessage);
+
+        // Step 12: Screenshot hasil assert
+        takeScreenshot("ABT-012_Contact_Form_Success");
+    }
+
+    @Test(priority = 4, dataProvider = "contactUsData", dataProviderClass = ContactUsDataProvider.class)
+    @Description("ABT-013")
+    public void testAbt013(String firstName, String lastName, String businessEmail, String phone,
+                          String company, String jobTitle, String country, String message,
+                          boolean checkPrivacyPolicy, boolean checkMarketingComms,
+                          String expectedErrorMessage) {
+        navigateToHome();
+
+        ContactUsPage contactUsPage = new ContactUsPage(driver);
+
+        boolean hoverSuccess = contactUsPage.hoverAboutMenu();
+        assertTrue(hoverSuccess, "Harus berhasil hover ke menu About");
+
+        boolean navSuccess = contactUsPage.navigateToContactUs();
+        assertTrue(navSuccess, "Harus berhasil navigate ke Contact Us");
+
+        contactUsPage.waitForPageLoad();
+        waitSeconds(2);
+
+        boolean formLoaded = contactUsPage.waitForFormToLoad();
+        assertTrue(formLoaded, "Form Contact Us harus berhasil dimuat");
+
+        contactUsPage.fillField(
+            contactUsPage.getFirstNameLocator(), 
+            firstName, 
+            "First Name"
+        );
+        contactUsPage.fillField(
+            contactUsPage.getLastNameLocator(), 
+            lastName, 
+            "Last Name"
+        );
+        waitSeconds(1);
+
+        contactUsPage.fillField(
+            contactUsPage.getEmailLocator(), 
+            businessEmail, 
+            "Business Email"
+        );
+        contactUsPage.fillField(
+            contactUsPage.getCompanyLocator(), 
+            company, 
+            "Company"
+        );
+        waitSeconds(1);
+
+        contactUsPage.selectCountry(country);
+        contactUsPage.fillField(
+            contactUsPage.getPhoneLocator(), 
+            phone, 
+            "Phone"
+        );
+        contactUsPage.fillField(
+            contactUsPage.getJobTitleLocator(), 
+            jobTitle, 
+            "Job Title"
+        );
+        waitSeconds(1);
+
+        contactUsPage.fillField(
+            contactUsPage.getMessageLocator(), 
+            message, 
+            "Message"
+        );
+        waitSeconds(1);
+
+        if (checkPrivacyPolicy) {
+            contactUsPage.checkPrivacyPolicy();
+            waitSeconds(1);
+        }
+
+        if (checkMarketingComms) {
+            contactUsPage.checkMarketingCommunications();
+            waitSeconds(1);
+        }
+
+        System.out.println("Skipping CAPTCHA - expecting error message");
+        contactUsPage.clickSubmit();
+        waitSeconds(3);
+
+        boolean hasErrorMessage = contactUsPage.verifyRecaptchaErrorMessage(expectedErrorMessage);
+        assertTrue(hasErrorMessage,
+                "Error message harus muncul dengan teks: " + expectedErrorMessage);
+
+        takeScreenshot("ABT-013_Contact_Form_Recaptcha_Error");
     }
 }

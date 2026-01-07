@@ -1,0 +1,26 @@
+{
+  "testData": [
+    {
+      "testCaseId": "SRV-007",
+      "fullName": "Michael",
+      "surname": "Johnson",
+      "emailAddress": "michael.johnson@example.com",
+      "companyName": "Enterprise Solutions Corp",
+      "country": "United States",
+      "checkPrivacyPolicy": true,
+      "checkMarketingComms": true,
+      "expectedSuccessMessage": "You will receive an email shortly providing access to your checklist"
+    },
+    {
+      "testCaseId": "SRV-008",
+      "fullName": "Sarah",
+      "surname": "",
+      "emailAddress": "",
+      "companyName": "",
+      "country": "",
+      "checkPrivacyPolicy": false,
+      "checkMarketingComms": false,
+      "expectedSuccessMessage": "Please provide a valid email address"
+    }
+  ]
+}

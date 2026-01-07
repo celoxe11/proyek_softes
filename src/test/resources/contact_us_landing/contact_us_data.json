@@ -1,0 +1,32 @@
+{
+  "testData": [
+    {
+      "testCaseId": "ABT-012",
+      "firstName": "Josua",
+      "lastName": "Starley",
+      "businessEmail": "josua.starley@example.com",
+      "phone": "+1234567890",
+      "company": "Tech Solutions Inc",
+      "jobTitle": "QA Engineer",
+      "country": "United States",
+      "message": "I would like to know more about SuiteCRM and how it can benefit our organization. Please contact me at your earliest convenience.",
+      "checkPrivacyPolicy": true,
+      "checkMarketingComms": true,
+      "expectedSuccessMessage": "Your submission was successful. A member of our team will be in touch soon."
+    },
+    {
+      "testCaseId": "ABT-013",
+      "firstName": "Jane",
+      "lastName": "Smith",
+      "businessEmail": "jane.smith@example.com",
+      "phone": "+9876543210",
+      "company": "Digital Innovations Ltd",
+      "jobTitle": "Software Developer",
+      "country": "United Kingdom",
+      "message": "I am interested in learning more about your CRM solutions for our company.",
+      "checkPrivacyPolicy": true,
+      "checkMarketingComms": true,
+      "expectedSuccessMessage": "reCAPTCHA wasn't successful."
+    }
+  ]
+}

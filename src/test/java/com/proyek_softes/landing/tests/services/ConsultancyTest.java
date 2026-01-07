@@ -6,13 +6,11 @@ import org.testng.annotations.Test;
 
 import com.proyek_softes.landing.main.base.BaseLandingTest;
 import com.proyek_softes.landing.main.pages.services.ConsultancyPage;
+import com.proyek_softes.landing.main.utils.ImplementationDataProvider;
 
 import io.qameta.allure.Description;
 
-/**
- * Test class untuk halaman Consultancy and Implementation
- * Berisi test case SRV-005+
- */
+
 public class ConsultancyTest extends BaseLandingTest {
 
     private static final String EXPECTED_CONTACT_URL = "https://suitecrm.com/about/about-us/contact/";
@@ -49,5 +47,131 @@ public class ConsultancyTest extends BaseLandingTest {
                 "URL harus " + EXPECTED_CONTACT_URL + " tapi actual: " + currentUrl);
 
         takeScreenshot("SRV-005_Contact_Page");
+    }
+
+    @Test(priority = 2, dataProvider = "implementationData", dataProviderClass = ImplementationDataProvider.class)
+    @Description("SRV-007")
+    public void testSrv007(String fullName, String surname, String emailAddress, 
+                          String companyName, String country,
+                          boolean checkPrivacyPolicy, boolean checkMarketingComms,
+                          String expectedSuccessMessage) {
+        navigateToHome();
+
+        ConsultancyPage consultancyPage = new ConsultancyPage(driver);
+
+        boolean hoverSuccess = consultancyPage.hoverServicesMenu();
+        assertTrue(hoverSuccess, "Harus berhasil hover ke menu Services");
+
+        boolean navSuccess = consultancyPage.navigateToConsultancy();
+        assertTrue(navSuccess, "Harus berhasil navigate ke Consultancy and Implementation");
+
+        consultancyPage.waitForPageLoad();
+        waitSeconds(2);
+
+        boolean clickSuccess = consultancyPage.clickCrmImplementationChecklistButton();
+        assertTrue(clickSuccess, "Harus berhasil klik button CRM Implementation Checklist");
+
+        consultancyPage.waitForPageLoad();
+        waitSeconds(2);
+
+        boolean formLoaded = consultancyPage.waitForImplementationFormToLoad();
+        assertTrue(formLoaded, "Form Implementation Checklist harus berhasil dimuat");
+
+        consultancyPage.fillField(
+            consultancyPage.getFullNameLocator(), 
+            fullName, 
+            "Full Name"
+        );
+        consultancyPage.fillField(
+            consultancyPage.getSurnameLocator(), 
+            surname, 
+            "Surname"
+        );
+        consultancyPage.fillField(
+            consultancyPage.getEmailLocator(), 
+            emailAddress, 
+            "Email Address"
+        );
+        waitSeconds(1);
+
+        consultancyPage.fillField(
+            consultancyPage.getCompanyNameLocator(), 
+            companyName, 
+            "Company Name"
+        );
+        consultancyPage.selectCountry(country);
+        waitSeconds(1);
+
+        if (checkPrivacyPolicy) {
+            consultancyPage.checkPrivacyPolicy();
+            waitSeconds(1);
+        }
+
+        if (checkMarketingComms) {
+            consultancyPage.checkMarketingCommunications();
+            waitSeconds(1);
+        }
+
+        System.out.println("CAPTCHA needs to be solved manually during test execution");
+        System.out.println("Please solve the CAPTCHA within 30 seconds...");
+        waitSeconds(30); // Give time for manual CAPTCHA solving
+
+        // Step 9: Tekan button Submit
+        consultancyPage.clickSubmit();
+        waitSeconds(3);
+
+        // Step 10: Assert muncul teks success message
+        boolean hasSuccessMessage = consultancyPage.verifySuccessMessage(expectedSuccessMessage);
+        assertTrue(hasSuccessMessage,
+                "Success message harus muncul dengan teks: " + expectedSuccessMessage);
+
+        // Step 11: Screenshot hasil assert
+        takeScreenshot("SRV-007_Implementation_Form_Success");
+    }
+
+    @Test(priority = 3, dataProvider = "implementationData", dataProviderClass = ImplementationDataProvider.class)
+    @Description("SRV-008")
+    public void testSrv008(String fullName, String surname, String emailAddress, 
+                          String companyName, String country,
+                          boolean checkPrivacyPolicy, boolean checkMarketingComms,
+                          String expectedErrorMessage) {
+        navigateToHome();
+
+        ConsultancyPage consultancyPage = new ConsultancyPage(driver);
+
+        boolean hoverSuccess = consultancyPage.hoverServicesMenu();
+        assertTrue(hoverSuccess, "Harus berhasil hover ke menu Services");
+
+        boolean navSuccess = consultancyPage.navigateToConsultancy();
+        assertTrue(navSuccess, "Harus berhasil navigate ke Consultancy and Implementation");
+
+        consultancyPage.waitForPageLoad();
+        waitSeconds(2);
+
+        boolean clickSuccess = consultancyPage.clickCrmImplementationChecklistButton();
+        assertTrue(clickSuccess, "Harus berhasil klik button CRM Implementation Checklist");
+
+        consultancyPage.waitForPageLoad();
+        waitSeconds(2);
+
+        boolean formLoaded = consultancyPage.waitForImplementationFormToLoad();
+        assertTrue(formLoaded, "Form Implementation Checklist harus berhasil dimuat");
+
+        // Isi full name saja (tanpa field lain)
+        consultancyPage.fillField(
+            consultancyPage.getFullNameLocator(), 
+            fullName, 
+            "Full Name"
+        );
+        waitSeconds(1);
+
+        consultancyPage.clickSubmit();
+        waitSeconds(2);
+
+        boolean hasErrorMessage = consultancyPage.verifyErrorMessage(expectedErrorMessage);
+        assertTrue(hasErrorMessage,
+                "Error message harus muncul dengan teks: " + expectedErrorMessage);
+
+        takeScreenshot("SRV-008_Implementation_Form_Validation_Error");
     }
 }

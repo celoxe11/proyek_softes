@@ -39,7 +39,14 @@ public class ContactUsPage extends AboutBasePage {
     private By errorMessage = By.cssSelector("span.mauticform-errormsg");
     private By firstNameError = By.cssSelector("#mauticform_suitecrrmcontactform_first_name span.mauticform-errormsg");
     
-    // Locators for ABT-010 and ABT-011
+    // Success message locator
+    private By successMessage = By.cssSelector(".mauticform-message");
+    private By successMessageAlt = By.xpath("//*[contains(text(),'Your submission was successful')]");
+    
+    // Error message locators
+    private By recaptchaErrorMessage = By.cssSelector(".mauticform-errormsg");
+    private By recaptchaErrorMessageAlt = By.xpath("//*[contains(text(),'reCAPTCHA')]");
+    
     private By freeTrialLinkLocator = By.xpath("//a[contains(text(),'Get your free 30-day trial')]");
     private By freeTrialLinkAltLocator = By.cssSelector("a[href*='/demo/']");
     private By tailoredSupportLinkLocator = By.xpath("//a[contains(text(),'tailored support packages')]");
@@ -47,6 +54,53 @@ public class ContactUsPage extends AboutBasePage {
 
     public ContactUsPage(WebDriver driver) {
         super(driver);
+    }
+    
+    // Getter methods for locators (to be used in tests)
+    public By getFirstNameLocator() {
+        return firstNameInput;
+    }
+    
+    public By getLastNameLocator() {
+        return lastNameInput;
+    }
+    
+    public By getEmailLocator() {
+        return emailInput;
+    }
+    
+    public By getPhoneLocator() {
+        return phoneInput;
+    }
+    
+    public By getCompanyLocator() {
+        return companyInput;
+    }
+    
+    public By getJobTitleLocator() {
+        return jobTitleInput;
+    }
+    
+    public By getMessageLocator() {
+        return messageInput;
+    }
+    
+    /**
+     * Generic method untuk fill individual field dengan explicit wait
+     * Dapat digunakan dari test class
+     */
+    public void fillField(By locator, String value, String fieldName) {
+        try {
+            WebElement field = wait.until(ExpectedConditions.elementToBeClickable(locator));
+            js.executeScript("arguments[0].scrollIntoView({block: 'center'});", field);
+            Thread.sleep(300);
+            field.click();
+            field.clear();
+            field.sendKeys(value);
+            System.out.println("✓ " + fieldName + " filled: " + value);
+        } catch (Exception e) {
+            System.out.println("⚠ " + fieldName + " field not filled: " + e.getMessage());
+        }
     }
     
     /**
@@ -57,7 +111,7 @@ public class ContactUsPage extends AboutBasePage {
      */
     public boolean clickFreeTrialLink() {
         try {
-            System.out.println("Mencari link Get your free 30-day trial...");
+            System.out.println("Mencari link Get your free 30-day trial");
             
             // Scroll to middle of page
             scrollToPercentage(40);
@@ -108,7 +162,7 @@ public class ContactUsPage extends AboutBasePage {
      */
     public boolean clickTailoredSupportLink() {
         try {
-            System.out.println("Mencari link tailored support packages...");
+            System.out.println("Mencari link tailored support packages");
             
             // Scroll to middle of page
             scrollToPercentage(40);
@@ -165,38 +219,38 @@ public class ContactUsPage extends AboutBasePage {
     // Wait sampai form contact benar-benar muncul
     public boolean waitForFormToLoad() {
         try {
-            System.out.println("⏳ Waiting for contact form to load...");
-            System.out.println("   Current URL: " + driver.getCurrentUrl());
+            System.out.println("Waiting for contact form to load...");
+            System.out.println("Current URL: " + driver.getCurrentUrl());
             
             // Cek apakah ada iframe
             try {
                 List<WebElement> iframes = driver.findElements(By.tagName("iframe"));
-                System.out.println("   Found " + iframes.size() + " iframe(s) on page");
+                System.out.println("Found " + iframes.size() + " iframe(s) on page");
                 
                 // Coba cari form di main page dulu
                 List<WebElement> forms = driver.findElements(By.tagName("form"));
-                System.out.println("   Found " + forms.size() + " form(s) on page");
+                System.out.println("Found " + forms.size() + " form(s) on page");
                 
                 // Coba cari input dengan berbagai ID yang mungkin
                 List<WebElement> firstNameInputs = driver.findElements(By.cssSelector("input[id*='first_name'], input[name*='first_name'], input[placeholder*='First Name']"));
-                System.out.println("   Found " + firstNameInputs.size() + " potential first name input(s)");
+                System.out.println("Found " + firstNameInputs.size() + " potential first name input(s)");
                 
             } catch (Exception debugEx) {
-                System.out.println("   Debug error: " + debugEx.getMessage());
+                System.out.println("Debug error: " + debugEx.getMessage());
             }
             
             // Tunggu lebih lama karena form mungkin load via iframe/async
             WebDriverWait longWait = new WebDriverWait(driver, Duration.ofSeconds(20));
             longWait.until(ExpectedConditions.presenceOfElementLocated(firstNameInput));
-            System.out.println("✓ Contact form loaded successfully");
+            System.out.println("Contact form loaded successfully");
             return true;
         } catch (Exception e) {
-            System.out.println("❌ Contact form not found after 20 seconds");
-            System.out.println("❌ Current URL: " + driver.getCurrentUrl());
-            System.out.println("❌ Error: " + e.getMessage());
+            System.out.println("Contact form not found after 20 seconds");
+            System.out.println("Current URL: " + driver.getCurrentUrl());
+            System.out.println("Error: " + e.getMessage());
             
             // Print page title for debugging
-            System.out.println("❌ Page title: " + driver.getTitle());
+            System.out.println("Page title: " + driver.getTitle());
             
             return false;
         }
@@ -209,7 +263,7 @@ public class ContactUsPage extends AboutBasePage {
             
             // Wait for form to be ready
             wait.until(ExpectedConditions.presenceOfElementLocated(firstNameInput));
-            System.out.println("✓ Form is present and ready");
+            System.out.println("Form is present and ready");
             
             // First Name - with scroll and click
             WebElement firstNameField = wait.until(ExpectedConditions.elementToBeClickable(firstNameInput));
@@ -218,7 +272,7 @@ public class ContactUsPage extends AboutBasePage {
             firstNameField.click();
             firstNameField.clear();
             firstNameField.sendKeys(fName);
-            System.out.println("✓ First Name filled: " + fName);
+            System.out.println("First Name filled: " + fName);
             
             // Last Name
             WebElement lastNameField = wait.until(ExpectedConditions.elementToBeClickable(lastNameInput));
@@ -227,7 +281,7 @@ public class ContactUsPage extends AboutBasePage {
             lastNameField.click();
             lastNameField.clear();
             lastNameField.sendKeys(lName);
-            System.out.println("✓ Last Name filled: " + lName);
+            System.out.println("Last Name filled: " + lName);
             
             // Email
             WebElement emailField = wait.until(ExpectedConditions.elementToBeClickable(emailInput));
@@ -236,7 +290,7 @@ public class ContactUsPage extends AboutBasePage {
             emailField.click();
             emailField.clear();
             emailField.sendKeys(email);
-            System.out.println("✓ Email filled: " + email);
+            System.out.println("Email filled: " + email);
             
             // Message
             WebElement messageField = wait.until(ExpectedConditions.elementToBeClickable(messageInput));
@@ -245,12 +299,12 @@ public class ContactUsPage extends AboutBasePage {
             messageField.click();
             messageField.clear();
             messageField.sendKeys(msg);
-            System.out.println("✓ Message filled");
+            System.out.println("Message filled");
             
-            System.out.println("✅ Contact form filled successfully\n");
+            System.out.println("Contact form filled successfully\n");
             
         } catch (Exception e) {
-            System.out.println("❌ Error filling form: " + e.getMessage());
+            System.out.println("Error filling form: " + e.getMessage());
             e.printStackTrace();
             throw new RuntimeException("Failed to fill contact form", e);
         }
@@ -272,36 +326,24 @@ public class ContactUsPage extends AboutBasePage {
             fillField(messageInput, msg, "Message");
             
         } catch (Exception e) {
-            System.out.println("❌ Error filling complete form: " + e.getMessage());
-        }
-    }
-    
-    // Helper method untuk fill individual field
-    private void fillField(By locator, String value, String fieldName) {
-        try {
-            WebElement field = driver.findElement(locator);
-            field.clear();
-            field.sendKeys(value);
-            System.out.println("✓ " + fieldName + " filled: " + value);
-        } catch (Exception e) {
-            System.out.println("⚠ " + fieldName + " field not filled: " + e.getMessage());
+            System.out.println("Error filling complete form: " + e.getMessage());
         }
     }
     
     // Method untuk select country dropdown
     public void selectCountry(String countryName) {
         try {
-            WebElement countryDropdown = driver.findElement(countryInput);
-            countryDropdown.click();
-            Thread.sleep(500);
+            WebElement countryDropdown = wait.until(ExpectedConditions.elementToBeClickable(countryInput));
+            js.executeScript("arguments[0].scrollIntoView({block: 'center'});", countryDropdown);
+            Thread.sleep(300);
             
             // Select by visible text
             org.openqa.selenium.support.ui.Select select = 
                 new org.openqa.selenium.support.ui.Select(countryDropdown);
             select.selectByVisibleText(countryName);
-            System.out.println("✓ Country selected: " + countryName);
+            System.out.println("Country selected: " + countryName);
         } catch (Exception e) {
-            System.out.println("⚠ Country not selected: " + e.getMessage());
+            System.out.println("Country not selected: " + e.getMessage());
         }
     }
     
@@ -313,10 +355,10 @@ public class ContactUsPage extends AboutBasePage {
                 js.executeScript("arguments[0].scrollIntoView({block: 'center'});", privacyCheckbox);
                 Thread.sleep(300);
                 privacyCheckbox.click();
-                System.out.println("✓ Privacy Policy checkbox checked");
+                System.out.println("Privacy Policy checkbox checked");
             }
         } catch (Exception e) {
-            System.out.println("❌ Error checking privacy policy: " + e.getMessage());
+            System.out.println("Error checking privacy policy: " + e.getMessage());
         }
     }
     
@@ -328,17 +370,17 @@ public class ContactUsPage extends AboutBasePage {
                 js.executeScript("arguments[0].scrollIntoView({block: 'center'});", marketingCheckbox);
                 Thread.sleep(300);
                 marketingCheckbox.click();
-                System.out.println("✓ Marketing communications checkbox checked");
+                System.out.println("Marketing communications checkbox checked");
             }
         } catch (Exception e) {
-            System.out.println("❌ Error checking marketing checkbox: " + e.getMessage());
+            System.out.println("Error checking marketing checkbox: " + e.getMessage());
         }
     }
     
     // Method untuk handle reCAPTCHA
     public void solveRecaptcha() {
         try {
-            System.out.println("⚠ Attempting to solve reCAPTCHA...");
+            System.out.println("Attempting to solve reCAPTCHA");
             
             // Wait for reCAPTCHA iframe to be present
             WebElement recaptchaIframe = wait.until(ExpectedConditions.presenceOfElementLocated(recaptchaFrame));
@@ -353,7 +395,7 @@ public class ContactUsPage extends AboutBasePage {
             // Click the checkbox
             WebElement checkbox = wait.until(ExpectedConditions.elementToBeClickable(recaptchaCheckbox));
             checkbox.click();
-            System.out.println("✓ reCAPTCHA checkbox clicked");
+            System.out.println("reCAPTCHA checkbox clicked");
             
             // Switch back to main content
             driver.switchTo().defaultContent();
@@ -361,11 +403,11 @@ public class ContactUsPage extends AboutBasePage {
             // Wait for reCAPTCHA to validate (may take a few seconds)
             Thread.sleep(3000);
             
-            System.out.println("✓ reCAPTCHA solved (or attempted)");
+            System.out.println("reCAPTCHA solved (or attempted)");
             
         } catch (Exception e) {
-            System.out.println("⚠ reCAPTCHA handling warning: " + e.getMessage());
-            System.out.println("⚠ Note: reCAPTCHA may require manual intervention or may not be solvable in automation");
+            System.out.println("reCAPTCHA handling warning: " + e.getMessage());
+            System.out.println("reCAPTCHA may require manual intervention or may not be solvable in automation");
             // Switch back to main content if stuck in iframe
             try {
                 driver.switchTo().defaultContent();
@@ -390,10 +432,10 @@ public class ContactUsPage extends AboutBasePage {
                 // Fallback to JS click
                 js.executeScript("arguments[0].click();", submitBtn);
             }
-            System.out.println("✓ Submit button clicked");
+            System.out.println("Submit button clicked");
             
         } catch (Exception e) {
-            System.out.println("❌ Error clicking submit: " + e.getMessage());
+            System.out.println("Error clicking submit: " + e.getMessage());
         }
     }
     
@@ -429,5 +471,127 @@ public class ContactUsPage extends AboutBasePage {
     
     public String getCurrentUrl() {
         return driver.getCurrentUrl();
+    }
+
+    public String getSuccessMessage() {
+        try {
+            System.out.println("Mencari success message");
+            
+            // Wait for success message to appear
+            WebDriverWait longWait = new WebDriverWait(driver, Duration.ofSeconds(15));
+            
+            WebElement message = null;
+            
+            // Try primary locator
+            try {
+                message = longWait.until(ExpectedConditions.visibilityOfElementLocated(successMessage));
+                System.out.println("Success message ditemukan dengan CSS selector");
+            } catch (Exception e1) {
+                // Try alternative locator
+                try {
+                    message = longWait.until(ExpectedConditions.visibilityOfElementLocated(successMessageAlt));
+                    System.out.println("Success message ditemukan dengan XPath");
+                } catch (Exception e2) {
+                    System.out.println("Success message tidak ditemukan");
+                    return "";
+                }
+            }
+            
+            if (message != null) {
+                String messageText = message.getText().trim();
+                System.out.println("Success message text: " + messageText);
+                return messageText;
+            }
+            
+            return "";
+            
+        } catch (Exception e) {
+            System.out.println("Error mendapatkan success message: " + e.getMessage());
+            return "";
+        }
+    }
+    
+    /**
+     * Verify apakah success message mengandung teks yang diharapkan
+     * 
+     * @param expectedText teks yang diharapkan
+     * @return true jika success message mengandung teks yang diharapkan
+     */
+    public boolean verifySuccessMessage(String expectedText) {
+        String actualMessage = getSuccessMessage();
+        boolean contains = actualMessage.contains(expectedText);
+        
+        return contains;
+    }
+    
+    /**
+     * Mendapatkan teks reCAPTCHA error message
+     * For test case ABT-013
+     * 
+     * @return teks error message, atau empty string jika tidak ada
+     */
+    public String getRecaptchaErrorMessage() {
+        try {
+            System.out.println("Mencari reCAPTCHA error message");
+            
+            // Wait for error message to appear
+            WebDriverWait longWait = new WebDriverWait(driver, Duration.ofSeconds(10));
+            
+            WebElement errorMsg = null;
+            
+            // Try primary locator
+            try {
+                List<WebElement> errorElements = driver.findElements(recaptchaErrorMessage);
+                for (WebElement elem : errorElements) {
+                    if (elem.getText().contains("reCAPTCHA")) {
+                        errorMsg = elem;
+                        System.out.println("reCAPTCHA error message ditemukan dengan CSS selector");
+                        break;
+                    }
+                }
+            } catch (Exception e1) {
+                System.out.println("Mencoba alternative locator");
+            }
+            
+            // Try alternative locator if not found
+            if (errorMsg == null) {
+                try {
+                    errorMsg = longWait.until(ExpectedConditions.visibilityOfElementLocated(recaptchaErrorMessageAlt));
+                    System.out.println("reCAPTCHA error message ditemukan dengan XPath");
+                } catch (Exception e2) {
+                    System.out.println("reCAPTCHA error message tidak ditemukan");
+                    return "";
+                }
+            }
+            
+            if (errorMsg != null) {
+                String messageText = errorMsg.getText().trim();
+                System.out.println("reCAPTCHA error message text: " + messageText);
+                return messageText;
+            }
+            
+            return "";
+            
+        } catch (Exception e) {
+            System.out.println("Error mendapatkan reCAPTCHA error message: " + e.getMessage());
+            return "";
+        }
+    }
+    
+    /**
+     * Verify apakah error message mengandung teks yang diharapkan
+     * 
+     * @param expectedText teks yang diharapkan
+     * @return true jika error message mengandung teks yang diharapkan
+     */
+    public boolean verifyRecaptchaErrorMessage(String expectedText) {
+        String actualMessage = getRecaptchaErrorMessage();
+        boolean contains = actualMessage.contains(expectedText);
+        
+        System.out.println("Expected error: " + expectedText);
+        System.out.println("Actual error: " + actualMessage);
+        System.out.println("Contains: " + contains);
+        
+        return contains;
     }
 }
