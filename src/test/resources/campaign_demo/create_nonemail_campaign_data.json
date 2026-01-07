@@ -1,0 +1,13 @@
+{
+  "name": "Spring 2026 Non-Email Campaign",
+  "status": "Planning",
+  "description": "Non-email campaign for Spring 2026 promotions via social media and traditional advertising",
+  "budget": "12000",
+  "actualCost": "0",
+  "expectedRevenue": "60000",
+  "expectedCost": "10000",
+  "impressions": "25000",
+  "objective": "Increase brand visibility and customer engagement through social media advertising, print ads, and radio spots for Spring 2026 product launch",
+  "targetListName": "Spring 2026 Non-Email Target Audience",
+  "targetListType": "Default"
+}
