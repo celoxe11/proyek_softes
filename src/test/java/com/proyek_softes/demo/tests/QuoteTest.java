@@ -9,6 +9,7 @@ import com.proyek_softes.demo.pages.quotes.CreateQuotePage;
 import com.proyek_softes.demo.pages.quotes.ImportQuotePage;
 import com.proyek_softes.demo.pages.quotes.QuotesPage;
 import com.proyek_softes.demo.utils.QuoteDataProvider;
+import com.proyek_softes.demo.pages.invoices.ImportLineItemPage;
 
 import io.qameta.allure.Description;
 
@@ -19,39 +20,37 @@ public class QuoteTest extends GenericCrudTestHelper<QuotesPage, CreateQuotePage
     public void testDem026(Map<String, String> testData) {
         QuotesPage quotesPage = new QuotesPage(driver);
         CreateQuotePage createQuotePage = new CreateQuotePage(driver, wait);
-        
+
         testCreateEntity(
-            testData,
-            v -> quotesPage,
-            quotesPage::navigateToQuotesModule,
-            quotesPage::navigateToCreateQuote,
-            v -> createQuotePage,
-            (page, data) -> page.addInformationFromData(data),
-            createQuotePage::save,
-            data -> data.get("name"),
-            createQuotePage::isQuoteSavedSuccessfully,
-            "DEM-026",
-            quotesPage::navigateToViewQuote,
-            quotesPage::isInFirstRow,
-            v -> quotesPage.getFirstRowLocator()
-        );
+                testData,
+                v -> quotesPage,
+                quotesPage::navigateToQuotesModule,
+                quotesPage::navigateToCreateQuote,
+                v -> createQuotePage,
+                (page, data) -> page.addInformationFromData(data),
+                createQuotePage::save,
+                data -> data.get("name"),
+                createQuotePage::isQuoteSavedSuccessfully,
+                "DEM-026",
+                quotesPage::navigateToViewQuote,
+                quotesPage::isInFirstRow,
+                v -> quotesPage.getFirstRowLocator());
     }
 
     @Test(dataProvider = "viewQuoteData", dataProviderClass = QuoteDataProvider.class)
     @Description("DEM-027")
     public void testDem027(Map<String, String> testData) {
         QuotesPage quotesPage = new QuotesPage(driver);
-        
+
         testViewEntity(
-            testData,
-            v -> quotesPage,
-            quotesPage::navigateToQuotesModule,
-            quotesPage::navigateToViewQuote,
-            quotesPage::clickFirstQuote,
-            data -> data.get("name"),
-            quotesPage::isQuoteTitleCorrect,
-            "DEM-027"
-        );
+                testData,
+                v -> quotesPage,
+                quotesPage::navigateToQuotesModule,
+                quotesPage::navigateToViewQuote,
+                quotesPage::clickFirstQuote,
+                data -> data.get("name"),
+                quotesPage::isQuoteTitleCorrect,
+                "DEM-027");
     }
 
     @Test(dataProvider = "editQuoteData", dataProviderClass = QuoteDataProvider.class)
@@ -59,24 +58,23 @@ public class QuoteTest extends GenericCrudTestHelper<QuotesPage, CreateQuotePage
     public void testDem028(Map<String, String> testData) {
         QuotesPage quotesPage = new QuotesPage(driver);
         CreateQuotePage editQuotePage = new CreateQuotePage(driver, wait);
-        
+
         testEditEntity(
-            testData,
-            v -> quotesPage,
-            quotesPage::navigateToQuotesModule,
-            quotesPage::navigateToViewQuote,
-            quotesPage::clickFirstQuote,
-            data -> data.get("nameBeforeEdit"),
-            quotesPage::isQuoteTitleCorrect,
-            "DEM-028_View_Quote_Detail",
-            quotesPage::editQuote,
-            v -> editQuotePage,
-            (page, data) -> page.addInformationFromData(data),
-            editQuotePage::save,
-            data -> data.get("name"),
-            editQuotePage::isQuoteSavedSuccessfully,
-            "DEM-028"
-        );
+                testData,
+                v -> quotesPage,
+                quotesPage::navigateToQuotesModule,
+                quotesPage::navigateToViewQuote,
+                quotesPage::clickFirstQuote,
+                data -> data.get("nameBeforeEdit"),
+                quotesPage::isQuoteTitleCorrect,
+                "DEM-028_View_Quote_Detail",
+                quotesPage::editQuote,
+                v -> editQuotePage,
+                (page, data) -> page.addInformationFromData(data),
+                editQuotePage::save,
+                data -> data.get("name"),
+                editQuotePage::isQuoteSavedSuccessfully,
+                "DEM-028");
     }
 
     @Test
@@ -103,7 +101,8 @@ public class QuoteTest extends GenericCrudTestHelper<QuotesPage, CreateQuotePage
 
             boolean isFilterResultEmpty = quotesPage.isFilterResultEmpty();
             assertTrue(isFilterResultEmpty, "Deleted quote should no longer exist in the quotes list");
-            takeElementScreenshot("DEM-029_Deleted_Quote_Filter_Result", driver.findElement(quotesPage.getFilterResult()));
+            takeElementScreenshot("DEM-029_Deleted_Quote_Filter_Result",
+                    driver.findElement(quotesPage.getFilterResult()));
 
             quotesPage.checkAndClearFilter();
         } catch (InterruptedException e) {
@@ -122,9 +121,9 @@ public class QuoteTest extends GenericCrudTestHelper<QuotesPage, CreateQuotePage
             ImportQuotePage importQuotePage = new ImportQuotePage(driver);
             importQuotePage.uploadFile("quotes_import.csv");
             importQuotePage.clickNextButton();
-            
+
             Thread.sleep(2000);
-            
+
             importQuotePage.clickImportButton();
 
             boolean isImportSuccessful = importQuotePage.isImportSuccessful();
@@ -141,5 +140,37 @@ public class QuoteTest extends GenericCrudTestHelper<QuotesPage, CreateQuotePage
         } catch (InterruptedException e) {
         }
     }
-}
 
+    @Test
+    @Description("DEM-031")
+    public void testDem031() {
+        try {
+            login("will", "will");
+            QuotesPage quotesPage = new QuotesPage(driver);
+            quotesPage.navigateToQuotesModule();
+            quotesPage.navigateToImportLineItems();
+
+            ImportLineItemPage importLineItemPage = new ImportLineItemPage(driver);
+            boolean isCSV = importLineItemPage.verifyDownloadedTemplateIsCSV(10, "DEM-031_Download_History");
+            assertTrue(isCSV, "Downloaded template should be in CSV format and named contains 'Line Items'");
+
+            // upload file and complete import process
+            // Using overloaded method to specify folder
+            importLineItemPage.uploadFile("quote_demo", "Quotes_Line_Items.csv");
+
+            importLineItemPage.clickImportCreate();
+            importLineItemPage.clickNext();
+            importLineItemPage.clickNext();
+            importLineItemPage.clickNext();
+            importLineItemPage.clickImportNow();
+
+            boolean isRecordsImported = importLineItemPage.isRecordsImported();
+            assertTrue(isRecordsImported, "Records from Quotes_Line_Items.csv should be imported successfully");
+            takeElementScreenshot("DEM-031_Import_Line_Items_Success", importLineItemPage.getSummaryElement());
+
+        } catch (Throwable e) {
+            takeScreenshot("DEM-031_Error_Current_Page");
+            throw new AssertionError("Test failed: " + e.getMessage(), e);
+        }
+    }
+}

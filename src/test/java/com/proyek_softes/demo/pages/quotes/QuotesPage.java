@@ -20,6 +20,8 @@ public class QuotesPage {
     private final By createQuoteLink = By.xpath("//a[@data-action-name='Create']");
     private final By importQuoteLink = By.xpath("//a[@data-action-name='Import']");
     private final By viewQuoteLink = By.xpath("//a[@data-action-name='List']");
+    private final By importLineItemsLink = By
+            .xpath("//a[@data-action-name='Import' and contains(@href, 'import_module=AOS_Products_Quotes')]");
 
     private final By firstRowQuoteName = By.cssSelector("table.list.view tbody tr:first-child td[type='name'] a");
     private final By firstRowLocator = By.cssSelector("table.list.view tbody tr[height='20']:first-of-type");
@@ -27,7 +29,8 @@ public class QuotesPage {
 
     // filter locators
     private final By filterButton = By.xpath("//a[@title='Filter']");
-    private final By quickFilterTab = By.xpath("//li[contains(@class, 'searchTabHandler') and contains(@class, 'basic')]/a");
+    private final By quickFilterTab = By
+            .xpath("//li[contains(@class, 'searchTabHandler') and contains(@class, 'basic')]/a");
     private final By modalContent = By.className("modal-content");
     private final By filterNameField = By.id("name_basic");
     private final By filterMyItemsCheckbox = By.id("current_user_only_basic");
@@ -83,6 +86,12 @@ public class QuotesPage {
         wait.until(ExpectedConditions.visibilityOfElementLocated(viewQuoteLink));
         wait.until(ExpectedConditions.elementToBeClickable(viewQuoteLink));
         driver.findElement(viewQuoteLink).click();
+    }
+
+    public void navigateToImportLineItems() {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(importLineItemsLink));
+        wait.until(ExpectedConditions.elementToBeClickable(importLineItemsLink));
+        driver.findElement(importLineItemsLink).click();
     }
 
     public boolean isInFirstRow(String quoteName) {

@@ -61,11 +61,11 @@ public class ImportLineItemPage {
 
                     fileName = (String) js.executeScript(
                             "var manager = document.querySelector('downloads-manager');"
-                            + "if (!manager || !manager.shadowRoot) return null;"
-                            + "var item = manager.shadowRoot.querySelector('downloads-item');"
-                            + "if (!item || !item.shadowRoot) return null;"
-                            + "var fileLink = item.shadowRoot.querySelector('#file-link');"
-                            + "return fileLink ? fileLink.textContent : null;");
+                                    + "if (!manager || !manager.shadowRoot) return null;"
+                                    + "var item = manager.shadowRoot.querySelector('downloads-item');"
+                                    + "if (!item || !item.shadowRoot) return null;"
+                                    + "var fileLink = item.shadowRoot.querySelector('#file-link');"
+                                    + "return fileLink ? fileLink.textContent : null;");
 
                     if (fileName != null && !fileName.trim().isEmpty()) {
                         System.out.println("Found downloaded file in browser history: " + fileName);
@@ -121,7 +121,14 @@ public class ImportLineItemPage {
     }
 
     public void uploadFile(String fileName) {
-        String resourcePath = Paths.get("src", "test", "resources", "invoice_demo", fileName).toAbsolutePath().toString();
+        String resourcePath = Paths.get("src", "test", "resources", "invoice_demo", fileName).toAbsolutePath()
+                .toString();
+        File file = new File(resourcePath);
+        driver.findElement(inputFile).sendKeys(file.getAbsolutePath());
+    }
+
+    public void uploadFile(String folderName, String fileName) {
+        String resourcePath = Paths.get("src", "test", "resources", folderName, fileName).toAbsolutePath().toString();
         File file = new File(resourcePath);
         driver.findElement(inputFile).sendKeys(file.getAbsolutePath());
     }
