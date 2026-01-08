@@ -18,7 +18,7 @@ public class AllSuiteCRMReleasesTest extends BaseLandingTest {
     private static final String EXPECTED_OPENCOLLECTIVE_URL = "https://opencollective.com/suitecrm";
     private static final String EXPECTED_FILE_NAME = "SuiteCRM-7.15.0";
     private static final String EXPECTED_RELEASE_NOTES_URL = "https://docs.suitecrm.com/admin/releases/7.15.x/";
-    private static final String EXPECTED_INSTALL_GUIDE_URL = "https://docs.suitecrm.com/admin/installation-guide/downloading-installing/";
+    private static final String EXPECTED_INSTALL_GUIDE_URL = "https://docs.suitecrm.com/8.x/admin/installation-guide/downloading-installing/";
     private static final String EXPECTED_UPGRADE_GUIDE_URL = "https://docs.suitecrm.com/admin/installation-guide/upgrading/";
 
     @Test(priority = 1)

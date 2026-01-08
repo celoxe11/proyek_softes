@@ -48,7 +48,15 @@ public class SupportServicesPage extends ServicesPage {
      */
     public boolean clickEnterpriseVerificationServiceLink() {
         scrollToPercentage(0.5);
-        return scrollAndClick(enterpriseVerificationServiceLinkLocator, "Enterprise Verification Service link");
+        
+        By[] locators = {
+            By.cssSelector("a[href*='enterprise-verification-service']"),
+            By.xpath("//a[contains(@href, 'enterprise-verification-service')]"),
+            By.partialLinkText("Enterprise Verification Service"),
+            By.linkText("Enterprise Verification Service")
+        };
+        
+        return scrollAndClickWithFallback(locators, "Enterprise Verification Service link");
     }
 
     /**
@@ -58,7 +66,15 @@ public class SupportServicesPage extends ServicesPage {
      */
     public boolean clickFullyManagedHostingLink() {
         scrollToPercentage(0.7);
-        return scrollAndClick(fullyManagedHostingLinkLocator, "Fully Managed SuiteCRM Hosting Services link");
+        
+        By[] locators = {
+            By.cssSelector("a[href*='suitecrmhosted']"),
+            By.xpath("//a[contains(@href, 'suitecrmhosted')]"),
+            By.partialLinkText("Fully Managed"),
+            By.partialLinkText("Hosting Services")
+        };
+        
+        return scrollAndClickWithFallback(locators, "Fully Managed SuiteCRM Hosting Services link");
     }
 
     /**
@@ -68,6 +84,14 @@ public class SupportServicesPage extends ServicesPage {
      */
     public boolean clickTermsAndConditionsLink() {
         scrollToPercentage(0.8);
-        return scrollAndClick(termsAndConditionsLinkLocator, "Terms and Conditions link (please click here)");
+        
+        By[] locators = {
+            By.cssSelector("a[href*='SuiteCRM_Support_Services_Terms_And_Conditions']"),
+            By.xpath("//a[contains(@href, 'SuiteCRM_Support_Services_Terms_And_Conditions')]"),
+            By.xpath("//a[contains(@href, 'Terms_And_Conditions')]"),
+            By.partialLinkText("please click here")
+        };
+        
+        return scrollAndClickWithFallback(locators, "Terms and Conditions link (please click here)");
     }
 }

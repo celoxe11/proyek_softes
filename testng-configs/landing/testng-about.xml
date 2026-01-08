@@ -68,6 +68,21 @@
         </classes>
     </test>
     
+    <!-- Newsletter Sign Up Tests -->
+    <test name="Newsletter Sign Up Tests" preserve-order="true">
+        <classes>
+            <class name="com.proyek_softes.landing.tests.about.NewsletterSignUpTest">
+                <methods>
+                    <!-- ABT-008: Newsletter Sign-Up form submission -->
+                    <include name="testAbt008" />
+                    
+                    <!-- ABT-009: Newsletter Sign-Up validation error -->
+                    <include name="testAbt009" />
+                </methods>
+            </class>
+        </classes>
+    </test>
+    
     <!-- Contact Us Tests -->
     <test name="Contact Us Tests" preserve-order="true">
         <classes>
@@ -83,19 +98,5 @@
         </classes>
     </test>
     
-    <!-- Newsletter Sign Up Tests -->
-    <test name="Newsletter Sign Up Tests" preserve-order="true">
-        <classes>
-            <class name="com.proyek_softes.landing.tests.about.NewsletterSignUpTest">
-                <methods>
-                    <!-- ABT-008: Newsletter Sign-Up form submission -->
-                    <include name="testAbt008" />
-                    
-                    <!-- ABT-009: Newsletter Sign-Up validation error -->
-                    <include name="testAbt009" />
-                </methods>
-            </class>
-        </classes>
-    </test>
     
 </suite>

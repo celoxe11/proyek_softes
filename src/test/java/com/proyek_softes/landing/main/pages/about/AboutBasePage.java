@@ -23,16 +23,16 @@ public class AboutBasePage {
     protected Actions actions;
 
     // Main About Menu
-    private By aboutMenuLocator = By.cssSelector("li#menu-item-563873 > a");
+    private By aboutMenuLocator = By.cssSelector("li#menu-item-564732 > a");
 
     // Sub-menu locators
-    private By aboutUsSubMenuLocator = By.cssSelector("li#menu-item-563874 a");
-    private By roadmapSubMenuLocator = By.cssSelector("li#menu-item-563875 a");
-    private By journeySubMenuLocator = By.cssSelector("li#menu-item-563876 a");
-    private By newsPressSubMenuLocator = By.cssSelector("li#menu-item-563877 a");
-    private By careersSubMenuLocator = By.cssSelector("li#menu-item-563878 a");
-    private By contactUsSubMenuLocator = By.cssSelector("li#menu-item-563879 a");
-    private By newsletterSubMenuLocator = By.cssSelector("li#menu-item-563880 a");
+    private By aboutUsSubMenuLocator = By.cssSelector("li#menu-item-564390 a");
+    private By roadmapSubMenuLocator = By.cssSelector("li#menu-item-564373 a");
+    private By journeySubMenuLocator = By.cssSelector("li#menu-item-564375 a");
+    private By newsPressSubMenuLocator = By.cssSelector("li#menu-item-564388 a");
+    private By careersSubMenuLocator = By.cssSelector("li#menu-item-564386 a");
+    private By contactUsSubMenuLocator = By.cssSelector("li#menu-item-564414 a");
+    private By newsletterSubMenuLocator = By.cssSelector("li#menu-item-564413 a");
 
     // ========================================
     // CONSTRUCTOR

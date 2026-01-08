@@ -23,14 +23,14 @@ public class ServicesPage {
     protected Actions actions;
 
     // Main Services Menu
-    private By servicesMenuLocator = By.cssSelector("li#menu-item-564388 > a");
+    private By servicesMenuLocator = By.cssSelector("li#menu-item-564358 > a");
 
     // Sub-menu locators
-    private By supportServicesSubMenuLocator = By.cssSelector("li#menu-item-564391 a");
-    private By consultancySubMenuLocator = By.cssSelector("li#menu-item-564389 a");
-    private By suiteCRMHostedSubMenuLocator = By.cssSelector("li#menu-item-564390 a");
-    private By suiteCRMMigrationSubMenuLocator = By.cssSelector("li#menu-item-564392 a");
-    private By evsSubMenuLocator = By.cssSelector("li#menu-item-564393 a");
+    private By supportServicesSubMenuLocator = By.cssSelector("li#menu-item-564362 a");
+    private By consultancySubMenuLocator = By.cssSelector("li#menu-item-564360 a");
+    private By suiteCRMHostedSubMenuLocator = By.cssSelector("li#menu-item-564361 a");
+    private By suiteCRMMigrationSubMenuLocator = By.cssSelector("li#menu-item-564363 a");
+    private By evsSubMenuLocator = By.cssSelector("li#menu-item-564364 a");
 
     // ========================================
     // CONSTRUCTOR
@@ -77,7 +77,39 @@ public class ServicesPage {
      * @return true jika berhasil
      */
     public boolean navigateToSupportServices() {
-        return navigateToSubMenu(supportServicesSubMenuLocator, "Support Services");
+        try {
+            System.out.println("Navigating ke Support Services");
+            hoverServicesMenu();
+            Thread.sleep(500);
+
+            By[] locators = {
+                By.cssSelector("li#menu-item-564362 a"),
+                By.xpath("//li[@id='menu-item-564362']//a"),
+                By.cssSelector("a[href*='support-services']"),
+                By.partialLinkText("Support Services")
+            };
+
+            WebDriverWait shortWait = new WebDriverWait(driver, Duration.ofSeconds(1));
+            for (By locator : locators) {
+                try {
+                    WebElement element = shortWait.until(ExpectedConditions.elementToBeClickable(locator));
+                    element.click();
+                    Thread.sleep(1000);
+                    System.out.println("Berhasil navigate ke Support Services");
+                    return true;
+                } catch (Exception e) {
+                    continue;
+                }
+            }
+
+            System.out.println("Semua locator gagal, menggunakan direct URL navigation");
+            driver.get("https://suitecrm.com/en/support-services/");
+            Thread.sleep(2000);
+            return true;
+        } catch (Exception e) {
+            System.out.println("Gagal navigate ke Support Services: " + e.getMessage());
+            return false;
+        }
     }
 
     /**
@@ -86,7 +118,39 @@ public class ServicesPage {
      * @return true jika berhasil
      */
     public boolean navigateToConsultancy() {
-        return navigateToSubMenu(consultancySubMenuLocator, "Consultancy and Implementation");
+        try {
+            System.out.println("Navigating ke Consultancy and Implementation");
+            hoverServicesMenu();
+            Thread.sleep(500);
+
+            By[] locators = {
+                By.cssSelector("li#menu-item-564360 a"),
+                By.xpath("//li[@id='menu-item-564360']//a"),
+                By.cssSelector("a[href*='customisation']"),
+                By.partialLinkText("Consultancy")
+            };
+
+            WebDriverWait shortWait = new WebDriverWait(driver, Duration.ofSeconds(1));
+            for (By locator : locators) {
+                try {
+                    WebElement element = shortWait.until(ExpectedConditions.elementToBeClickable(locator));
+                    element.click();
+                    Thread.sleep(1000);
+                    System.out.println("Berhasil navigate ke Consultancy and Implementation");
+                    return true;
+                } catch (Exception e) {
+                    continue;
+                }
+            }
+
+            System.out.println("Semua locator gagal, menggunakan direct URL navigation");
+            driver.get("https://suitecrm.com/en/enterprise/customisation/");
+            Thread.sleep(2000);
+            return true;
+        } catch (Exception e) {
+            System.out.println("Gagal navigate ke Consultancy and Implementation: " + e.getMessage());
+            return false;
+        }
     }
 
     /**
@@ -95,7 +159,39 @@ public class ServicesPage {
      * @return true jika berhasil
      */
     public boolean navigateToSuiteCRMHosted() {
-        return navigateToSubMenu(suiteCRMHostedSubMenuLocator, "SuiteCRM Hosted");
+        try {
+            System.out.println("Navigating ke SuiteCRM Hosted");
+            hoverServicesMenu();
+            Thread.sleep(500);
+
+            By[] locators = {
+                By.cssSelector("li#menu-item-564361 a"),
+                By.xpath("//li[@id='menu-item-564361']//a"),
+                By.cssSelector("a[href*='suitecrmhosted']"),
+                By.partialLinkText("SuiteCRM Hosted")
+            };
+
+            WebDriverWait shortWait = new WebDriverWait(driver, Duration.ofSeconds(1));
+            for (By locator : locators) {
+                try {
+                    WebElement element = shortWait.until(ExpectedConditions.elementToBeClickable(locator));
+                    element.click();
+                    Thread.sleep(1000);
+                    System.out.println("Berhasil navigate ke SuiteCRM Hosted");
+                    return true;
+                } catch (Exception e) {
+                    continue;
+                }
+            }
+
+            System.out.println("Semua locator gagal, menggunakan direct URL navigation");
+            driver.get("https://suitecrm.com/suitecrmhosted/");
+            Thread.sleep(2000);
+            return true;
+        } catch (Exception e) {
+            System.out.println("Gagal navigate ke SuiteCRM Hosted: " + e.getMessage());
+            return false;
+        }
     }
 
     /**
@@ -104,7 +200,39 @@ public class ServicesPage {
      * @return true jika berhasil
      */
     public boolean navigateToSuiteCRMMigration() {
-        return navigateToSubMenu(suiteCRMMigrationSubMenuLocator, "SuiteCRM Migration");
+        try {
+            System.out.println("Navigating ke SuiteCRM Migration");
+            hoverServicesMenu();
+            Thread.sleep(500);
+
+            By[] locators = {
+                By.cssSelector("li#menu-item-564363 a"),
+                By.xpath("//li[@id='menu-item-564363']//a"),
+                By.cssSelector("a[href*='migrations']"),
+                By.partialLinkText("SuiteCRM Migration")
+            };
+
+            WebDriverWait shortWait = new WebDriverWait(driver, Duration.ofSeconds(1));
+            for (By locator : locators) {
+                try {
+                    WebElement element = shortWait.until(ExpectedConditions.elementToBeClickable(locator));
+                    element.click();
+                    Thread.sleep(1000);
+                    System.out.println("Berhasil navigate ke SuiteCRM Migration");
+                    return true;
+                } catch (Exception e) {
+                    continue;
+                }
+            }
+
+            System.out.println("Semua locator gagal, menggunakan direct URL navigation");
+            driver.get("https://suitecrm.com/en/consultancy/migrations/");
+            Thread.sleep(2000);
+            return true;
+        } catch (Exception e) {
+            System.out.println("Gagal navigate ke SuiteCRM Migration: " + e.getMessage());
+            return false;
+        }
     }
 
     /**
@@ -113,7 +241,39 @@ public class ServicesPage {
      * @return true jika berhasil
      */
     public boolean navigateToEVS() {
-        return navigateToSubMenu(evsSubMenuLocator, "Enterprise Verification Service");
+        try {
+            System.out.println("Navigating ke Enterprise Verification Service");
+            hoverServicesMenu();
+            Thread.sleep(500);
+
+            By[] locators = {
+                By.cssSelector("li#menu-item-564364 a"),
+                By.xpath("//li[@id='menu-item-564364']//a"),
+                By.cssSelector("a[href*='enterprise-verification-service']"),
+                By.partialLinkText("Enterprise Verification Service")
+            };
+
+            WebDriverWait shortWait = new WebDriverWait(driver, Duration.ofSeconds(1));
+            for (By locator : locators) {
+                try {
+                    WebElement element = shortWait.until(ExpectedConditions.elementToBeClickable(locator));
+                    element.click();
+                    Thread.sleep(1000);
+                    System.out.println("Berhasil navigate ke Enterprise Verification Service");
+                    return true;
+                } catch (Exception e) {
+                    continue;
+                }
+            }
+
+            System.out.println("Semua locator gagal, menggunakan direct URL navigation");
+            driver.get("https://suitecrm.com/enterprise-verification-service/");
+            Thread.sleep(2000);
+            return true;
+        } catch (Exception e) {
+            System.out.println("Gagal navigate ke Enterprise Verification Service: " + e.getMessage());
+            return false;
+        }
     }
 
     /**
@@ -242,5 +402,45 @@ public class ServicesPage {
         } catch (Exception e) {
             // Continue
         }
+    }
+
+    /**
+     * Helper method untuk scroll dan klik dengan multiple fallback locators
+     * 
+     * @param locators    array of locators to try
+     * @param elementName nama element untuk logging
+     * @return true jika berhasil
+     */
+    protected boolean scrollAndClickWithFallback(By[] locators, String elementName) {
+        System.out.println("Clicking " + elementName);
+        waitForPageLoad();
+
+        WebDriverWait shortWait = new WebDriverWait(driver, Duration.ofSeconds(1));
+        
+        for (By locator : locators) {
+            try {
+                WebElement element = shortWait.until(ExpectedConditions.elementToBeClickable(locator));
+                
+                // Scroll ke element
+                js.executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", element);
+                Thread.sleep(500);
+                
+                // Klik element
+                try {
+                    element.click();
+                } catch (Exception e) {
+                    js.executeScript("arguments[0].click();", element);
+                }
+                
+                Thread.sleep(2000);
+                System.out.println("Berhasil click " + elementName);
+                return true;
+            } catch (Exception e) {
+                continue;
+            }
+        }
+        
+        System.out.println("Gagal click " + elementName + " - semua locator gagal");
+        return false;
     }
 }

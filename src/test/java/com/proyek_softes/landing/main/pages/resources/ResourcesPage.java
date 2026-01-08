@@ -24,10 +24,10 @@ public class ResourcesPage {
     protected Actions actions;
 
     // Main Resources Menu
-    private By resourcesMenuLocator = By.cssSelector("li#menu-item-564403 > a");
+    private By resourcesMenuLocator = By.cssSelector("li#menu-item-564402 > a");
 
-    // Sub-menu locators
-    private By allSuiteCRMReleasesSubMenuLocator = By.cssSelector("li#menu-item-564404 a");
+    // Sub-menu locators (Updated sesuai HTML actual)
+    private By allSuiteCRMReleasesSubMenuLocator = By.cssSelector("li#menu-item-564421 a");
     private By documentationSubMenuLocator = By.cssSelector("li#menu-item-564405 a");
     private By addOnsStoreSubMenuLocator = By.cssSelector("li#menu-item-564406 a");
     private By addOnsOutlookPluginSubMenuLocator = By.cssSelector("li#menu-item-564382 a");
@@ -111,7 +111,39 @@ public class ResourcesPage {
      * @return true jika berhasil
      */
     public boolean navigateToAddOnsOutlookPlugin() {
-        return navigateToSubMenu(addOnsOutlookPluginSubMenuLocator, "Add-ons > Outlook Plugin");
+        try {
+            System.out.println("Navigating ke Add-ons > Outlook Plugin");
+            hoverResourcesMenu();
+            Thread.sleep(500);
+
+            By[] locators = {
+                By.cssSelector("li#menu-item-564382 a"),
+                By.xpath("//li[@id='menu-item-564382']//a"),
+                By.cssSelector("a[href*='outlook-plugin']"),
+                By.partialLinkText("Outlook Plugin")
+            };
+
+            WebDriverWait shortWait = new WebDriverWait(driver, Duration.ofSeconds(1));
+            for (By locator : locators) {
+                try {
+                    WebElement element = shortWait.until(ExpectedConditions.elementToBeClickable(locator));
+                    element.click();
+                    Thread.sleep(1000);
+                    System.out.println("Berhasil navigate ke Add-ons > Outlook Plugin");
+                    return true;
+                } catch (Exception e) {
+                    continue;
+                }
+            }
+
+            System.out.println("Semua locator gagal, menggunakan direct URL navigation");
+            driver.get("https://store.suitecrm.com/addons/SuiteCRM-official-outlook-plugin?tag=suitecrm");
+            Thread.sleep(2000);
+            return true;
+        } catch (Exception e) {
+            System.out.println("Gagal navigate ke Add-ons > Outlook Plugin: " + e.getMessage());
+            return false;
+        }
     }
 
     /**
@@ -303,6 +335,46 @@ public class ResourcesPage {
         } catch (Exception e) {
             // Continue
         }
+    }
+
+    /**
+     * Helper method untuk scroll dan klik dengan multiple fallback locators
+     * 
+     * @param locators    array of locators to try
+     * @param elementName nama element untuk logging
+     * @return true jika berhasil
+     */
+    protected boolean scrollAndClickWithFallback(By[] locators, String elementName) {
+        System.out.println("Clicking " + elementName);
+        waitForPageLoad();
+
+        WebDriverWait shortWait = new WebDriverWait(driver, Duration.ofSeconds(1));
+        
+        for (By locator : locators) {
+            try {
+                WebElement element = shortWait.until(ExpectedConditions.elementToBeClickable(locator));
+                
+                // Scroll ke element
+                js.executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", element);
+                Thread.sleep(500);
+                
+                // Klik element
+                try {
+                    element.click();
+                } catch (Exception e) {
+                    js.executeScript("arguments[0].click();", element);
+                }
+                
+                Thread.sleep(2000);
+                System.out.println("Berhasil click " + elementName);
+                return true;
+            } catch (Exception e) {
+                continue;
+            }
+        }
+        
+        System.out.println("Gagal click " + elementName + " - semua locator gagal");
+        return false;
     }
 
     /**

@@ -112,26 +112,29 @@ public class ConsultancyTest extends BaseLandingTest {
             waitSeconds(1);
         }
 
-        System.out.println("CAPTCHA needs to be solved manually during test execution");
-        System.out.println("Please solve the CAPTCHA within 30 seconds...");
-        waitSeconds(30); // Give time for manual CAPTCHA solving
+        System.out.println("Attempting to solve CAPTCHA automatically");
+        boolean captchaSolved = consultancyPage.solveCaptcha();
+        
+        if (!captchaSolved) {
+            System.out.println("CAPTCHA needs to be solved manually");
+            System.out.println("Please solve the CAPTCHA within 30 seconds");
+            waitSeconds(30); // Give time for manual CAPTCHA solving
+        } else {
+            System.out.println("CAPTCHA solved automatically - form will auto-submit");
+            waitSeconds(5); // Wait for auto-submit and validation
+        }
 
-        // Step 9: Tekan button Submit
-        consultancyPage.clickSubmit();
-        waitSeconds(3);
-
-        // Step 10: Assert muncul teks success message
         boolean hasSuccessMessage = consultancyPage.verifySuccessMessage(expectedSuccessMessage);
         assertTrue(hasSuccessMessage,
                 "Success message harus muncul dengan teks: " + expectedSuccessMessage);
 
-        // Step 11: Screenshot hasil assert
+        // Step 10: Screenshot hasil assert
         takeScreenshot("SRV-007_Implementation_Form_Success");
     }
 
-    @Test(priority = 3, dataProvider = "implementationData", dataProviderClass = ImplementationDataProvider.class)
+    @Test(priority = 3, dataProvider = "implementationDataSrv008", dataProviderClass = ImplementationDataProvider.class)
     @Description("SRV-008")
-    public void testSrv008(String fullName, String surname, String emailAddress, 
+    public void testSrv008(String fullName, String surname, String emailAddress,
                           String companyName, String country,
                           boolean checkPrivacyPolicy, boolean checkMarketingComms,
                           String expectedErrorMessage) {
@@ -157,17 +160,24 @@ public class ConsultancyTest extends BaseLandingTest {
         boolean formLoaded = consultancyPage.waitForImplementationFormToLoad();
         assertTrue(formLoaded, "Form Implementation Checklist harus berhasil dimuat");
 
-        // Isi full name saja (tanpa field lain)
+        // Isi full name saja
         consultancyPage.fillField(
             consultancyPage.getFullNameLocator(), 
             fullName, 
             "Full Name"
         );
+        consultancyPage.fillField(
+            consultancyPage.getSurnameLocator(), 
+            surname, 
+            "Surname"
+        );
         waitSeconds(1);
 
+        // Submit form (field lain kosong, akan muncul validation error)
         consultancyPage.clickSubmit();
         waitSeconds(2);
 
+        // Assert error message
         boolean hasErrorMessage = consultancyPage.verifyErrorMessage(expectedErrorMessage);
         assertTrue(hasErrorMessage,
                 "Error message harus muncul dengan teks: " + expectedErrorMessage);

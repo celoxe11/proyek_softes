@@ -2,9 +2,10 @@ package com.proyek_softes.landing.tests.resources;
 
 import static org.testng.Assert.assertTrue;
 
+import java.util.Map;
+
 import org.testng.annotations.Test;
 
-import com.google.gson.JsonObject;
 import com.proyek_softes.landing.main.base.BaseLandingTest;
 import com.proyek_softes.landing.main.pages.resources.CompareSuiteCRMPage;
 import com.proyek_softes.landing.main.utils.CompareSuiteCRMDataProvider;
@@ -20,7 +21,7 @@ public class CompareSuiteCRMTest extends BaseLandingTest{
 
     @Test(priority = 1, dataProvider = "whitepaperFormData", dataProviderClass = CompareSuiteCRMDataProvider.class)
     @Description("RES-011")
-    public void testRes011(JsonObject data) {
+    public void testRes011(Map<String, String> data) {
         navigateToHome();
 
         CompareSuiteCRMPage comparePage = new CompareSuiteCRMPage(driver);
@@ -41,11 +42,11 @@ public class CompareSuiteCRMTest extends BaseLandingTest{
         waitSeconds(2);
         takeScreenshot("RES-011_WhitepaperForm_Page");
 
-        // Fill form
-        String fullName = data.get("full_name").getAsString();
-        String email = data.get("email").getAsString();
-        String companyName = data.get("company_name").getAsString();
-        String country = data.get("country").getAsString();
+        // Fill form - get data from HashMap
+        String fullName = data.get("full_name");
+        String email = data.get("email");
+        String companyName = data.get("company_name");
+        String country = data.get("country");
 
         boolean fullNameSuccess = comparePage.enterFullName(fullName);
         assertTrue(fullNameSuccess, "Harus berhasil isi full name");

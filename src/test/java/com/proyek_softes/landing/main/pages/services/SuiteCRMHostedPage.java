@@ -21,10 +21,21 @@ public class SuiteCRMHostedPage extends ServicesPage {
     private By dedicatedContactUsButtonLocator = By.cssSelector("div.dedicated a.fusion-button[href*='contact']");
 
     // Links on SuiteCRM Hosted page
-    private By migrationServicesLinkLocator = By.cssSelector("a[href*='enterprise/migrations']");
+    private By[] migrationServicesLinkLocators = {
+        By.cssSelector("a[href*='enterprise/migrations']"),
+        By.xpath("//a[contains(@href, 'enterprise/migrations')]"),
+        By.xpath("//a[contains(text(), 'migration services')]"),
+        By.partialLinkText("migration services")
+    };
     private By getStartedWithSuiteCRMHostedButtonLocator = By
             .cssSelector("a.fusion-one-page-text-link[href*='#viewpackages']");
-    private By contactSalesTeamLinkLocator = By.cssSelector("a[href*='about/about-us/contact']");
+    private By[] contactSalesTeamLinkLocators = {
+        By.cssSelector("a[href*='about/about-us/contact']"),
+        By.xpath("//a[contains(@href, 'contact')]"),
+        By.xpath("//a[contains(text(), 'contact our sales team')]"),
+        By.partialLinkText("contact our sales team"),
+        By.partialLinkText("sales team")
+    };
 
     // ========================================
     // CONSTRUCTOR
@@ -84,8 +95,23 @@ public class SuiteCRMHostedPage extends ServicesPage {
      * @return true jika berhasil
      */
     public boolean clickMigrationServicesLink() {
-        scrollToPercentage(0.7);
-        return scrollAndClick(migrationServicesLinkLocator, "Migration Services link");
+        // Coba scroll ke berbagai posisi untuk menemukan link
+        double[] scrollPositions = {0.5, 0.6, 0.4, 0.7, 0.3};
+        
+        for (double position : scrollPositions) {
+            scrollToPercentage(position);
+            
+            // Coba semua locator
+            boolean success = scrollAndClickWithFallback(migrationServicesLinkLocators, 
+                "Migration Services link");
+            
+            if (success) {
+                return true;
+            }
+        }
+        
+        // Jika semua gagal, coba tanpa scroll percentage dulu
+        return scrollAndClickWithFallback(migrationServicesLinkLocators, "Migration Services link");
     }
 
     /**
@@ -104,7 +130,22 @@ public class SuiteCRMHostedPage extends ServicesPage {
      * @return true jika berhasil
      */
     public boolean clickContactSalesTeamLink() {
-        scrollToPercentage(0.7);
-        return scrollAndClick(contactSalesTeamLinkLocator, "Contact our sales team link");
+        // Coba scroll ke berbagai posisi untuk menemukan link
+        double[] scrollPositions = {0.7, 0.8, 0.6, 0.9, 0.5};
+        
+        for (double position : scrollPositions) {
+            scrollToPercentage(position);
+            
+            // Coba semua locator
+            boolean success = scrollAndClickWithFallback(contactSalesTeamLinkLocators, 
+                "Contact our sales team link");
+            
+            if (success) {
+                return true;
+            }
+        }
+        
+        // Jika semua gagal, coba tanpa scroll percentage dulu
+        return scrollAndClickWithFallback(contactSalesTeamLinkLocators, "Contact our sales team link");
     }
 }

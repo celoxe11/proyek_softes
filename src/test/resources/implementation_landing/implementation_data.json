@@ -14,13 +14,13 @@
     {
       "testCaseId": "SRV-008",
       "fullName": "Sarah",
-      "surname": "",
+      "surname": "Natalie",
       "emailAddress": "",
       "companyName": "",
       "country": "",
       "checkPrivacyPolicy": false,
       "checkMarketingComms": false,
-      "expectedSuccessMessage": "Please provide a valid email address"
+      "expectedErrorMessage": "Please provide a valid email address"
     }
   ]
 }
