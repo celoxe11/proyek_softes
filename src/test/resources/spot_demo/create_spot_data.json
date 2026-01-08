@@ -1,6 +1,7 @@
 {
   "name": "Sales Performance Analysis 2026",
   "type": "Sales",
-  "renderer": "Table",
-  "aggregator": "Count"
+  "renderer": "Table Barchart",
+  "aggregator": "Count",
+  "fields": ["Account Name", "Opportunity Name"]
 }

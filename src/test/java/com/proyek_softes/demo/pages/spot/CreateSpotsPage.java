@@ -33,9 +33,10 @@ public class CreateSpotsPage {
     }
 
     /**
-     * Waits for the configuration GUI (pivot table) to load after selecting type
+     * Waits for the configuration GUI (pivot table) to load after selecting
+     * type
      */
-    public void waitForConfigurationToLoad() {
+    private void waitForConfigurationToLoad() {
         try {
             wait.until(ExpectedConditions.presenceOfElementLocated(By.id("output")));
             wait.until(ExpectedConditions.presenceOfElementLocated(By.className("pvtUi")));
@@ -49,9 +50,10 @@ public class CreateSpotsPage {
 
     /**
      * Selects the chart/table renderer type from dropdown
+     *
      * @param rendererType e.g., "Table", "Bar Chart", "Line Chart", "Pie Chart"
      */
-    public void selectRenderer(String rendererType) {
+    private void selectRenderer(String rendererType) {
         try {
             By rendererDropdown = By.className("pvtRenderer");
             WebElement dropdown = wait.until(ExpectedConditions.presenceOfElementLocated(rendererDropdown));
@@ -67,9 +69,10 @@ public class CreateSpotsPage {
 
     /**
      * Selects the aggregation function from dropdown
+     *
      * @param aggregator e.g., "Count", "Sum", "Average", "Maximum", "Minimum"
      */
-    public void selectAggregator(String aggregator) {
+    private void selectAggregator(String aggregator) {
         try {
             By aggregatorDropdown = By.className("pvtAggregator");
             WebElement dropdown = wait.until(ExpectedConditions.presenceOfElementLocated(aggregatorDropdown));
@@ -84,31 +87,63 @@ public class CreateSpotsPage {
     }
 
     /**
-     * Drags a field from unused area to rows area using JavaScript
-     * @param fieldName The name of the field to drag (e.g., "Account Name", "Opportunity Name")
+     * Select attribute
+     *
+     * @param aggregator e.g., "Sum", "Average", "Maximum", "Minimum"
+     * @param attribute e.g., "Amount", "Quantity"
      */
-    public void dragFieldToRows(String fieldName) {
+    private void selectAttribute(String aggregator, String attribute) {
         try {
-            String script = 
-                "var unused = document.querySelector('.pvtUnused');" +
-                "var rows = document.querySelector('.pvtRows');" +
-                "if (!unused || !rows) {" +
-                "  return 'ERROR: Containers not found';" +
-                "}" +
-                "var field = Array.from(unused.querySelectorAll('.pvtAttr')).find(function(el) { return el.textContent.includes('" + fieldName + "'); });" +
-                "if (field && rows) {" +
-                "  var li = field.closest('li');" +
-                "  rows.appendChild(li);" +
-                "  if (typeof $ !== 'undefined' && $(rows).sortable) {" +
-                "    $(rows).sortable('refresh');" +
-                "  }" +
-                "  if (typeof c !== 'undefined' && c.pivot) {" +
-                "    c.pivot();" +
-                "  }" +
-                "  return 'SUCCESS';" +
-                "}" +
-                "return 'ERROR: Field not found';";
-            
+            if (aggregator.equals("Sum") || aggregator.equals("Average")
+                    || aggregator.equals("Maximum") || aggregator.equals("Minimum")) {
+                // If numeric aggregation, select attribute field
+                By attributeDropdown = By.className("pvtAttrDropdown");
+                WebElement attrDropdown = wait.until(ExpectedConditions.presenceOfElementLocated(attributeDropdown));
+                Select attrSelect = new Select(attrDropdown);
+                // For simplicity, select the first numeric field available
+                if (attribute != null && !attribute.isEmpty()) {
+                    attrSelect.selectByVisibleText(attribute);
+                } else {
+                    attrSelect.selectByIndex(0); // Select first option if none specified
+                }
+                Thread.sleep(500); // Wait for attribute to apply
+                System.out.println("  → Selected attribute for aggregation");
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException("Thread was interrupted while selecting aggregator", e);
+        }
+
+    }
+
+    /**
+     * Drags a field from unused area to rows area using JavaScript
+     *
+     * @param fieldName The name of the field to drag (e.g., "Account Name",
+     * "Opportunity Name")
+     */
+    private void dragFieldToRows(String fieldName) {
+        try {
+            String script
+                    = "var unused = document.querySelector('.pvtUnused');"
+                    + "var rows = document.querySelector('.pvtRows');"
+                    + "if (!unused || !rows) {"
+                    + "  return 'ERROR: Containers not found';"
+                    + "}"
+                    + "var field = Array.from(unused.querySelectorAll('.pvtAttr')).find(function(el) { return el.textContent.includes('" + fieldName + "'); });"
+                    + "if (field && rows) {"
+                    + "  var li = field.closest('li');"
+                    + "  rows.appendChild(li);"
+                    + "  if (typeof $ !== 'undefined' && $(rows).sortable) {"
+                    + "    $(rows).sortable('refresh');"
+                    + "  }"
+                    + "  if (typeof c !== 'undefined' && c.pivot) {"
+                    + "    c.pivot();"
+                    + "  }"
+                    + "  return 'SUCCESS';"
+                    + "}"
+                    + "return 'ERROR: Field not found';";
+
             Object result = ((org.openqa.selenium.JavascriptExecutor) driver).executeScript(script);
             System.out.println("  → Drag result for '" + fieldName + "': " + result);
             Thread.sleep(1500); // Wait for pivot table to update
@@ -119,17 +154,150 @@ public class CreateSpotsPage {
     }
 
     /**
-     * Configures basic spot settings with renderer and aggregator
-     * Note: Full drag-and-drop configuration of rows/columns is complex and may require
+     * Drags a field from unused area to columns area using JavaScript
+     * (Used for Accounts type configuration)
+     *
+     * @param fieldName The name of the field to drag (e.g., "Name", "Industry")
+     */
+    private void dragFieldToCols(String fieldName) {
+        try {
+            String script
+                    = "var unused = document.querySelector('.pvtUnused');"
+                    + "var cols = document.querySelector('.pvtCols');"
+                    + "if (!unused || !cols) {"
+                    + "  return 'ERROR: Containers not found';"
+                    + "}"
+                    + "var field = Array.from(unused.querySelectorAll('.pvtAttr')).find(function(el) { return el.textContent.includes('" + fieldName + "'); });"
+                    + "if (field && cols) {"
+                    + "  var li = field.closest('li');"
+                    + "  cols.appendChild(li);"
+                    + "  if (typeof $ !== 'undefined' && $(cols).sortable) {"
+                    + "    $(cols).sortable('refresh');"
+                    + "  }"
+                    + "  if (typeof c !== 'undefined' && c.pivot) {"
+                    + "    c.pivot();"
+                    + "  }"
+                    + "  return 'SUCCESS';"
+                    + "}"
+                    + "return 'ERROR: Field not found';";
+
+            Object result = ((org.openqa.selenium.JavascriptExecutor) driver).executeScript(script);
+            System.out.println("  → Drag to cols result for '" + fieldName + "': " + result);
+            Thread.sleep(1500); // Wait for pivot table to update
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException("Thread was interrupted while dragging field to cols", e);
+        }
+    }
+
+    /**
+     * Clears all configured spots by dragging fields from rows/cols back to
+     * unused area This is useful for the edit functionality to reset the
+     * configuration
+     */
+    private void clearSpots() {
+        try {
+            String script
+                    = "var rows = document.querySelector('.pvtRows');"
+                    + "var cols = document.querySelector('.pvtCols');"
+                    + "var unused = document.querySelector('.pvtUnused');"
+                    + "if (!rows || !cols || !unused) {"
+                    + "  return 'ERROR: Containers not found';"
+                    + "}"
+                    + // Move all items from rows to unused
+                    "var rowItems = rows.querySelectorAll('li');"
+                    + "for (var i = 0; i < rowItems.length; i++) {"
+                    + "  unused.appendChild(rowItems[i]);"
+                    + "}"
+                    + // Move all items from cols to unused
+                    "var colItems = cols.querySelectorAll('li');"
+                    + "for (var i = 0; i < colItems.length; i++) {"
+                    + "  unused.appendChild(colItems[i]);"
+                    + "}"
+                    + // Refresh sortable and pivot table
+                    "if (typeof $ !== 'undefined') {"
+                    + "  if ($(unused).sortable) $(unused).sortable('refresh');"
+                    + "  if ($(rows).sortable) $(rows).sortable('refresh');"
+                    + "  if ($(cols).sortable) $(cols).sortable('refresh');"
+                    + "}"
+                    + "if (typeof c !== 'undefined' && c.pivot) {"
+                    + "  c.pivot();"
+                    + "}"
+                    + "return 'SUCCESS: All fields cleared';";
+
+            Object result = ((org.openqa.selenium.JavascriptExecutor) driver).executeScript(script);
+            System.out.println("  → Clear spots result: " + result);
+            Thread.sleep(1000); // Wait for pivot table to update
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException("Thread was interrupted while clearing spots", e);
+        }
+    }
+
+    /**
+     * Clears all configured spots for Accounts type by dragging fields from
+     * cols back to unused area The Accounts type uses columns instead of rows
+     */
+    private void clearSpotsAccounts() {
+        try {
+            String script
+                    = "var cols = document.querySelector('.pvtCols');"
+                    + "var unused = document.querySelector('.pvtUnused');"
+                    + "if (!cols || !unused) {"
+                    + "  return 'ERROR: Containers not found';"
+                    + "}"
+                    + // Move all items from cols to unused
+                    "var colItems = cols.querySelectorAll('li');"
+                    + "for (var i = 0; i < colItems.length; i++) {"
+                    + "  unused.appendChild(colItems[i]);"
+                    + "}"
+                    + // Refresh sortable and pivot table
+                    "if (typeof $ !== 'undefined') {"
+                    + "  if ($(unused).sortable) $(unused).sortable('refresh');"
+                    + "  if ($(cols).sortable) $(cols).sortable('refresh');"
+                    + "}"
+                    + "if (typeof c !== 'undefined' && c.pivot) {"
+                    + "  c.pivot();"
+                    + "}"
+                    + "return 'SUCCESS: All cols fields cleared';";
+
+            Object result = ((org.openqa.selenium.JavascriptExecutor) driver).executeScript(script);
+            System.out.println("  → Clear spots (Accounts) result: " + result);
+            Thread.sleep(1000); // Wait for pivot table to update
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException("Thread was interrupted while clearing spots (Accounts)", e);
+        }
+    }
+
+    /**
+     * Configures basic spot settings with renderer and aggregator Note: Full
+     * drag-and-drop configuration of rows/columns is complex and may require
      * JavaScript execution or Actions class with precise coordinates
      */
-    public void configureSpot(String rendererType, String aggregator) {
+    private void configureSpot(String rendererType, String aggregator, String attribute, String[] fields, String type) {
         waitForConfigurationToLoad();
-        
-        // Drag default fields to rows (Account Name and Opportunity Name)
-        dragFieldToRows("Account Name");
-        dragFieldToRows("Opportunity Name");
-        
+
+        // Clear existing configuration first based on type
+        if ("Accounts".equals(type)) {
+            clearSpotsAccounts();
+        } else {
+            clearSpots();
+        }
+
+        System.out.println("  → Configuring spot with renderer: " + rendererType + ", aggregator: " + aggregator + ", attribute: " + attribute + ", fields: " + (fields != null ? String.join(", ", fields) : "none") + ", type: " + type);
+
+        // Drag specified fields based on type
+        if (fields != null) {
+            for (String field : fields) {
+                if ("Accounts".equals(type)) {
+                    dragFieldToCols(field);
+                } else {
+                    dragFieldToRows(field);
+                }
+            }
+        }
+
         // Wait and check if table rendered
         try {
             Thread.sleep(2000);
@@ -138,31 +306,36 @@ public class CreateSpotsPage {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
-        
+
         if (rendererType != null && !rendererType.isEmpty()) {
             selectRenderer(rendererType);
         }
-        
+
         if (aggregator != null && !aggregator.isEmpty()) {
             selectAggregator(aggregator);
         }
-        
+
+        if (aggregator.equals("Sum") || aggregator.equals("Average")
+                || aggregator.equals("Maximum") || aggregator.equals("Minimum")) {
+            selectAttribute(aggregator, attribute);
+        }
+
         // Additional wait for final render
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
-        
+
         // Trigger form snapshot to save configuration state
         // This JavaScript executes the same snapshot function used by the save buttons
         try {
             String result = (String) ((org.openqa.selenium.JavascriptExecutor) driver).executeScript(
-                "if (typeof snapshotForm === 'function' && document.getElementById('EditView')) {" +
-                "  snapshotForm(document.getElementById('EditView'));" +
-                "  return 'Snapshot executed';" +
-                "}" +
-                "return 'Snapshot function not found';"
+                    "if (typeof snapshotForm === 'function' && document.getElementById('EditView')) {"
+                    + "  snapshotForm(document.getElementById('EditView'));"
+                    + "  return 'Snapshot executed';"
+                    + "}"
+                    + "return 'Snapshot function not found';"
             );
             System.out.println("  → " + result);
             Thread.sleep(1000); // Wait for snapshot to complete
@@ -225,17 +398,26 @@ public class CreateSpotsPage {
             // Wait for configuration to load after selecting type
             Thread.sleep(3000); // Increased wait time for configuration to fully load
 
+            // Parse fields array from JSON string
+            String[] fields = null;
+            String fieldsData = data.get("fields");
+            if (fieldsData != null && !fieldsData.isEmpty()) {
+                // Remove brackets and quotes, then split by comma
+                fieldsData = fieldsData.replaceAll("[\\[\\]\"]", "").trim();
+                if (!fieldsData.isEmpty()) {
+                    fields = fieldsData.split("\\s*,\\s*");
+                }
+            }
+
             // Configure spot if configuration data provided
-            if (data.get("renderer") != null || data.get("aggregator") != null) {
-                configureSpot(data.get("renderer"), data.get("aggregator"));
+            if (data.get("renderer") != null || data.get("aggregator") != null || data.get("attribute") != null || fields != null) {
+                configureSpot(data.get("renderer"), data.get("aggregator"), data.get("attribute"), fields, type);
             } else {
                 // Even if no renderer/aggregator specified, wait for default configuration
                 waitForConfigurationToLoad();
                 System.out.println("  → Using default configuration without changes");
                 Thread.sleep(1000);
             }
-
-
 
             System.out.println("  → Filled spot data: " + data.get("name") + " (" + data.get("type") + ")");
 
@@ -273,10 +455,13 @@ public class CreateSpotsPage {
 
     public boolean isSpotSavedSuccessfully(String spotName) {
         try {
-            By pageTitle = By.className("module-title-text");
+            By pageTitle = By.cssSelector(".moduleTitle h2");
             String title = wait.until(ExpectedConditions.presenceOfElementLocated(pageTitle)).getText();
+            System.out.println("Page title after save: " + title);
+            System.out.println("Expected spot name: " + spotName);
             return title.toLowerCase().contains(spotName.toLowerCase());
         } catch (Exception e) {
+            System.out.println("Error verifying spot save: " + e.getMessage());
             return false;
         }
     }

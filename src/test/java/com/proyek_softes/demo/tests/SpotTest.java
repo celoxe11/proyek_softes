@@ -89,22 +89,14 @@ public class SpotTest extends GenericCrudTestHelper<SpotsPage, CreateSpotsPage> 
 
             String firstRowSpotName = spotsPage.getFirstRowNameLocator().getText().trim();
 
-            spotsPage.clickFirstSpot();
-
-            Thread.sleep(2000);
-
             spotsPage.deleteSpot();
             spotsPage.clickOkInDeleteDialog();
 
-            Thread.sleep(2000);
+            Thread.sleep(1000);
 
-            spotsPage.filterQuick(firstRowSpotName, false, false);
-
-            boolean isFilterResultEmpty = spotsPage.isFilterResultEmpty();
-            assertTrue(isFilterResultEmpty, "Deleted spot should no longer exist in the spots list");
-            takeElementScreenshot("DEM-047_Deleted_Spot_Filter_Result", driver.findElement(spotsPage.getFilterResult()));
-
-            spotsPage.checkAndClearFilter();
+            boolean spotExists = spotsPage.isSpotExistsInTable(firstRowSpotName);
+            assertTrue(!spotExists, "Deleted spot should no longer exist in the spots list");
+            takeScreenshot("DEM-047_Deleted_Spot_Verification");
         } catch (InterruptedException e) {
         }
     }

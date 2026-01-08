@@ -3,5 +3,7 @@
   "name": "Sales & Accounts Performance Analysis 2026",
   "type": "Accounts",
   "renderer": "Table Barchart",
-  "aggregator": "Sum"
+  "aggregator": "Sum",
+  "attribute": "Name",
+  "fields": ["Name", "Industry"]
 }

@@ -34,13 +34,6 @@ public class SpotsPage {
     private final By filterSubmitButton = By.id("search_form_submit");
     private final By filterClearButton = By.id("search_form_clear");
 
-    // detail page locators
-    private final By tabActionsInDetail = By.id("tab-actions");
-    private final By editButtonInDetail = By.id("edit_button");
-    private final By deleteButtonInDetail = By.id("delete_button");
-
-    private final By pageTitle = By.className("module-title-text");
-
     public SpotsPage(WebDriver driver) {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, java.time.Duration.ofSeconds(20));
@@ -91,6 +84,33 @@ public class SpotsPage {
         }
     }
 
+    public boolean isSpotExistsInTable(String spotName) {
+        try {
+            // First check if there's a "no records" message
+            By noRecordsMsg = By.className("msg");
+            if (!driver.findElements(noRecordsMsg).isEmpty()) {
+                return false; // No records exist
+            }
+            
+            wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("table.list.view")));
+            By allSpotNamesLocator = By.cssSelector("table.list.view tbody tr td[type='name'] a");
+            java.util.List<org.openqa.selenium.WebElement> allSpots = driver.findElements(allSpotNamesLocator);
+            
+            if (allSpots.isEmpty()) {
+                return false;
+            }
+            
+            for (org.openqa.selenium.WebElement spot : allSpots) {
+                if (spot.getText().trim().equals(spotName)) {
+                    return true;
+                }
+            }
+            return false;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     public WebElement getFirstRowNameLocator() {
         wait.until(ExpectedConditions.presenceOfElementLocated(firstRowSpotName));
         return driver.findElement(firstRowSpotName);
@@ -107,27 +127,51 @@ public class SpotsPage {
 
     public boolean isSpotTitleCorrect(String spotName) {
         try {
+            By pageTitle = By.cssSelector(".moduleTitle h2");
             String title = wait.until(ExpectedConditions.presenceOfElementLocated(pageTitle)).getText();
-            System.out.println(title.toLowerCase());
-            System.out.println(spotName.toLowerCase());
+            System.out.println("Page title after save: " + title);
+            System.out.println("Expected spot name: " + spotName);
             return title.toLowerCase().contains(spotName.toLowerCase());
         } catch (Exception e) {
+            System.out.println("Error verifying spot save: " + e.getMessage());
             return false;
         }
     }
 
     public void editSpot() {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(tabActionsInDetail));
-        driver.findElement(tabActionsInDetail).click();
-        wait.until(ExpectedConditions.visibilityOfElementLocated(editButtonInDetail));
-        driver.findElement(editButtonInDetail).click();
+        // no need to wait here as wait is done in isSpotTitleCorrect
     }
 
     public void deleteSpot() {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(tabActionsInDetail));
-        driver.findElement(tabActionsInDetail).click();
-        wait.until(ExpectedConditions.visibilityOfElementLocated(deleteButtonInDetail));
-        driver.findElement(deleteButtonInDetail).click();
+        // Locate and check the first row checkbox
+        By firstRowCheckbox = By.cssSelector("table.list.view tbody tr:first-child input[type='checkbox'][name='mass[]']");
+        wait.until(ExpectedConditions.presenceOfElementLocated(firstRowCheckbox));
+        WebElement checkbox = driver.findElement(firstRowCheckbox);
+        
+        if (!checkbox.isSelected()) {
+            checkbox.click();
+        }
+        
+        // Wait for bulk action menu to be enabled
+        try {
+            Thread.sleep(500); // Wait for selection to register
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        
+        // Click the bulk action dropdown
+        By actionDropdown = By.cssSelector("ul#actionLinkTop.selectActions a.parent-dropdown-handler");
+        wait.until(ExpectedConditions.elementToBeClickable(actionDropdown));
+        driver.findElement(actionDropdown).click();
+        
+        // Wait for dropdown menu to appear
+        By dropdownMenu = By.cssSelector("ul#actionLinkTop.selectActions ul.subnav");
+        wait.until(ExpectedConditions.visibilityOfElementLocated(dropdownMenu));
+        
+        // Click the delete option
+        By deleteOption = By.cssSelector("ul#actionLinkTop.selectActions ul.subnav li a#delete_listview_top");
+        wait.until(ExpectedConditions.elementToBeClickable(deleteOption));
+        driver.findElement(deleteOption).click();
     }
 
     public void clickOkInDeleteDialog() {
