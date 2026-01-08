@@ -11,6 +11,7 @@ import com.proyek_softes.demo.pages.campaign.CreateCampaignEmailPage;
 import com.proyek_softes.demo.pages.campaign.CreateCampaignNewsletterPage;
 import com.proyek_softes.demo.pages.campaign.CreateCampaignNonEmailPage;
 import com.proyek_softes.demo.pages.campaign.CreateCampaignSurveyPage;
+import com.proyek_softes.demo.pages.campaign.CreatePersonFormPage;
 import com.proyek_softes.demo.pages.campaign.NavigationChecker;
 import com.proyek_softes.demo.utils.CampaignDataProvider;
 
@@ -269,10 +270,44 @@ public class CampaignTest extends GenericCrudTestHelper<CampaignsPage, CreateCam
         takeScreenshot("DEM-057_Campaign_Diagnostics_Page_Access");
     }
 
-    @Test
+    @Test(dataProvider = "createPersonFormData", dataProviderClass = CampaignDataProvider.class)
     @Description("DEM-058")
-    public void testDem058() {
+    public void testDem058(Map<String, String> testData) {
+        try {
+            login("will", "will");
+            CampaignsPage campaignsPage = new CampaignsPage(driver);
+            campaignsPage.navigateToCampaignsModule();
+            campaignsPage.navigateToCreateCampaign();
+            campaignsPage.selectNonEmailCampaign();
 
+            CreateCampaignNonEmailPage createCampaignNonEmailPage = new CreateCampaignNonEmailPage(driver);
+            createCampaignNonEmailPage.addInformationFromData(testData);
+
+            campaignsPage.navigateToCreatePersonForm();
+
+            CreatePersonFormPage createPersonFormPage = new CreatePersonFormPage(driver);
+            createPersonFormPage.clickAddAllFields();
+            Thread.sleep(600);
+            createPersonFormPage.clickNext();
+            Thread.sleep(600);
+
+            createPersonFormPage.addInformationFromData(testData);
+            createPersonFormPage.clickGenerateForm();
+
+            Thread.sleep(1000);
+
+            createPersonFormPage.clickSaveWebForm();
+            Thread.sleep(1000);
+
+            createPersonFormPage.clickWebToPersonFormLink();
+            Thread.sleep(2000);
+
+            boolean isFileNameCorrect = createPersonFormPage.verifyDownloadedWebToLeadForm();
+            assertTrue(isFileNameCorrect, "Downloaded web to lead form file name should be correct");
+            createPersonFormPage.takeScreenshotOfDownloadsPage("DEM-058_Downloaded_Web_To_Lead_Form_Verification");
+
+        } catch (InterruptedException e) {
+        }
     }
 
 }

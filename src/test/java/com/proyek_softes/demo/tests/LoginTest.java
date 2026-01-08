@@ -80,6 +80,12 @@ public class LoginTest extends BaseTest {
         boolean isInSuiteAssuredPage = welcomePage.isInSuiteAssuredPage();
         assertTrue(isInSuiteAssuredPage, "Should be in Suite Assured page after clicking Learn More");
 
+        try {
+            Thread.sleep(2000); // wait for page to load
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
         // take screenshot of current URL page
         takeScreenshot("DEM-003_SuiteAssuredPage");
     }

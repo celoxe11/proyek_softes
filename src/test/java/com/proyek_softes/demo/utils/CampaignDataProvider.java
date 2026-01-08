@@ -36,4 +36,9 @@ public class CampaignDataProvider extends BaseDataProvider {
         return getTestData(ENTITY_FOLDER, "create_survey");
     }
 
+    @DataProvider(name = "createPersonFormData")
+    public static Object[][] createPersonFormData() {
+        return getTestData(ENTITY_FOLDER, "create_person_form");
+    }
+
 }
