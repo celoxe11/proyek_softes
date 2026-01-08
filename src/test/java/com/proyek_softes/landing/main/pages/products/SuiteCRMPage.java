@@ -11,12 +11,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
-/**
- * Page Object Model untuk halaman SuiteCRM Product
- * URL: https://suitecrm.com/suitecrm/
- * 
- * Memisahkan locators dan interaksi UI dari logika test
- */
+
 public class SuiteCRMPage {
 
     private WebDriver driver;
@@ -25,6 +20,27 @@ public class SuiteCRMPage {
 
     // Expected URL untuk halaman ini
     public static final String PAGE_URL = "https://suitecrm.com/suitecrm/";
+
+    /**
+     * Inner class to hold active case study info
+     */
+    public static class CaseStudyInfo {
+        private String title;
+        private WebElement button;
+
+        public CaseStudyInfo(String title, WebElement button) {
+            this.title = title;
+            this.button = button;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public WebElement getButton() {
+            return button;
+        }
+    }
 
     // Expected URL setelah klik CRM link
     public static final String CRM_PAGE_URL = "https://suitecrm.com/what-is-crm/";
@@ -77,7 +93,7 @@ public class SuiteCRMPage {
             WebElement link = findCRMLink();
 
             if (link == null) {
-                System.out.println("❌ Link 'Customer Relationship Management' tidak ditemukan");
+                System.out.println("Link 'Customer Relationship Management' tidak ditemukan");
                 return false;
             }
 
@@ -85,25 +101,50 @@ public class SuiteCRMPage {
             js.executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", link);
             Thread.sleep(500);
 
-            // Highlight element sebelum klik (untuk debugging visual)
-            js.executeScript("arguments[0].style.border='3px solid red'", link);
-
             System.out.println("📍 Link ditemukan: " + link.getText());
             System.out.println("📍 Link href: " + link.getAttribute("href"));
+            
+            String currentWindowHandle = driver.getWindowHandle();
+            int initialWindowCount = driver.getWindowHandles().size();
 
             // Klik link
             try {
                 link.click();
             } catch (Exception e) {
                 // Fallback ke JavaScript click
+                System.out.println("Click gagal, mencoba JS click");
                 js.executeScript("arguments[0].click();", link);
             }
+            
+            // Wait untuk navigation atau new tab
+            Thread.sleep(2000);
+            
+            // Check jika ada tab baru yang terbuka
+            if (driver.getWindowHandles().size() > initialWindowCount) {
+                System.out.println("Tab baru terdeteksi, switching");
+                for (String windowHandle : driver.getWindowHandles()) {
+                    if (!windowHandle.equals(currentWindowHandle)) {
+                        driver.switchTo().window(windowHandle);
+                        break;
+                    }
+                }
+            }
+            
+            // Wait untuk URL berubah
+            try {
+                wait.until(driver -> driver.getCurrentUrl().contains("what-is-crm"));
+                System.out.println("URL berhasil berubah ke: " + driver.getCurrentUrl());
+            } catch (Exception e) {
+                System.out.println("URL tidak berubah dalam waktu yang ditentukan");
+                System.out.println("Current URL: " + driver.getCurrentUrl());
+            }
 
-            System.out.println("✓ Berhasil klik link 'Customer Relationship Management'");
+            System.out.println("Berhasil klik link 'Customer Relationship Management'");
             return true;
 
         } catch (Exception e) {
-            System.out.println("❌ Gagal klik CRM link: " + e.getMessage());
+            System.out.println("Gagal klik CRM link: " + e.getMessage());
+            e.printStackTrace();
             return false;
         }
     }
@@ -162,9 +203,9 @@ public class SuiteCRMPage {
         try {
             String currentUrl = driver.getCurrentUrl();
             boolean isCorrect = currentUrl.equals(CRM_PAGE_URL) || currentUrl.contains("what-is-crm");
-            System.out.println("📍 Current URL: " + currentUrl);
-            System.out.println("📍 Expected URL: " + CRM_PAGE_URL);
-            System.out.println("✓ URL Match: " + isCorrect);
+            System.out.println("Current URL: " + currentUrl);
+            System.out.println("Expected URL: " + CRM_PAGE_URL);
+            System.out.println("URL Match: " + isCorrect);
             return isCorrect;
         } catch (Exception e) {
             return false;
@@ -208,9 +249,9 @@ public class SuiteCRMPage {
             });
 
             Thread.sleep(1000); // Extra wait untuk dynamic content
-            System.out.println("✓ Page fully loaded");
+            System.out.println("Page fully loaded");
         } catch (Exception e) {
-            System.out.println("⚠️ Warning: Page load wait timeout");
+            System.out.println("Warning: Page load wait timeout");
         }
     }
 
@@ -237,7 +278,7 @@ public class SuiteCRMPage {
                 clickButton(button, "Try For Free");
             }
         } catch (Exception e) {
-            System.out.println("❌ Failed to click Try For Free: " + e.getMessage());
+            System.out.println("Failed to click Try For Free: " + e.getMessage());
         }
     }
 
@@ -252,7 +293,7 @@ public class SuiteCRMPage {
                 clickButton(button, "Book Demo");
             }
         } catch (Exception e) {
-            System.out.println("❌ Failed to click Book Demo: " + e.getMessage());
+            System.out.println("Failed to click Book Demo: " + e.getMessage());
         }
     }
 
@@ -267,7 +308,7 @@ public class SuiteCRMPage {
                 clickButton(button, "Get in Touch");
             }
         } catch (Exception e) {
-            System.out.println("❌ Failed to click Get in Touch: " + e.getMessage());
+            System.out.println("Failed to click Get in Touch: " + e.getMessage());
         }
     }
 
@@ -300,7 +341,7 @@ public class SuiteCRMPage {
             try {
                 WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(selector));
                 if (element != null && element.isDisplayed()) {
-                    System.out.println("✓ Found button: " + buttonText);
+                    System.out.println("Found button: " + buttonText);
                     return element;
                 }
             } catch (Exception e) {
@@ -308,7 +349,7 @@ public class SuiteCRMPage {
             }
         }
 
-        System.out.println("❌ Button not found: " + buttonText);
+        System.out.println("Button not found: " + buttonText);
         return null;
     }
 
@@ -326,9 +367,9 @@ public class SuiteCRMPage {
                 js.executeScript("arguments[0].click();", button);
             }
 
-            System.out.println("✓ Clicked button: " + buttonName);
+            System.out.println("Clicked button: " + buttonName);
         } catch (Exception e) {
-            System.out.println("❌ Failed to click: " + buttonName + " - " + e.getMessage());
+            System.out.println("Failed to click: " + buttonName + " - " + e.getMessage());
         }
     }
 
@@ -337,8 +378,87 @@ public class SuiteCRMPage {
     // ========================================
 
     /**
-     * Get active case study title from slider
+     * Get active case study title and button together
+     * This prevents carousel rotation issue between getting title and clicking button
      */
+    public CaseStudyInfo getActiveCaseStudyInfo() {
+        try {
+            // Scroll to case study section
+            js.executeScript("window.scrollTo(0, document.body.scrollHeight * 0.7);");
+            Thread.sleep(1000);
+
+            // Find active testimonial/case study title
+            WebElement titleElement = null;
+            String title = "Case Study";
+
+            By[] titleSelectors = {
+                    By.cssSelector(".review.active-testimonial h2"),
+                    By.cssSelector(".review.active-testimonial .awb-quote-content"),
+                    By.cssSelector(".active-testimonial h2"),
+                    By.xpath("//div[contains(@class, 'active-testimonial')]//h2"),
+                    By.xpath("//div[contains(@class, 'review') and contains(@class, 'active')]//h2"),
+                    By.cssSelector("#case_study_slider .active h2"),
+                    By.cssSelector(".reviews .review h2")
+            };
+
+            for (By selector : titleSelectors) {
+                try {
+                    WebElement element = driver.findElement(selector);
+                    if (element != null && element.isDisplayed()) {
+                        String text = element.getText().trim();
+                        if (!text.isEmpty()) {
+                            titleElement = element;
+                            title = text;
+                            System.out.println("Found active case study title: " + title);
+                            break;
+                        }
+                    }
+                } catch (Exception e) {
+                    continue;
+                }
+            }
+
+            // Find the READ CASE STUDY button in the same active container
+            WebElement button = null;
+            By[] buttonSelectors = {
+                    By.xpath("//div[contains(@class, 'active-testimonial')]//a[contains(@href, 'pdf')]"),
+                    By.xpath("//div[contains(@class, 'active-testimonial')]//a[contains(text(), 'READ CASE STUDY')]"),
+                    By.cssSelector(".active-testimonial a[href*='pdf']"),
+                    By.xpath("//a[contains(text(), 'READ CASE STUDY')]"),
+                    By.cssSelector("a[href*='.pdf']"),
+                    By.cssSelector(".reviews .button a")
+            };
+
+            for (By selector : buttonSelectors) {
+                try {
+                    button = driver.findElement(selector);
+                    if (button != null && button.isDisplayed()) {
+                        String href = button.getAttribute("href");
+                        System.out.println("Found active case study button: " + href);
+                        break;
+                    }
+                } catch (Exception e) {
+                    continue;
+                }
+            }
+
+            if (button == null) {
+                System.out.println("Warning: Case study button not found, returning title only");
+            }
+
+            return new CaseStudyInfo(title, button);
+
+        } catch (Exception e) {
+            System.out.println("Error getting case study info: " + e.getMessage());
+            return new CaseStudyInfo("Case Study", null);
+        }
+    }
+
+    /**
+     * Get active case study title from slider
+     * @deprecated Use getActiveCaseStudyInfo() instead to avoid carousel rotation issues
+     */
+    @Deprecated
     public String getActiveCaseStudyTitle() {
         try {
             // Scroll to case study section
@@ -362,7 +482,7 @@ public class SuiteCRMPage {
                     if (element != null && element.isDisplayed()) {
                         String title = element.getText().trim();
                         if (!title.isEmpty()) {
-                            System.out.println("✓ Found case study title: " + title);
+                            System.out.println("Found case study title: " + title);
                             return title;
                         }
                     }
@@ -379,11 +499,11 @@ public class SuiteCRMPage {
                 // Continue
             }
 
-            System.out.println("⚠️ Could not find case study title");
+            System.out.println("Could not find case study title");
             return "Case Study";
 
         } catch (Exception e) {
-            System.out.println("❌ Error getting case study title: " + e.getMessage());
+            System.out.println("Error getting case study title: " + e.getMessage());
             return "Case Study";
         }
     }
@@ -413,7 +533,7 @@ public class SuiteCRMPage {
                 try {
                     button = wait.until(ExpectedConditions.elementToBeClickable(selector));
                     if (button != null && button.isDisplayed()) {
-                        System.out.println("✓ Found Read Case Study button");
+                        System.out.println("Found Read Case Study button");
                         break;
                     }
                 } catch (Exception e) {
@@ -426,20 +546,20 @@ public class SuiteCRMPage {
                 Thread.sleep(500);
 
                 String href = button.getAttribute("href");
-                System.out.println("📍 Case Study URL: " + href);
+                System.out.println("Case Study URL: " + href);
 
                 try {
                     button.click();
                 } catch (Exception e) {
                     js.executeScript("arguments[0].click();", button);
                 }
-                System.out.println("✓ Clicked Read Case Study button");
+                System.out.println("Clicked Read Case Study button");
             } else {
-                System.out.println("❌ Read Case Study button not found");
+                System.out.println("Read Case Study button not found");
             }
 
         } catch (Exception e) {
-            System.out.println("❌ Error clicking Read Case Study: " + e.getMessage());
+            System.out.println("Error clicking Read Case Study: " + e.getMessage());
         }
     }
 }

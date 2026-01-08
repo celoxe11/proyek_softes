@@ -24,16 +24,17 @@ public class ProductsPage {
     // LOCATORS - Element UI
     // ========================================
 
-    // Main Products Menu - using multiple locators for robustness
-    private By productsMenuLocator = By.cssSelector("li#menu-item-563881 > a");
-    private By productsMenuAlt1 = By.xpath("//nav[@id='menu-main-menu-1']//a[text()='Products']");
-    private By productsMenuAlt2 = By.xpath("//a[contains(text(), 'Products') and contains(@class, 'fusion-')]");
+    // Main Products Menu - berdasarkan inspect element screenshot
+    private By productsMenuLocator = By.cssSelector("li#menu-item-564354 > a");
+    private By productsMenuAlt1 = By.cssSelector("a.fusion-bar-highlight[href*='what-is-suitecrm']");
+    private By productsMenuAlt2 = By.xpath("//span[@class='menu-text' and text()='Products']/parent::a");
     private By productsMenuAlt3 = By.linkText("Products");
 
-    // Sub-menu SuiteCRM
-    private By suiteCRMSubMenuLocator = By.cssSelector("li#menu-item-563882 a");
-    private By suiteCRMSubMenuAlt1 = By.xpath("//nav[@id='menu-main-menu-1']//a[contains(text(), 'SuiteCRM')]");
-    private By suiteCRMSubMenuAlt2 = By.linkText("SuiteCRM");
+    // Sub-menu SuiteCRM - berdasarkan inspect element screenshot
+    private By suiteCRMSubMenuLocator = By.cssSelector("li#menu-item-564355 > a");
+    private By suiteCRMSubMenuAlt1 = By.cssSelector("a[href*='what-is-suitecrm']");
+    private By suiteCRMSubMenuAlt2 = By.xpath("//span[@class='menu-text' and contains(text(), 'Explore SuiteCRM')]/parent::a");
+    private By suiteCRMSubMenuAlt3 = By.partialLinkText("Explore SuiteCRM");
 
     // ========================================
     // CONSTRUCTOR
@@ -127,10 +128,15 @@ public class ProductsPage {
                 // Try alternative locators
                 try {
                     subMenu = wait.until(ExpectedConditions.elementToBeClickable(suiteCRMSubMenuAlt1));
-                    System.out.println("SuiteCRM submenu ditemukan dengan XPath nav");
+                    System.out.println("✓ SuiteCRM submenu ditemukan dengan href what-is-suitecrm");
                 } catch (Exception e2) {
-                    subMenu = wait.until(ExpectedConditions.elementToBeClickable(suiteCRMSubMenuAlt2));
-                    System.out.println("SuiteCRM submenu ditemukan dengan linkText");
+                    try {
+                        subMenu = wait.until(ExpectedConditions.elementToBeClickable(suiteCRMSubMenuAlt2));
+                        System.out.println("✓ SuiteCRM submenu ditemukan dengan XPath menu-text");
+                    } catch (Exception e3) {
+                        subMenu = wait.until(ExpectedConditions.elementToBeClickable(suiteCRMSubMenuAlt3));
+                        System.out.println("✓ SuiteCRM submenu ditemukan dengan partialLinkText");
+                    }
                 }
             }
             
@@ -220,19 +226,24 @@ public class ProductsPage {
             hoverProductsMenu();
             Thread.sleep(500);
 
-            // Cari submenu SuiteASSURED
+            // Cari submenu SuiteASSURED dengan wait yang lebih pendek (3 detik)
+            WebDriverWait shortWait = new WebDriverWait(driver, Duration.ofSeconds(3));
+            
             By[] selectors = {
-                    By.xpath("//li[contains(@class, 'menu-item')]//a[contains(text(), 'SuiteASSURED')]"),
+                    // Primary: menu-item ID (confirmed from DOM: menu-item-564356)
+                    By.cssSelector("li#menu-item-564356 > a"),
+                    // Fallback locators
+                    By.cssSelector("a[href*='suiteassured']"),
                     By.xpath("//a[contains(@href, 'suiteassured')]"),
-                    By.xpath("//a[contains(translate(text(), 'SUITEASSURED', 'suiteassured'), 'suiteassured')]"),
-                    By.cssSelector("a[href*='suiteassured']")
+                    By.partialLinkText("SuiteASSURED")
             };
 
             WebElement subMenu = null;
             for (By selector : selectors) {
                 try {
-                    subMenu = wait.until(ExpectedConditions.elementToBeClickable(selector));
+                    subMenu = shortWait.until(ExpectedConditions.elementToBeClickable(selector));
                     if (subMenu != null && subMenu.isDisplayed()) {
+                        System.out.println("✓ SuiteASSURED submenu ditemukan");
                         break;
                     }
                 } catch (Exception e) {
@@ -246,7 +257,7 @@ public class ProductsPage {
                 return true;
             }
 
-            // Fallback: direct URL
+            // Fallback: direct URL (faster than waiting for timeout)
             System.out.println("Submenu not found, navigating directly...");
             driver.get("https://suitecrm.com/enterprise/suiteassured/");
             return true;

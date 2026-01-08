@@ -142,15 +142,21 @@ public class ProductTest extends BaseLandingTest {
         }
         suiteCRMPage.waitForPageLoad();
 
-        // Get active case study title
-        String caseStudyTitle = suiteCRMPage.getActiveCaseStudyTitle();
-        System.out.println("📍 Active Case Study Title: " + caseStudyTitle);
+        // Get active case study info (title + button)
+        SuiteCRMPage.CaseStudyInfo caseStudyInfo = suiteCRMPage.getActiveCaseStudyInfo();
+        String caseStudyTitle = caseStudyInfo.getTitle();
+        System.out.println("Active Case Study Title: " + caseStudyTitle);
         assertTrue(caseStudyTitle != null && !caseStudyTitle.isEmpty(),
                 "Case study title should not be empty");
         takeScreenshot("PRD-004_CaseStudy_Active");
 
-        // Click Read Case Study button
-        suiteCRMPage.clickReadCaseStudyButton();
+        if (caseStudyInfo.getButton() != null) {
+            caseStudyInfo.getButton().click();
+            System.out.println("Clicked Read Case Study button for: " + caseStudyTitle);
+        } else {
+            System.out.println("Button not found, trying fallback method");
+            suiteCRMPage.clickReadCaseStudyButton();
+        }
         waitSeconds(3); // Wait for PDF to load
 
         // Assert URL contains case study PDF
