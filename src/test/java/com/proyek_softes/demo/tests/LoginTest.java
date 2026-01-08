@@ -91,8 +91,19 @@ public class LoginTest extends BaseTest {
     }
 
     @Test
-    @Description("DEM-104")
-    public void testDem104() {
+    @Description("DEM-173")
+    public void testDem173() {
+        login("will", "will");
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.logout();
+        boolean isInLoginPage = loginPage.isInLoginPage();
+        assertTrue(isInLoginPage, "Should be in login page after logout");
+        takeScreenshot("DEM-173_Login_Page_After_Logout");
+    }
+
+    @Test
+    @Description("DEM-174")
+    public void testDem174() {
         driver.get(baseUrl);
         LoginPage loginPage = new LoginPage(driver);
         loginPage.navigateToDemo8();
@@ -106,17 +117,8 @@ public class LoginTest extends BaseTest {
                 "Should be on dashboard page after login");
 
         // take screenshot
-        takeScreenshot("DEM-104_Login_Page");
+        takeScreenshot("DEM-174_Login_Page");
     }
 
-    @Test
-    @Description("DEM-173")
-    public void testDem173() {
-        login("will", "will");
-        LoginPage loginPage = new LoginPage(driver);
-        loginPage.logout();
-        boolean isInLoginPage = loginPage.isInLoginPage();
-        assertTrue(isInLoginPage, "Should be in login page after logout");
-        takeScreenshot("DEM-173_Login_Page_After_Logout");
-    }
+    
 }

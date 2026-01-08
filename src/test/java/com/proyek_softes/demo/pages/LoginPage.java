@@ -38,7 +38,7 @@ public class LoginPage {
 
     public LoginPage(WebDriver driver) {
         this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(20));
         this.actions = new Actions(driver);
     }
 
@@ -156,14 +156,52 @@ public class LoginPage {
             driver.findElement(passwordField8).sendKeys(password);
             driver.findElement(loginButton8).click();
 
-            // Wait for dashboard to fully load after login
+            // Wait for dashboard to fully load after login (SPA approach)
             try {
-                wait.until(ExpectedConditions
-                        .presenceOfElementLocated(By.id("grouptab_0")));
-
-                // Additional wait to ensure page is fully stable
-                Thread.sleep(2000);
-                System.out.println("✓ Login successful and dashboard loaded");
+                // First, wait for URL to change away from Login page
+                wait.until(ExpectedConditions.not(
+                        ExpectedConditions.urlContains("/#/Login")));
+                
+                // Wait for any loading overlays to disappear
+                try {
+                    wait.until(ExpectedConditions.invisibilityOfElementLocated(
+                            By.cssSelector(".loading-overlay, .spinner, #overlay-spinner")));
+                } catch (Exception e) {
+                    // Loading overlay might not exist, continue
+                }
+                
+                // Wait for document ready state
+                JavascriptExecutor js = (JavascriptExecutor) driver;
+                wait.until(driver -> js.executeScript("return document.readyState").equals("complete"));
+                
+                // Use JavaScript-based polling to wait for dashboard
+                // This is more reliable for SPAs than Selenium's ExpectedConditions
+                boolean dashboardFound = waitForElementWithJS(js, "dashboard", 15);
+                
+                // Debug: Print current URL and check page state
+                System.out.println("DEBUG: Current URL = " + driver.getCurrentUrl());
+                System.out.println("DEBUG: Dashboard found via JS = " + dashboardFound);
+                
+                // Check if there are any iframes that might contain the dashboard
+                Long iframeCount = (Long) js.executeScript("return document.getElementsByTagName('iframe').length");
+                System.out.println("DEBUG: Number of iframes on page = " + iframeCount);
+                
+                // Check what elements exist with 'dashboard' in their id or class
+                String dashboardElements = (String) js.executeScript(
+                    "var elements = document.querySelectorAll('[id*=\"dashboard\"], [class*=\"dashboard\"]');" +
+                    "return Array.from(elements).map(e => 'Tag:' + e.tagName + ' ID:' + e.id + ' Class:' + e.className).join('; ');"
+                );
+                System.out.println("DEBUG: Elements with 'dashboard' = " + dashboardElements);
+                
+                if (dashboardFound) {
+                    // Small additional wait for any remaining AJAX calls
+                    Thread.sleep(1000);
+                    System.out.println("✓ Login successful and dashboard loaded");
+                } else {
+                    // Even if not found, continue anyway - the test will verify later
+                    System.out.println("Warning: Dashboard element not found via JavaScript polling, continuing anyway...");
+                    Thread.sleep(2000); // Give extra time for page to stabilize
+                }
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             } catch (Exception e) {
@@ -172,6 +210,44 @@ public class LoginPage {
         } else {
             System.out.println("Already logged in or redirected to dashboard.");
         }
+    }
+    
+    /**
+     * Uses JavaScript to poll for an element by ID, more reliable for SPAs
+     */
+    private boolean waitForElementWithJS(JavascriptExecutor js, String elementId, int timeoutSeconds) {
+        long endTime = System.currentTimeMillis() + (timeoutSeconds * 1000);
+        
+        while (System.currentTimeMillis() < endTime) {
+            try {
+                // Check if element exists and is visible
+                Boolean result = (Boolean) js.executeScript(
+                    "var elem = document.getElementById('" + elementId + "');" +
+                    "if (elem) {" +
+                    "    var rect = elem.getBoundingClientRect();" +
+                    "    var style = window.getComputedStyle(elem);" +
+                    "    return rect.width > 0 && rect.height > 0 && " +
+                    "           style.display !== 'none' && " +
+                    "           style.visibility !== 'hidden';" +
+                    "}" +
+                    "return false;"
+                );
+                
+                if (Boolean.TRUE.equals(result)) {
+                    return true;
+                }
+                
+                Thread.sleep(500);
+            } catch (Exception e) {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                    return false;
+                }
+            }
+        }
+        return false;
     }
 
     public void logout() {

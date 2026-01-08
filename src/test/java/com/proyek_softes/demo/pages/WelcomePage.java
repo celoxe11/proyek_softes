@@ -29,6 +29,8 @@ public class WelcomePage {
     private final By aboutLink = By.cssSelector(".user-dropdown.user-menu li:nth-child(4) a");
     private final By aboutSuiteCRMHeading = By.xpath("//h3[text()='About SuiteCRM']");
 
+    private final By profileLink = By.cssSelector(".user-dropdown.user-menu li:nth-child(1) a");
+
     public WelcomePage(WebDriver driver) {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
@@ -118,5 +120,27 @@ public class WelcomePage {
             System.out.println("Error navigating to About page: " + e.getMessage());
             return false;
         }
+    }
+
+    public void navigateToProfilePage() {
+        wait.until(ExpectedConditions.presenceOfElementLocated(profileDropdownButton));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(profileDropdownButton));
+        
+        // Hover over the profile button to trigger dropdown
+        actions.moveToElement(driver.findElement(profileDropdownButton)).perform();
+        
+        // Wait for about link to be present in DOM
+        wait.until(ExpectedConditions.presenceOfElementLocated(profileLink));
+        
+        // Give time for CSS transition to complete
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        
+        // Use JavaScript click since normal click may not work with hover dropdown
+        org.openqa.selenium.JavascriptExecutor js = (org.openqa.selenium.JavascriptExecutor) driver;
+        js.executeScript("arguments[0].click();", driver.findElement(profileLink));
     }
 }

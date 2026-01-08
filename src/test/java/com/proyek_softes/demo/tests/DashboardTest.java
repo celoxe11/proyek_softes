@@ -1,9 +1,14 @@
 package com.proyek_softes.demo.tests;
 
+import java.util.Map;
+
 import static org.testng.Assert.assertTrue;
 import org.testng.annotations.Test;
 
+import com.proyek_softes.demo.pages.DashboardPage;
+import com.proyek_softes.demo.pages.ProfilePage;
 import com.proyek_softes.demo.pages.WelcomePage;
+import com.proyek_softes.demo.utils.DashboardDataProvider;
 
 import io.qameta.allure.Description;
 
@@ -20,80 +25,106 @@ public class DashboardTest extends BaseTest {
         takeScreenshot("DEM-172_About_Page");
     }
 
-    // private DashboardPage dashboardPage;
+    @Test
+    @Description("DEM-175")
+    public void testDem175() {
+        login8("will", "will");
+        DashboardPage dashboardPage = new DashboardPage(driver);
+        dashboardPage.waitForPageToLoad();
+        dashboardPage.clickAddDashlets();
+        dashboardPage.clickMyNotesDashlet();
+        dashboardPage.closeModal();
+        boolean hasMyNotes = dashboardPage.hasMyNotesDashlet();
+        assertTrue(hasMyNotes, "My Notes dashlet should be added to the dashboard");
+        takeScreenshot("DEM-175_Dashboard_with_My_Notes_Dashlet");
+    }
 
-    // @Test
-    // public void testDashboardAccess() {
-    //     System.out.println("\nTesting: Dashboard Access");
-    //     login("will", "will");
-    //     dashboardPage = new DashboardPage(driver);
+    @Test(dataProvider = "addTabData", dataProviderClass = DashboardDataProvider.class)
+    @Description("DEM-176")
+    public void testDem176(Map<String, String> testData) {
+        login8("will", "will");
+        DashboardPage dashboardPage = new DashboardPage(driver);
+        dashboardPage.waitForPageToLoad();
+        dashboardPage.clickAddTab();
+        dashboardPage.fillAddDashboardForm(testData);
+        dashboardPage.confirmAddDashboard();
+        dashboardPage.slow();
 
-    //     // Navigate to dashboard and verify
-    //     dashboardPage.navigateToDashboard();
-    //     String dashboardTitle = dashboardPage.getDashboardTitle().trim();
-    //     Assert.assertEquals(dashboardTitle, "SUITECRM DASHBOARD",
-    //             "Dashboard should be accessible after login");
-    //     System.out.println("✅ Dashboard access verified successfully!");
-    // }
+        dashboardPage.waitAndClickNewTab();
+        dashboardPage.slow();
 
-    // @Test(dependsOnMethods = "testDashboardAccess")
-    // public void testAddDashlet() {
-    //     System.out.println("\nTesting: Add Dashlet Functionality");
-    //     // Give some time for page load
-    //     try {
-    //         Thread.sleep(1000);
-    //     } catch (InterruptedException e) {
-    //     }
+        dashboardPage.clickAddDashlets();
+        dashboardPage.slow();
+        
+        dashboardPage.chooseChartAndSelectOpportunity();
+        dashboardPage.slow();
 
-    //     dashboardPage.actionsDropdownClicked();
-    //     dashboardPage.addDashlet();
+        dashboardPage.closeModal();
+        dashboardPage.slow();
+        
+        boolean hasOpportunityChart = dashboardPage.hasOpportunityChart();
+        assertTrue(hasOpportunityChart, "Opportunity chart should be added to the dashboard");
+        takeScreenshot("DEM-176_Dashboard_with_Opportunity_Chart");
+    }
 
-    //     System.out.println("✅ Add Dashlet modal opened successfully!");
-    // }
+    @Test(dataProvider = "editTabData", dataProviderClass = DashboardDataProvider.class)
+    @Description("DEM-177") 
+    public void testDem177(Map<String, String> testData) {
+        login8("will", "will");
+        DashboardPage dashboardPage = new DashboardPage(driver);
+        dashboardPage.waitForPageToLoad();
+        dashboardPage.clickAddTab();
+        dashboardPage.fillAddDashboardForm(testData);
+        dashboardPage.confirmAddDashboard();
+        dashboardPage.slow();
 
-    // @Test(dependsOnMethods = "testAddDashlet")
-    // public void testSearchDashlet() {
-    //     System.out.println("\nTesting: Search Dashlet Functionality");
+        dashboardPage.clickEditTab();
+        dashboardPage.slow();
 
-    //     // Give some time for page load
-    //     try {
-    //         Thread.sleep(1000);
-    //     } catch (InterruptedException e) {
-    //     }
+        dashboardPage.removeLastDashboardTab();
+        dashboardPage.slow();
 
-    //     // Search for "email" dashlet (modal is already open from previous test)
-    //     dashboardPage.searchDashlet("email");
+        dashboardPage.closeEditModal();
+        dashboardPage.slow();
 
-    //     // Verify the dashlet option is visible
-    //     boolean searchSuccess = dashboardPage.isDashletOptionVisible("MyEmailsDashlet_select_icon");
-    //     Assert.assertTrue(searchSuccess, "Email dashlet should be visible in search results");
+        boolean hasOnlyDefaultAndTestDashboard = dashboardPage.hasOnlyDefaultAndTestDashboard();
+        assertTrue(hasOnlyDefaultAndTestDashboard, "Only default and test dashboard should be visible");
+        takeScreenshot("DEM-177_Dashboard_with_Only_Default_and_Test_Dashboard");
+    }
 
-    //     System.out.println("✅ Dashlet search executed and verified successfully!");
+    @Test(dataProvider = "searchData", dataProviderClass = DashboardDataProvider.class)
+    @Description("DEM-178")
+    public void testDem178(Map<String, String> testData) {
+        login8("will", "will");
+        DashboardPage dashboardPage = new DashboardPage(driver);
+        dashboardPage.waitForPageToLoad();
 
-    //     // let the tester see the result before clearing search
-    //     try {
-    //         Thread.sleep(2000);
-    //     } catch (InterruptedException e) {
-    //     }
-    // }
+        dashboardPage.searchDashboard(testData.get("searchTerm"));
+        dashboardPage.slow();
 
-    // @Test(dependsOnMethods = "testSearchDashlet")
-    // public void testClearDashletSearch() {
-    //     System.out.println("\nTesting: Clear Dashlet Search Functionality");
+        boolean hasSearchResults = dashboardPage.hasExpectedSearchResults();
+        assertTrue(hasSearchResults, "Search results should be visible");
+        takeScreenshot("DEM-178_Dashboard_with_Search_Results");
+    }
 
-    //     // Give some time for page load
-    //     try {
-    //         Thread.sleep(1000);
-    //     } catch (InterruptedException e) {
-    //     }
+    @Test(dataProvider="editProfileData", dataProviderClass = DashboardDataProvider.class)
+    @Description("DEM-179")
+    public void testDem179(Map<String, String> testData) {
+        login("will", "will");
+        WelcomePage welcomePage = new WelcomePage(driver);
+        welcomePage.navigateToProfilePage();
 
-    //     // Clear the dashlet search input
-    //     dashboardPage.clearSearchDashlet();
+        ProfilePage profilePage = new ProfilePage(driver);
+        profilePage.addInformationFromData(testData);
+        profilePage.clickSaveButton();
+        try {
+            Thread.sleep(2000); // Wait for save to complete
+        } catch (InterruptedException e) {
+        }
+        
+        boolean isSaved = profilePage.isProfileSavedSuccessfully(testData.get("first_name") + " " + testData.get("last_name"));
+        assertTrue(isSaved, "Profile should be saved successfully");
+        takeScreenshot("DEM-179_Profile_After_Saving");
+    }
 
-    //     // Verify the search input is cleared
-    //     boolean isSearchCleared = dashboardPage.isDashletOptionVisible("MyEmailsDashlet_select_icon");
-    //     Assert.assertTrue(isSearchCleared, "Dashlet search input should be cleared");
-
-    //     System.out.println("✅ Dashlet search cleared successfully!");
-    // }
 }

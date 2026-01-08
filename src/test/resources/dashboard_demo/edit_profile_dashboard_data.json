@@ -1,0 +1,19 @@
+{
+  "first_name": "John",
+  "last_name": "Smith",
+  "title": "Senior Software Engineer",
+  "department": "Engineering",
+  "phone_work": "+1-555-0100",
+  "phone_mobile": "+1-555-0101",
+  "phone_home": "+1-555-0102",
+  "phone_other": "+1-555-0103",
+  "phone_fax": "+1-555-0104",
+  "address_street": "123 Main Street",
+  "address_city": "New York",
+  "address_state": "NY",
+  "address_postalcode": "10001",
+  "address_country": "United States",
+  "messenger_type": "MSN",
+  "messenger_id": "john.smith@msn.com",
+  "description": "Experienced software engineer with expertise in web development and automation testing."
+}
