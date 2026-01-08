@@ -1,0 +1,9 @@
+{
+    "nameBeforeEdit": "Customer Satisfaction Survey",
+    "name": "Employee Engagement Survey",
+    "status": "Draft",
+    "description": "Survey internal untuk mengetahui tingkat keterlibatan dan motivasi karyawan.",
+    "survey_questions_names[0]": "Apakah Anda merasa didukung oleh manajemen?",
+    "survey_questions_names[1]": "Seberapa puas Anda dengan lingkungan kerja saat ini?",
+    "survey_questions_names[2]": "Apa yang dapat perusahaan lakukan untuk meningkatkan motivasi Anda?"
+}

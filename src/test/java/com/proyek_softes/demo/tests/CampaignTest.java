@@ -220,7 +220,8 @@ public class CampaignTest extends GenericCrudTestHelper<CampaignsPage, CreateCam
 
             boolean isFilterResultEmpty = campaignsPage.isFilterResultEmpty();
             assertTrue(isFilterResultEmpty, "Deleted campaign should no longer exist in the campaigns list");
-            takeElementScreenshot("DEM-054_Deleted_Campaign_Filter_Result", driver.findElement(campaignsPage.getFilterResult()));
+            takeElementScreenshot("DEM-054_Deleted_Campaign_Filter_Result",
+                    driver.findElement(campaignsPage.getFilterResult()));
             campaignsPage.checkAndClearFilter();
         } catch (InterruptedException e) {
         }

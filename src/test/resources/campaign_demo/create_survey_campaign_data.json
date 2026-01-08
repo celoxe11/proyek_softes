@@ -1,5 +1,5 @@
 {
-  "name": "Spring 2026 Customer Survey Campaign",
+  "name": "Customer Satisfaction Survey",
   "status": "Planning",
   "description": "Survey campaign to gather customer feedback on Spring 2026 product preferences and satisfaction",
   "budget": "5000",
@@ -8,7 +8,7 @@
   "expectedCost": "4500",
   "impressions": "10000",
   "objective": "Collect customer insights and feedback to improve product offerings and service quality for Spring 2026",
-  "targetListName": "Spring 2026 Survey Recipients",
+  "targetListName": "Enterprise Clients Q1 2026",
   "targetListType": "Default",
   "templateName": "Spring 2026 Survey Invitation Template",
   "templateSubject": "Share Your Feedback - Spring 2026 Survey",

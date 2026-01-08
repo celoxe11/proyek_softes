@@ -23,7 +23,8 @@ public class CreateCampaignSurveyPage {
     private final By selectSurveyButton = By.xpath("//input[@type='button' and contains(@onclick, 'Surveys')]");
 
     private final By firstExistingTargetList = By.xpath("(//li[@class='target-list-item'])[1]/a");
-    private final By createTargetListButton = By.xpath("//input[@value='Create' and @onclick='add_target(\"false\");']");
+    private final By createTargetListButton = By
+            .xpath("//input[@value='Create' and @onclick='add_target(\"false\");']");
 
     private final By saveEmailTemplateButton = By.id("LBL_CREATE_EMAIL_TEMPLATE_BTN");
 
@@ -190,11 +191,13 @@ public class CreateCampaignSurveyPage {
              */
             // Click first existing target list if available
             try {
-                java.util.List<WebElement> existingLists = driver.findElements(By.xpath("//li[@class='target-list-item']"));
+                java.util.List<WebElement> existingLists = driver
+                        .findElements(By.xpath("//li[@class='target-list-item']"));
                 if (!existingLists.isEmpty()) {
                     WebElement firstList = wait.until(ExpectedConditions.elementToBeClickable(firstExistingTargetList));
                     ((org.openqa.selenium.JavascriptExecutor) driver)
-                            .executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", firstList);
+                            .executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});",
+                                    firstList);
                     Thread.sleep(300);
                     firstList.click();
                     Thread.sleep(500);
@@ -203,44 +206,6 @@ public class CreateCampaignSurveyPage {
             } catch (Exception e) {
                 System.out.println("  Note: No existing target lists found or unable to click: " + e.getMessage());
             }
-
-            // Create new target list
-            String targetListName = data.get("targetListName");
-            String targetListType = data.get("targetListType");
-
-            if (targetListName != null && !targetListName.isEmpty()) {
-                // Scroll to create target list section
-                WebElement targetNameField = wait.until(ExpectedConditions.presenceOfElementLocated(inputLocators.get("targetListName")));
-                ((org.openqa.selenium.JavascriptExecutor) driver)
-                        .executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", targetNameField);
-                Thread.sleep(300);
-
-                fillInputFieldFromData("targetListName", targetListName);
-                Thread.sleep(300);
-
-                if (targetListType != null && !targetListType.isEmpty()) {
-                    selectDropdown("targetListType", targetListType);
-                    Thread.sleep(300);
-                }
-
-                // Click Create button
-                WebElement createButton = wait.until(ExpectedConditions.elementToBeClickable(createTargetListButton));
-                ((org.openqa.selenium.JavascriptExecutor) driver)
-                        .executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", createButton);
-                Thread.sleep(300);
-
-                try {
-                    createButton.click();
-                } catch (org.openqa.selenium.ElementClickInterceptedException e) {
-                    System.out.println("  Note: Using JavaScript click for Create button");
-                    ((org.openqa.selenium.JavascriptExecutor) driver)
-                            .executeScript("arguments[0].click();", createButton);
-                }
-
-                Thread.sleep(500);
-                System.out.println("  → Created new target list: " + targetListName);
-            }
-
             next(2);
             Thread.sleep(1000);
 
@@ -260,9 +225,11 @@ public class CreateCampaignSurveyPage {
             }
 
             // Save the email template
-            WebElement saveEmailTemplate = wait.until(ExpectedConditions.presenceOfElementLocated(saveEmailTemplateButton));
+            WebElement saveEmailTemplate = wait
+                    .until(ExpectedConditions.presenceOfElementLocated(saveEmailTemplateButton));
             ((org.openqa.selenium.JavascriptExecutor) driver)
-                    .executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", saveEmailTemplate);
+                    .executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});",
+                            saveEmailTemplate);
             Thread.sleep(300);
 
             try {
@@ -291,9 +258,11 @@ public class CreateCampaignSurveyPage {
             selectDropdown("dateStartMeridiem", data.get("dateStartMeridiem"));
 
             // Scroll to sender information section before filling
-            WebElement fromNameField = wait.until(ExpectedConditions.presenceOfElementLocated(inputLocators.get("fromName")));
+            WebElement fromNameField = wait
+                    .until(ExpectedConditions.presenceOfElementLocated(inputLocators.get("fromName")));
             ((org.openqa.selenium.JavascriptExecutor) driver)
-                    .executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", fromNameField);
+                    .executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});",
+                            fromNameField);
             Thread.sleep(500);
 
             // Fill sender information with explicit waits and validation
@@ -313,9 +282,11 @@ public class CreateCampaignSurveyPage {
             Thread.sleep(1000);
 
             // Verify sender fields are filled (trigger JavaScript validation)
-            WebElement fromAddrField = wait.until(ExpectedConditions.presenceOfElementLocated(inputLocators.get("fromAddr")));
+            WebElement fromAddrField = wait
+                    .until(ExpectedConditions.presenceOfElementLocated(inputLocators.get("fromAddr")));
             ((org.openqa.selenium.JavascriptExecutor) driver)
-                    .executeScript("arguments[0].dispatchEvent(new Event('change', { bubbles: true }));", fromAddrField);
+                    .executeScript("arguments[0].dispatchEvent(new Event('change', { bubbles: true }));",
+                            fromAddrField);
             ((org.openqa.selenium.JavascriptExecutor) driver)
                     .executeScript("arguments[0].dispatchEvent(new Event('blur', { bubbles: true }));", fromAddrField);
 
@@ -375,7 +346,8 @@ public class CreateCampaignSurveyPage {
             // Wait for TinyMCE to initialize
             Thread.sleep(1000);
 
-            // TinyMCE iframe ID is always "email_template_editor_ifr" for the campaign template editor
+            // TinyMCE iframe ID is always "email_template_editor_ifr" for the campaign
+            // template editor
             By iframeLocator = By.id("email_template_editor_ifr");
 
             // Wait for iframe to be present

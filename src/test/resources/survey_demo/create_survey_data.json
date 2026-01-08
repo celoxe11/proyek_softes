@@ -1,0 +1,8 @@
+{
+    "name": "Customer Satisfaction Survey",
+    "status": "Active",
+    "description": "Survey untuk mengukur tingkat kepuasan pelanggan terhadap produk dan layanan.",
+    "survey_questions_names[0]": "Seberapa puas Anda dengan kualitas produk kami?",
+    "survey_questions_names[1]": "Bagaimana pengalaman Anda dengan layanan pelanggan kami?",
+    "survey_questions_names[2]": "Apakah Anda akan merekomendasikan produk kami kepada orang lain?"
+}

@@ -16,7 +16,8 @@ public class WelcomePage {
 
     // Welcome Locators
     private final By welcomeTitle = By.xpath("//div[@id='about_header']/h1");
-    // private final By dashboardButton = By.cssSelector(".navbar-brand.with-home-icon");
+    // private final By dashboardButton =
+    // By.cssSelector(".navbar-brand.with-home-icon");
 
     private final By takeATourButton = By.xpath("//a[contains(text(),'Take a quick tour')]");
     private final By swalNextButton = By.xpath("//button[contains(text(),'Next >')]");
@@ -30,6 +31,8 @@ public class WelcomePage {
     private final By aboutSuiteCRMHeading = By.xpath("//h3[text()='About SuiteCRM']");
 
     private final By profileLink = By.cssSelector(".user-dropdown.user-menu li:nth-child(1) a");
+    private final By employeesLink = By.id("employees_link");
+    private final By supportForumLink = By.id("training_link");
 
     public WelcomePage(WebDriver driver) {
         this.driver = driver;
@@ -91,20 +94,20 @@ public class WelcomePage {
     public void navigateToAboutPage() {
         wait.until(ExpectedConditions.presenceOfElementLocated(profileDropdownButton));
         wait.until(ExpectedConditions.visibilityOfElementLocated(profileDropdownButton));
-        
+
         // Hover over the profile button to trigger dropdown
         actions.moveToElement(driver.findElement(profileDropdownButton)).perform();
-        
+
         // Wait for about link to be present in DOM
         wait.until(ExpectedConditions.presenceOfElementLocated(aboutLink));
-        
+
         // Give time for CSS transition to complete
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
-        
+
         // Use JavaScript click since normal click may not work with hover dropdown
         org.openqa.selenium.JavascriptExecutor js = (org.openqa.selenium.JavascriptExecutor) driver;
         js.executeScript("arguments[0].click();", driver.findElement(aboutLink));
@@ -125,22 +128,87 @@ public class WelcomePage {
     public void navigateToProfilePage() {
         wait.until(ExpectedConditions.presenceOfElementLocated(profileDropdownButton));
         wait.until(ExpectedConditions.visibilityOfElementLocated(profileDropdownButton));
-        
+
         // Hover over the profile button to trigger dropdown
         actions.moveToElement(driver.findElement(profileDropdownButton)).perform();
-        
+
         // Wait for about link to be present in DOM
         wait.until(ExpectedConditions.presenceOfElementLocated(profileLink));
-        
+
         // Give time for CSS transition to complete
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
-        
+
         // Use JavaScript click since normal click may not work with hover dropdown
         org.openqa.selenium.JavascriptExecutor js = (org.openqa.selenium.JavascriptExecutor) driver;
         js.executeScript("arguments[0].click();", driver.findElement(profileLink));
+    }
+
+    public void navigateToEmployeesPage() {
+        wait.until(ExpectedConditions.presenceOfElementLocated(profileDropdownButton));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(profileDropdownButton));
+
+        actions.moveToElement(driver.findElement(profileDropdownButton)).perform();
+
+        wait.until(ExpectedConditions.presenceOfElementLocated(employeesLink));
+
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
+        org.openqa.selenium.JavascriptExecutor js = (org.openqa.selenium.JavascriptExecutor) driver;
+        js.executeScript("arguments[0].click();", driver.findElement(employeesLink));
+    }
+
+    public boolean isInEmployeesPage() {
+        try {
+            wait.until(ExpectedConditions.urlContains("module=Employees"));
+            return driver.getCurrentUrl().contains("module=Employees");
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public void navigateToSupportForumPage() {
+        wait.until(ExpectedConditions.presenceOfElementLocated(profileDropdownButton));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(profileDropdownButton));
+
+        actions.moveToElement(driver.findElement(profileDropdownButton)).perform();
+
+        wait.until(ExpectedConditions.presenceOfElementLocated(supportForumLink));
+
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
+        org.openqa.selenium.JavascriptExecutor js = (org.openqa.selenium.JavascriptExecutor) driver;
+        js.executeScript("arguments[0].click();", driver.findElement(supportForumLink));
+    }
+
+    public boolean isInSupportForumPage() {
+        // Store the original window handle
+        String originalWindow = driver.getWindowHandle();
+
+        // Wait for new tab to open
+        wait.until(ExpectedConditions.numberOfWindowsToBe(2));
+
+        // Switch to the new tab
+        for (String windowHandle : driver.getWindowHandles()) {
+            if (!windowHandle.equals(originalWindow)) {
+                driver.switchTo().window(windowHandle);
+                break;
+            }
+        }
+
+        // Wait for the URL to contain the expected URL
+        wait.until(ExpectedConditions.urlContains("community.suitecrm.com"));
+        return driver.getCurrentUrl().contains("community.suitecrm.com");
     }
 }

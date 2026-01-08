@@ -15,6 +15,41 @@ import io.qameta.allure.Description;
 public class DashboardTest extends BaseTest {
 
     @Test
+    @Description("DEM-169")
+    public void testDem169() {
+        login("will", "will");
+        WelcomePage welcomePage = new WelcomePage(driver);
+        welcomePage.navigateToProfilePage();
+        ProfilePage profilePage = new ProfilePage(driver);
+        boolean isProfilePageVisible = profilePage.isOnProfileEditPage();
+        assertTrue(isProfilePageVisible, "Profile page should be visible");
+        takeScreenshot("DEM-169_Profile_Page");
+    }
+
+    @Test
+    @Description("DEM-170")
+    public void testDem170() {
+        login("will", "will");
+        WelcomePage welcomePage = new WelcomePage(driver);
+        welcomePage.navigateToEmployeesPage();
+        welcomePage.isInEmployeesPage();
+        boolean isEmployeesPageVisible = welcomePage.isInEmployeesPage();
+        assertTrue(isEmployeesPageVisible, "Employees page should be visible");
+        takeScreenshot("DEM-170_Employees_Page");
+    }
+
+    @Test
+    @Description("DEM-171")
+    public void testDem171() {
+        login("will", "will");
+        WelcomePage welcomePage = new WelcomePage(driver);
+        welcomePage.navigateToSupportForumPage();
+        boolean isSupportForumVisible = welcomePage.isInSupportForumPage();
+        assertTrue(isSupportForumVisible, "Support Forum page should be visible");
+        takeScreenshot("DEM-171_Support_Forum_Page");
+    }
+
+    @Test
     @Description("DEM-172")
     public void testDem172() {
         login("will", "will");
@@ -55,20 +90,20 @@ public class DashboardTest extends BaseTest {
 
         dashboardPage.clickAddDashlets();
         dashboardPage.slow();
-        
+
         dashboardPage.chooseChartAndSelectOpportunity();
         dashboardPage.slow();
 
         dashboardPage.closeModal();
         dashboardPage.slow();
-        
+
         boolean hasOpportunityChart = dashboardPage.hasOpportunityChart();
         assertTrue(hasOpportunityChart, "Opportunity chart should be added to the dashboard");
         takeScreenshot("DEM-176_Dashboard_with_Opportunity_Chart");
     }
 
     @Test(dataProvider = "editTabData", dataProviderClass = DashboardDataProvider.class)
-    @Description("DEM-177") 
+    @Description("DEM-177")
     public void testDem177(Map<String, String> testData) {
         login8("will", "will");
         DashboardPage dashboardPage = new DashboardPage(driver);
@@ -107,7 +142,7 @@ public class DashboardTest extends BaseTest {
         takeScreenshot("DEM-178_Dashboard_with_Search_Results");
     }
 
-    @Test(dataProvider="editProfileData", dataProviderClass = DashboardDataProvider.class)
+    @Test(dataProvider = "editProfileData", dataProviderClass = DashboardDataProvider.class)
     @Description("DEM-179")
     public void testDem179(Map<String, String> testData) {
         login("will", "will");
@@ -121,8 +156,9 @@ public class DashboardTest extends BaseTest {
             Thread.sleep(2000); // Wait for save to complete
         } catch (InterruptedException e) {
         }
-        
-        boolean isSaved = profilePage.isProfileSavedSuccessfully(testData.get("first_name") + " " + testData.get("last_name"));
+
+        boolean isSaved = profilePage
+                .isProfileSavedSuccessfully(testData.get("first_name") + " " + testData.get("last_name"));
         assertTrue(isSaved, "Profile should be saved successfully");
         takeScreenshot("DEM-179_Profile_After_Saving");
     }
