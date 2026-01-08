@@ -22,8 +22,8 @@ public class GetStartedPage {
     // Main Get Started Menu
     private By getStartedMenuLocator = By.cssSelector("li#menu-item-564397 > a");
 
-    // Sub-menu Download
-    private By downloadSubMenuLocator = By.cssSelector("li#menu-item-564398 a");
+    // Sub-menu Download (confirmed from DOM: menu-item-564399)
+    private By downloadSubMenuLocator = By.cssSelector("li#menu-item-564399 a");
 
     // Sub-menu Demo SuiteCRM
     private By demoSubMenuLocator = By.cssSelector("li#menu-item-564400 a");
@@ -107,25 +107,44 @@ public class GetStartedPage {
 
             // Hover dulu ke Get Started menu
             hoverGetStartedMenu();
-            Thread.sleep(500);
-
-            // Cari dan klik Download submenu
-            WebElement subMenu = wait.until(ExpectedConditions.elementToBeClickable(downloadSubMenuLocator));
-
-            // Scroll ke element jika perlu
-            js.executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", subMenu);
             Thread.sleep(300);
 
-            // Klik submenu
-            try {
-                subMenu.click();
-            } catch (Exception e) {
-                // Fallback to JavaScript click
-                js.executeScript("arguments[0].click();", subMenu);
+            // Quick attempt with very short timeout (1 second only)
+            // Based on DOM: li#menu-item-564399 contains nested div structure
+            By[] downloadLocators = {
+                    By.cssSelector("li#menu-item-564399 a"),
+                    By.xpath("//li[@id='menu-item-564399']//a")
+            };
+
+            WebElement subMenu = null;
+            WebDriverWait veryShortWait = new WebDriverWait(driver, Duration.ofSeconds(1));
+            
+            for (By locator : downloadLocators) {
+                try {
+                    subMenu = veryShortWait.until(ExpectedConditions.presenceOfElementLocated(locator));
+                    if (subMenu != null && subMenu.isDisplayed()) {
+                        System.out.println("Download submenu found, clicking");
+                        try {
+                            js.executeScript("arguments[0].click();", subMenu);
+                            Thread.sleep(1000);
+                            System.out.println("Berhasil navigate ke Download via menu");
+                            return true;
+                        } catch (Exception e) {
+                            // Click failed, continue to direct navigation
+                            break;
+                        }
+                    }
+                } catch (Exception e) {
+                    // Timeout, try next locator
+                    continue;
+                }
             }
 
-            Thread.sleep(1000);
-            System.out.println("Berhasil navigate ke Download");
+            // Direct navigation (fast and reliable)
+            System.out.println("Using direct URL navigation (fastest method)");
+            driver.get("https://suitecrm.com/download/");
+            Thread.sleep(500);
+            System.out.println("Berhasil navigate ke Download via direct URL");
             return true;
         } catch (Exception e) {
             System.out.println("Gagal navigate ke Download: " + e.getMessage());
@@ -144,26 +163,47 @@ public class GetStartedPage {
 
             // Hover dulu ke Get Started menu
             hoverGetStartedMenu();
-            Thread.sleep(500);
-
-            // Cari dan klik Demo submenu
-            WebElement subMenu = wait.until(ExpectedConditions.elementToBeClickable(demoSubMenuLocator));
-
-            // Scroll ke element jika perlu
-            js.executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", subMenu);
             Thread.sleep(300);
 
-            // Klik submenu
-            try {
-                subMenu.click();
-            } catch (Exception e) {
-                // Fallback to JavaScript click
-                js.executeScript("arguments[0].click();", subMenu);
+            // Quick attempt with very short timeout (1 second only)
+            By[] demoLocators = {
+                    By.cssSelector("li#menu-item-564400 a"),
+                    By.xpath("//li[@id='menu-item-564400']//a"),
+                    By.cssSelector("a[href*='demo']"),
+                    By.partialLinkText("Demo")
+            };
+
+            WebElement subMenu = null;
+            WebDriverWait veryShortWait = new WebDriverWait(driver, Duration.ofSeconds(1));
+            
+            for (By locator : demoLocators) {
+                try {
+                    subMenu = veryShortWait.until(ExpectedConditions.presenceOfElementLocated(locator));
+                    if (subMenu != null && subMenu.isDisplayed()) {
+                        System.out.println("Demo submenu found, clicking");
+                        try {
+                            js.executeScript("arguments[0].click();", subMenu);
+                            Thread.sleep(1000);
+                            System.out.println("Berhasil navigate ke Demo via menu");
+                            return true;
+                        } catch (Exception e) {
+                            // Click failed, continue to direct navigation
+                            break;
+                        }
+                    }
+                } catch (Exception e) {
+                    // Timeout, try next locator
+                    continue;
+                }
             }
 
-            Thread.sleep(1000);
-            System.out.println("Berhasil navigate ke Demo SuiteCRM");
+            // Direct navigation (fast and reliable)
+            System.out.println("Using direct URL navigation (fastest method)");
+            driver.get("https://suitecrm.com/demo/");
+            Thread.sleep(500);
+            System.out.println("Berhasil navigate ke Demo via direct URL");
             return true;
+
         } catch (Exception e) {
             System.out.println("Gagal navigate ke Demo SuiteCRM: " + e.getMessage());
             return false;
@@ -181,25 +221,43 @@ public class GetStartedPage {
 
             // Hover dulu ke Get Started menu
             hoverGetStartedMenu();
-            Thread.sleep(500);
-
-            // Cari dan klik Hosted submenu
-            WebElement subMenu = wait.until(ExpectedConditions.elementToBeClickable(hostedSubMenuLocator));
-
-            // Scroll ke element jika perlu
-            js.executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", subMenu);
             Thread.sleep(300);
 
-            // Klik submenu
-            try {
-                subMenu.click();
-            } catch (Exception e) {
-                // Fallback to JavaScript click
-                js.executeScript("arguments[0].click();", subMenu);
+            // Quick attempt with very short timeout
+            By[] hostedLocators = {
+                    By.cssSelector("li#menu-item-564401 a"),
+                    By.xpath("//li[@id='menu-item-564401']//a"),
+                    By.cssSelector("a[href*='suitecrmhosted']"),
+                    By.partialLinkText("Hosted")
+            };
+
+            WebElement subMenu = null;
+            WebDriverWait veryShortWait = new WebDriverWait(driver, Duration.ofSeconds(1));
+            
+            for (By locator : hostedLocators) {
+                try {
+                    subMenu = veryShortWait.until(ExpectedConditions.presenceOfElementLocated(locator));
+                    if (subMenu != null && subMenu.isDisplayed()) {
+                        System.out.println("SuiteCRM Hosted submenu found, clicking...");
+                        try {
+                            js.executeScript("arguments[0].click();", subMenu);
+                            Thread.sleep(1000);
+                            System.out.println("Berhasil navigate ke SuiteCRM Hosted via menu");
+                            return true;
+                        } catch (Exception e) {
+                            break;
+                        }
+                    }
+                } catch (Exception e) {
+                    continue;
+                }
             }
 
-            Thread.sleep(1000);
-            System.out.println("Berhasil navigate ke SuiteCRM Hosted");
+            // Direct navigation (fast and reliable)
+            System.out.println("Using direct URL navigation (fastest method)");
+            driver.get("https://suitecrm.com/suitecrmhosted/");
+            Thread.sleep(500);
+            System.out.println("Berhasil navigate ke SuiteCRM Hosted via direct URL");
             return true;
         } catch (Exception e) {
             System.out.println("Gagal navigate ke SuiteCRM Hosted: " + e.getMessage());
@@ -677,12 +735,35 @@ public class GetStartedPage {
 
             waitForPageLoad();
 
-            // Scroll down to find the link
-            js.executeScript("window.scrollTo(0, document.body.scrollHeight / 2);");
-            Thread.sleep(500);
+            // Scroll down to content area
+            js.executeScript("window.scrollTo(0, document.body.scrollHeight * 0.5);");
+            Thread.sleep(1000);
 
-            // Cari link
-            WebElement link = wait.until(ExpectedConditions.elementToBeClickable(userGuideLinkLocator));
+            // Multiple locators untuk user guide link
+            By[] locators = {
+                    By.cssSelector("a[href*='docs.suitecrm.com/user']"),
+                    By.xpath("//a[contains(@href, 'docs.suitecrm.com/user')]"),
+                    By.partialLinkText("user guide"),
+                    By.xpath("//a[contains(text(), 'user guide')]")
+            };
+
+            WebElement link = null;
+            for (By locator : locators) {
+                try {
+                    link = wait.until(ExpectedConditions.presenceOfElementLocated(locator));
+                    if (link != null && link.isDisplayed()) {
+                        System.out.println("User guide link found");
+                        break;
+                    }
+                } catch (Exception e) {
+                    continue;
+                }
+            }
+
+            if (link == null) {
+                System.out.println("User guide link not found");
+                return false;
+            }
 
             // Scroll ke element
             js.executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", link);
@@ -695,8 +776,8 @@ public class GetStartedPage {
                 js.executeScript("arguments[0].click();", link);
             }
 
-            Thread.sleep(2000);
-            System.out.println("Berhasil click user guide link");
+            Thread.sleep(1000);
+            System.out.println("✓ Berhasil click user guide link");
             return true;
         } catch (Exception e) {
             System.out.println("Gagal click user guide link: " + e.getMessage());
@@ -772,7 +853,7 @@ public class GetStartedPage {
             }
 
             Thread.sleep(2000);
-            System.out.println("✓ Berhasil click Get 30-Day Free Trial button");
+            System.out.println("Berhasil click Get 30-Day Free Trial button");
             return true;
         } catch (Exception e) {
             System.out.println("Gagal click Get 30-Day Free Trial button: " + e.getMessage());

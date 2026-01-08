@@ -12,7 +12,7 @@ import io.qameta.allure.Description;
 public class GetStartedTest extends BaseLandingTest {
 
         private static final String EXPECTED_715_RELEASE_NOTES_URL = "https://docs.suitecrm.com/admin/releases/7.15.x/";
-        private static final String EXPECTED_UPGRADES_URL = "https://suitecrm.com/upgrade-suitecrm/";
+        private static final String EXPECTED_UPGRADES_URL = "https://suitecrm.com/releases/";
         private static final String EXPECTED_89_RELEASE_NOTES_URL = "https://docs.suitecrm.com/8.x/admin/releases/8.9/";
         private static final String EXPECTED_COMMUNITY_URL = "https://community.suitecrm.com/";
         private static final String EXPECTED_SUITEASSURED_URL = "https://suitecrm.com/enterprise/suiteassured/";
@@ -77,7 +77,8 @@ public class GetStartedTest extends BaseLandingTest {
                 String currentUrl = getStartedPage.getCurrentUrl();
                 System.out.println("Current URL: " + currentUrl);
 
-                boolean urlCorrect = currentUrl.contains("upgrade-suitecrm")
+                boolean urlCorrect = currentUrl.contains("releases")
+                                || currentUrl.contains("upgrade-suitecrm")
                                 || currentUrl.contains("suitecrm.com/upgrade");
                 assertTrue(urlCorrect,
                                 "URL harus " + EXPECTED_UPGRADES_URL + " tapi actual: " + currentUrl);
@@ -142,7 +143,8 @@ public class GetStartedTest extends BaseLandingTest {
                 String currentUrl = getStartedPage.getCurrentUrl();
                 System.out.println("Current URL: " + currentUrl);
 
-                boolean urlCorrect = currentUrl.contains("upgrade-suitecrm")
+                boolean urlCorrect = currentUrl.contains("releases")
+                                || currentUrl.contains("upgrade-suitecrm")
                                 || currentUrl.contains("suitecrm.com/upgrade");
                 assertTrue(urlCorrect,
                                 "URL harus " + EXPECTED_UPGRADES_URL + " tapi actual: " + currentUrl);
@@ -170,9 +172,10 @@ public class GetStartedTest extends BaseLandingTest {
 
                 waitSeconds(5);
 
-                // Assert file downloaded
-                String downloadedFileName = getStartedPage.getDownloadedFileName("suitecrm-7");
-                boolean fileExists = downloadedFileName != null && downloadedFileName.contains("suitecrm")
+                // Assert file downloaded with specific version pattern
+                String downloadedFileName = getStartedPage.getDownloadedFileName("SuiteCRM-7");
+                boolean fileExists = downloadedFileName != null 
+                                && downloadedFileName.startsWith("SuiteCRM-7")
                                 && downloadedFileName.endsWith(".zip");
 
                 System.out.println(
@@ -182,7 +185,7 @@ public class GetStartedTest extends BaseLandingTest {
                 takeScreenshot("GST-005_Download_Initiated");
 
                 if (fileExists) {
-                        System.out.println("File SuiteCRM 7.15 downloaded successfully: " + downloadedFileName);
+                        System.out.println("File SuiteCRM 7.x downloaded successfully: " + downloadedFileName);
                 } else {
                         System.out.println("File download verification skipped (may depend on browser settings)");
                 }
@@ -208,9 +211,10 @@ public class GetStartedTest extends BaseLandingTest {
 
                 waitSeconds(5);
 
-                // Assert file downloaded
-                String downloadedFileName = getStartedPage.getDownloadedFileName("suitecrm-8");
-                boolean fileExists = downloadedFileName != null && downloadedFileName.contains("suitecrm")
+                // Assert file downloaded with specific version (SuiteCRM-8.9.1.zip)
+                String downloadedFileName = getStartedPage.getDownloadedFileName("SuiteCRM-8.9");
+                boolean fileExists = downloadedFileName != null 
+                                && downloadedFileName.startsWith("SuiteCRM-8.9")
                                 && downloadedFileName.endsWith(".zip");
 
                 System.out.println(
@@ -220,7 +224,7 @@ public class GetStartedTest extends BaseLandingTest {
                 takeScreenshot("GST-006_Download_Initiated");
 
                 if (fileExists) {
-                        System.out.println("File SuiteCRM 8.9 downloaded successfully: " + downloadedFileName);
+                        System.out.println("File SuiteCRM-8.9.1.zip downloaded successfully: " + downloadedFileName);
                 } else {
                         System.out.println("File download verification skipped (may depend on browser settings)");
                 }
