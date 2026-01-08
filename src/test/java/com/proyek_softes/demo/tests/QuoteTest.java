@@ -5,11 +5,11 @@ import java.util.Map;
 import static org.testng.Assert.assertTrue;
 import org.testng.annotations.Test;
 
+import com.proyek_softes.demo.pages.invoices.ImportLineItemPage;
 import com.proyek_softes.demo.pages.quotes.CreateQuotePage;
 import com.proyek_softes.demo.pages.quotes.ImportQuotePage;
 import com.proyek_softes.demo.pages.quotes.QuotesPage;
 import com.proyek_softes.demo.utils.QuoteDataProvider;
-import com.proyek_softes.demo.pages.invoices.ImportLineItemPage;
 
 import io.qameta.allure.Description;
 
@@ -112,33 +112,26 @@ public class QuoteTest extends GenericCrudTestHelper<QuotesPage, CreateQuotePage
     @Test
     @Description("DEM-030")
     public void testDem030() {
-        try {
-            login("will", "will");
-            QuotesPage quotesPage = new QuotesPage(driver);
-            quotesPage.navigateToQuotesModule();
-            quotesPage.navigateToImportQuote();
+        login("will", "will");
+        QuotesPage quotesPage = new QuotesPage(driver);
+        quotesPage.navigateToQuotesModule();
+        quotesPage.navigateToImportQuote();
 
-            ImportQuotePage importQuotePage = new ImportQuotePage(driver);
-            importQuotePage.uploadFile("quotes_import.csv");
-            importQuotePage.clickNextButton();
+        ImportQuotePage importQuotePage = new ImportQuotePage(driver);
+        boolean isCSV = importQuotePage.verifyDownloadedTemplateIsCSV(10, "DEM-030_Download_History");
+        assertTrue(isCSV, "Downloaded template should be in CSV format and named contains 'quotes'");
+        // upload file and complete import process
+        importQuotePage.uploadFile("Quotes_2.csv");
 
-            Thread.sleep(2000);
+        importQuotePage.clickImportCreate();
+        importQuotePage.clickNext();
+        importQuotePage.clickNext();
+        importQuotePage.clickNext();
+        importQuotePage.clickImportNow();
 
-            importQuotePage.clickImportButton();
-
-            boolean isImportSuccessful = importQuotePage.isImportSuccessful();
-            assertTrue(isImportSuccessful, "Quote should be imported successfully");
-            takeScreenshot("DEM-030_Import_Quote");
-
-            quotesPage.navigateToViewQuote();
-
-            String importedQuoteName = "Imported Quote Sample";
-            boolean isInFirstRow = quotesPage.isInFirstRow(importedQuoteName);
-            assertTrue(isInFirstRow, "Imported quote should appear in the quotes list");
-
-            takeElementScreenshot("DEM-030_Imported_Quote_In_List", quotesPage.getFirstRowLocator());
-        } catch (InterruptedException e) {
-        }
+        boolean isRecordsImported = importQuotePage.isRecordsImported();
+        assertTrue(isRecordsImported, "Records from Quotes.csv should be imported successfully");
+        takeElementScreenshot("DEM-030_Import_Quotes_Success", importQuotePage.getSummaryElement());
     }
 
     @Test

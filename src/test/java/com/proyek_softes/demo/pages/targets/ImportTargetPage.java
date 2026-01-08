@@ -1,22 +1,18 @@
 package com.proyek_softes.demo.pages.targets;
 
 import java.io.File;
-import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class ImportTargetPage {
+import com.proyek_softes.demo.pages.BaseImportPage;
 
-    private final WebDriver driver;
-    private final WebDriverWait wait;
+public class ImportTargetPage extends BaseImportPage {
+
     private final Actions actions;
 
     private final By downloadLink = By.linkText("Download Import File Template");
@@ -27,14 +23,10 @@ public class ImportTargetPage {
     private final By titlePage = By.className("module-title-text");
     private final By addNewField = By.id("addrow"); // button di step 3
     private final By importNowButton = By.id("importnow"); // button di step 4
-    // private final By paginationText = By.cssSelector(".pageNumbers");
-    // private final By tableRows = By.cssSelector(".list.View tbody tr:not(.pagination-unique):not([height='20']):has(td[scope='row'])");
-    // private final By exitButton = By.id("finished");
     private final By summaryText = By.xpath("//span[@style='font-size: 14px']");
 
     public ImportTargetPage(WebDriver driver) {
-        this.driver = driver;
-        this.wait = new WebDriverWait(driver, java.time.Duration.ofSeconds(20));
+        super(driver);
         this.actions = new Actions(driver);
     }
 
@@ -61,40 +53,14 @@ public class ImportTargetPage {
         }
 
         try {
-            // Navigate to downloads page
-            driver.get("chrome://downloads");
+            // Navigate to appropriate downloads page based on browser
+            navigateToDownloadsPage();
 
             // Wait for downloads page to load
             Thread.sleep(1000);
 
-            // Get the shadow root and check for downloaded file
-            long endTime = System.currentTimeMillis() + (timeoutSeconds * 1000L);
-            String fileName = null;
-
-            while (System.currentTimeMillis() < endTime) {
-                try {
-                    // Access shadow DOM to get download manager
-                    org.openqa.selenium.JavascriptExecutor js = (org.openqa.selenium.JavascriptExecutor) driver;
-
-                    // Get the first download item's file name
-                    fileName = (String) js.executeScript(
-                            "var manager = document.querySelector('downloads-manager');"
-                            + "if (!manager || !manager.shadowRoot) return null;"
-                            + "var item = manager.shadowRoot.querySelector('downloads-item');"
-                            + "if (!item || !item.shadowRoot) return null;"
-                            + "var fileLink = item.shadowRoot.querySelector('#file-link');"
-                            + "return fileLink ? fileLink.textContent : null;");
-
-                    if (fileName != null && !fileName.trim().isEmpty()) {
-                        System.out.println("Found downloaded file in browser history: " + fileName);
-                        break;
-                    }
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    // Continue trying
-                    Thread.sleep(500);
-                }
-            }
+            // Get the downloaded file name using base class method
+            String fileName = getDownloadedFileName(timeoutSeconds);
 
             // Take screenshot if requested
             if (screenshotName != null && fileName != null) {
@@ -112,9 +78,8 @@ public class ImportTargetPage {
                 return false;
             }
 
-        } catch (Exception e) {
+        } catch (InterruptedException e) {
             System.err.println("Error checking browser downloads: " + e.getMessage());
-            e.printStackTrace();
 
             // Try to navigate back to original page
             try {
@@ -124,29 +89,6 @@ public class ImportTargetPage {
             }
             return false;
         }
-    }
-
-    /**
-     * Takes a screenshot of the current downloads page
-     *
-     * @param screenshotName the name for the screenshot file (without
-     * extension)
-     */
-    private void takeScreenshotOfDownloadsPage(String screenshotName) {
-        try {
-            File screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-            File destination = new File("screenshots/" + screenshotName + ".png");
-            destination.getParentFile().mkdirs();
-            Files.copy(screenshot.toPath(), destination.toPath(),
-                    java.nio.file.StandardCopyOption.REPLACE_EXISTING);
-            System.out.println("Screenshot saved: " + destination.getAbsolutePath());
-        } catch (Exception e) {
-            System.err.println("Failed to take screenshot: " + e.getMessage());
-        }
-    }
-
-    public boolean isTemplateFileInCSVFormat(String fileName) {
-        return fileName.toLowerCase().endsWith(".csv");
     }
 
     public void uploadFile(String fileName) {
@@ -167,8 +109,24 @@ public class ImportTargetPage {
     }
 
     public void clickNext() {
-        actions.moveToElement(driver.findElement(nextButton)).perform();
-        wait.until(ExpectedConditions.elementToBeClickable(nextButton)).click();
+        try {
+            // Wait for page to be ready after previous action
+            Thread.sleep(500);
+
+            // Wait for the next button to be present and clickable
+            WebElement nextBtn = wait.until(ExpectedConditions.elementToBeClickable(nextButton));
+
+            // Scroll into view and click
+            actions.moveToElement(nextBtn).perform();
+            Thread.sleep(200);
+            nextBtn.click();
+
+            // Wait for page transition
+            Thread.sleep(800);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException("Thread was interrupted while clicking Next", e);
+        }
     }
 
     public boolean confirmInStep(String stepName) {
@@ -182,7 +140,6 @@ public class ImportTargetPage {
     }
 
     public void clickImportNow() {
-        wait.until(ExpectedConditions.elementToBeClickable(importNowButton));
         driver.findElement(importNowButton).click();
     }
 
@@ -218,7 +175,7 @@ public class ImportTargetPage {
                 return Integer.parseInt(parts[0].trim());
             }
             return 0;
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             System.err.println("Failed to extract created records count: " + e.getMessage());
             return 0;
         }

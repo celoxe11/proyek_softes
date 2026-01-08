@@ -1,0 +1,10 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Demo Test Product Category Suite - Firefox" parallel="false">
+    <parameter name="browser" value="firefox"/>
+    
+    <test name="Demo Product Category Tests - Firefox">
+        <classes>
+            <class name="com.proyek_softes.demo.tests.ProductCategoryTest"/>
+        </classes>
+    </test>
+</suite>

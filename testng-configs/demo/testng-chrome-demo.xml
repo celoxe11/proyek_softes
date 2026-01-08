@@ -1,0 +1,10 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Demo Test Suite - Chrome" parallel="false">
+    <parameter name="browser" value="chrome"/>
+    
+    <test name="Demo Tests - Chrome">
+        <packages>
+            <package name="com.proyek_softes.demo.tests"/>
+        </packages>
+    </test>
+</suite>

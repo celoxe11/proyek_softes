@@ -1,0 +1,10 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Demo Test Target List Suite - Firefox" parallel="false">
+    <parameter name="browser" value="firefox"/>
+    
+    <test name="Demo Target List Tests - Firefox">
+        <classes>
+            <class name="com.proyek_softes.demo.tests.TargetListTest"/>
+        </classes>
+    </test>
+</suite>

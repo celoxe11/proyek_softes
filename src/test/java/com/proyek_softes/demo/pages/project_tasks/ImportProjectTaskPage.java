@@ -1,25 +1,18 @@
 package com.proyek_softes.demo.pages.project_tasks;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class ImportProjectTaskPage {
+import com.proyek_softes.demo.pages.BaseImportPage;
 
-    private final WebDriver driver;
-    private final WebDriverWait wait;
+public class ImportProjectTaskPage extends BaseImportPage {
+
     private final Actions actions;
 
     private final By downloadLink = By.linkText("Download Import File Template");
@@ -30,14 +23,10 @@ public class ImportProjectTaskPage {
     private final By titlePage = By.className("module-title-text");
     private final By addNewField = By.id("addrow"); // button di step 3
     private final By importNowButton = By.id("importnow"); // button di step 4
-    private final By paginationText = By.cssSelector(".pageNumbers");
-    // private final By tableRows = By.cssSelector(".list.View tbody tr:not(.pagination-unique):not([height='20']):has(td[scope='row'])");
-    private final By exitButton = By.id("finished");
     private final By summaryText = By.xpath("//span[@style='font-size: 14px']");
 
     public ImportProjectTaskPage(WebDriver driver) {
-        this.driver = driver;
-        this.wait = new WebDriverWait(driver, java.time.Duration.ofSeconds(20));
+        super(driver);
         this.actions = new Actions(driver);
     }
 
@@ -46,7 +35,7 @@ public class ImportProjectTaskPage {
      *
      * @param timeoutSeconds maximum time to wait for download
      * @param screenshotName optional screenshot name (without extension) to
-     * capture downloads page, pass null to skip
+     * capture the downloads page, pass null to skip
      * @return true if file is downloaded and is in CSV format
      */
     public boolean verifyDownloadedTemplateIsCSV(int timeoutSeconds, String screenshotName) {
@@ -64,40 +53,14 @@ public class ImportProjectTaskPage {
         }
 
         try {
-            // Navigate to downloads page
-            driver.get("chrome://downloads");
+            // Navigate to appropriate downloads page based on browser
+            navigateToDownloadsPage();
 
             // Wait for downloads page to load
             Thread.sleep(1000);
 
-            // Get shadow root and check for downloaded file
-            long endTime = System.currentTimeMillis() + (timeoutSeconds * 1000L);
-            String fileName = null;
-
-            while (System.currentTimeMillis() < endTime) {
-                try {
-                    // Access shadow DOM to get download manager
-                    org.openqa.selenium.JavascriptExecutor js = (org.openqa.selenium.JavascriptExecutor) driver;
-
-                    // Get first download item's file name
-                    fileName = (String) js.executeScript(
-                            "var manager = document.querySelector('downloads-manager');"
-                            + "if (!manager || !manager.shadowRoot) return null;"
-                            + "var item = manager.shadowRoot.querySelector('downloads-item');"
-                            + "if (!item || !item.shadowRoot) return null;"
-                            + "var fileLink = item.shadowRoot.querySelector('#file-link');"
-                            + "return fileLink ? fileLink.textContent : null;");
-
-                    if (fileName != null && !fileName.trim().isEmpty()) {
-                        System.out.println("Found downloaded file in browser history: " + fileName);
-                        break;
-                    }
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    // Continue trying
-                    Thread.sleep(500);
-                }
-            }
+            // Get the downloaded file name using base class method
+            String fileName = getDownloadedFileName(timeoutSeconds);
 
             // Take screenshot if requested
             if (screenshotName != null && fileName != null) {
@@ -115,9 +78,8 @@ public class ImportProjectTaskPage {
                 return false;
             }
 
-        } catch (Exception e) {
+        } catch (InterruptedException e) {
             System.err.println("Error checking browser downloads: " + e.getMessage());
-            e.printStackTrace();
 
             // Try to navigate back to original page
             try {
@@ -129,35 +91,12 @@ public class ImportProjectTaskPage {
         }
     }
 
-    /**
-     * Takes a screenshot of current downloads page
-     *
-     * @param screenshotName name for screenshot file (without
-     * extension)
-     */
-    private void takeScreenshotOfDownloadsPage(String screenshotName) {
-        try {
-            File screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-            File destination = new File("screenshots/" + screenshotName + ".png");
-            destination.getParentFile().mkdirs();
-            Files.copy(screenshot.toPath(), destination.toPath(),
-                    java.nio.file.StandardCopyOption.REPLACE_EXISTING);
-            System.out.println("Screenshot saved: " + destination.getAbsolutePath());
-        } catch (Exception e) {
-            System.err.println("Failed to take screenshot: " + e.getMessage());
-        }
-    }
-
-    public boolean isTemplateFileInCSVFormat(String fileName) {
-        return fileName.toLowerCase().endsWith(".csv");
-    }
-
     public void uploadFile(String fileName) {
-        // Get absolute path to file in test resources
+        // Get the absolute path to the file in test resources
         String resourcePath = Paths.get("src", "test", "resources", "project_task_demo", fileName).toAbsolutePath().toString();
         File file = new File(resourcePath);
 
-        // Upload file by sending the absolute path to the input field
+        // Upload the file by sending the absolute path to the input field
         driver.findElement(inputFile).sendKeys(file.getAbsolutePath());
     }
 
@@ -170,8 +109,24 @@ public class ImportProjectTaskPage {
     }
 
     public void clickNext() {
-        actions.moveToElement(driver.findElement(nextButton)).perform();
-        wait.until(ExpectedConditions.elementToBeClickable(nextButton)).click();
+        try {
+            // Wait for page to be ready after previous action
+            Thread.sleep(500);
+            
+            // Wait for the next button to be present and clickable
+            WebElement nextBtn = wait.until(ExpectedConditions.elementToBeClickable(nextButton));
+            
+            // Scroll into view and click
+            actions.moveToElement(nextBtn).perform();
+            Thread.sleep(200);
+            nextBtn.click();
+            
+            // Wait for page transition
+            Thread.sleep(800);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException("Thread was interrupted while clicking Next", e);
+        }
     }
 
     public boolean confirmInStep(String stepName) {
@@ -220,42 +175,9 @@ public class ImportProjectTaskPage {
                 return Integer.parseInt(parts[0].trim());
             }
             return 0;
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             System.err.println("Failed to extract created records count: " + e.getMessage());
             return 0;
         }
-    }
-
-    public By getAddNewField() {
-        return addNewField;
-    }
-
-    public int getImportedRecordsCount() {
-        // Extract count from pagination text like "(1 - 4 of 4)"
-        String paginationStr = driver.findElement(paginationText).getText().trim();
-        // Extract total count (last number)
-        String[] parts = paginationStr.replaceAll("[()]", "").split("of");
-        if (parts.length == 2) {
-            return Integer.parseInt(parts[1].trim());
-        }
-        return 0;
-    }
-
-    public int countCSVDataRows(String fileName) {
-        String resourcePath = Paths.get("src", "test", "resources", "project_task_demo", fileName).toAbsolutePath().toString();
-        int rowCount = 0;
-        try (BufferedReader br = new BufferedReader(new FileReader(resourcePath))) {
-            br.readLine(); // Skip header
-            while (br.readLine() != null) {
-                rowCount++;
-            }
-        } catch (IOException e) {
-            System.err.println("Error reading CSV file: " + e.getMessage());
-        }
-        return rowCount;
-    }
-
-    public void clickExit() {
-        driver.findElement(exitButton).click();
     }
 }

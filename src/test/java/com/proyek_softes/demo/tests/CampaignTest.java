@@ -12,7 +12,6 @@ import com.proyek_softes.demo.pages.campaign.CreateCampaignNewsletterPage;
 import com.proyek_softes.demo.pages.campaign.CreateCampaignNonEmailPage;
 import com.proyek_softes.demo.pages.campaign.CreateCampaignSurveyPage;
 import com.proyek_softes.demo.pages.campaign.NavigationChecker;
-import com.proyek_softes.demo.pages.project_templates.ProjectTemplatesPage;
 import com.proyek_softes.demo.utils.CampaignDataProvider;
 
 import io.qameta.allure.Description;

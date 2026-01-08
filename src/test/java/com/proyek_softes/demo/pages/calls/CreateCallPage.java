@@ -15,8 +15,8 @@ public class CreateCallPage {
     private final WebDriver driver;
     private final WebDriverWait wait;
 
-    private final By buttonSave = By.xpath("//input[@title='Save [Alt+a]' and @id='SAVE_HEADER']");
-    private final By buttonCancel = By.xpath("//input[@title='Cancel [Alt+l]' and @id='CANCEL']");
+    private final By buttonSave = By.id("SAVE_HEADER");
+    private final By buttonCancel = By.id("CANCEL");
 
     private final By selectParentButton = By.id("btn_parent_name");
 
@@ -63,18 +63,21 @@ public class CreateCallPage {
 
     public void save() {
         try {
-            WebElement saveButton = wait.until(ExpectedConditions.presenceOfElementLocated(buttonSave));
+            // First scroll to top of page where save button is located
             ((org.openqa.selenium.JavascriptExecutor) driver)
-                    .executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", saveButton);
-            Thread.sleep(300);
-
-            try {
-                wait.until(ExpectedConditions.elementToBeClickable(buttonSave)).click();
-            } catch (org.openqa.selenium.ElementClickInterceptedException e) {
-                System.out.println("  Note: Using JavaScript click for Save button due to overlap");
-                ((org.openqa.selenium.JavascriptExecutor) driver)
-                        .executeScript("arguments[0].click();", saveButton);
-            }
+                    .executeScript("window.scrollTo(0, 0);");
+            Thread.sleep(500);
+            
+            // Wait for save button to be present
+            WebElement saveButton = wait.until(ExpectedConditions.presenceOfElementLocated(buttonSave));
+            
+            // Make sure it's visible and clickable
+            wait.until(ExpectedConditions.visibilityOf(saveButton));
+            
+            // Use JavaScript click for better cross-browser compatibility
+            ((org.openqa.selenium.JavascriptExecutor) driver)
+                    .executeScript("arguments[0].click();", saveButton);
+            
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
@@ -144,7 +147,6 @@ public class CreateCallPage {
             // if (data.get("assigned_user_name") != null && !data.get("assigned_user_name").isEmpty()) {
             //     // Currently using default assigned user
             // }
-
             // Handle reminders if specified in test data
             String hasReminder = data.get("has_reminder");
             if (hasReminder != null && hasReminder.equalsIgnoreCase("true")) {
@@ -360,7 +362,9 @@ public class CreateCallPage {
     }
 
     /**
-     * Add invitees to the call by searching for first name and adding the first result
+     * Add invitees to the call by searching for first name and adding the first
+     * result
+     *
      * @param inviteeFirstName The first name to search for
      */
     public void addInvitees(String inviteeFirstName) {
@@ -368,8 +372,8 @@ public class CreateCallPage {
             // Scroll to the invitees section
             WebElement firstNameField = wait.until(ExpectedConditions.presenceOfElementLocated(inviteesSearchFirstName));
             ((org.openqa.selenium.JavascriptExecutor) driver)
-                    .executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", firstNameField);
-            Thread.sleep(300);
+                    .executeScript("arguments[0].scrollIntoView({block: 'center'});", firstNameField);
+            Thread.sleep(500);
 
             // Enter first name in search field
             firstNameField.clear();
@@ -379,7 +383,7 @@ public class CreateCallPage {
             // Click search button
             WebElement searchButton = wait.until(ExpectedConditions.elementToBeClickable(inviteesSearchButton));
             searchButton.click();
-            
+
             // Wait for search results to load
             Thread.sleep(1000);
             wait.until(ExpectedConditions.presenceOfElementLocated(inviteesListDiv));

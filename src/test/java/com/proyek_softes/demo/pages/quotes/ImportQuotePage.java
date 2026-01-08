@@ -1,74 +1,183 @@
 package com.proyek_softes.demo.pages.quotes;
 
 import java.io.File;
+import java.nio.file.Paths;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class ImportQuotePage {
+import com.proyek_softes.demo.pages.BaseImportPage;
 
-    private final WebDriver driver;
-    private final WebDriverWait wait;
+public class ImportQuotePage extends BaseImportPage {
 
-    private final By fileInput = By.id("userfile");
+    private final Actions actions;
+
+    private final By downloadLink = By.linkText("Download Import File Template");
+    private final By inputFile = By.id("userfile");
+    private final By importCreateButton = By.id("import_create");
+    private final By importCreateAndUpdateButton = By.id("import_update");
     private final By nextButton = By.id("gonext");
-    private final By importButton = By.id("importnow");
-    private final By pageTitle = By.className("module-title-text");
+    private final By titlePage = By.className("module-title-text");
+    private final By addNewField = By.id("addrow"); // button di step 3
+    private final By importNowButton = By.id("importnow"); // button di step 4
+    private final By summaryText = By.xpath("//span[@style='font-size: 14px']");
 
     public ImportQuotePage(WebDriver driver) {
-        this.driver = driver;
-        this.wait = new WebDriverWait(driver, java.time.Duration.ofSeconds(20));
+        super(driver);
+        this.actions = new Actions(driver);
     }
 
-    public void uploadFile(String fileName) {
+    /**
+     * Downloads template and verifies it through browser download history
+     *
+     * @param timeoutSeconds maximum time to wait for download
+     * @param screenshotName optional screenshot name (without extension) to
+     * capture the downloads page, pass null to skip
+     * @return true if file is downloaded and is in CSV format
+     */
+    public boolean verifyDownloadedTemplateIsCSV(int timeoutSeconds, String screenshotName) {
+        // Store current URL to navigate back later
+        String originalUrl = driver.getCurrentUrl();
+
+        // Click download
+        driver.findElement(downloadLink).click();
+
+        // Wait a bit for download to start
         try {
-            File file = new File("src/test/resources/test_data/" + fileName);
-            String absolutePath = file.getAbsolutePath();
-
-            wait.until(ExpectedConditions.presenceOfElementLocated(fileInput));
-            WebElement fileInputElement = driver.findElement(fileInput);
-            fileInputElement.sendKeys(absolutePath);
-
-            Thread.sleep(500);
-            System.out.println("  → Uploaded file: " + fileName);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            throw new RuntimeException("Thread was interrupted while uploading file", e);
-        }
-    }
-
-    public void clickNextButton() {
-        try {
-            wait.until(ExpectedConditions.elementToBeClickable(nextButton));
-            driver.findElement(nextButton).click();
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            throw new RuntimeException("Thread was interrupted while clicking next button", e);
-        }
-    }
-
-    public void clickImportButton() {
-        try {
-            wait.until(ExpectedConditions.elementToBeClickable(importButton));
-            driver.findElement(importButton).click();
             Thread.sleep(2000);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            throw new RuntimeException("Thread was interrupted while clicking import button", e);
+        }
+
+        try {
+            // Navigate to appropriate downloads page based on browser
+            navigateToDownloadsPage();
+
+            // Wait for downloads page to load
+            Thread.sleep(1000);
+
+            // Get the downloaded file name using base class method
+            String fileName = getDownloadedFileName(timeoutSeconds);
+
+            // Take screenshot if requested
+            if (screenshotName != null && fileName != null) {
+                takeScreenshotOfDownloadsPage(screenshotName);
+            }
+
+            // Navigate back to original page
+            driver.get(originalUrl);
+
+            // Check if file is CSV
+            if (fileName != null) {
+                return isTemplateFileInCSVFormat(fileName) && fileName.toLowerCase().contains("quotes");
+            } else {
+                System.err.println("No file found in browser download history");
+                return false;
+            }
+
+        } catch (InterruptedException e) {
+            System.err.println("Error checking browser downloads: " + e.getMessage());
+
+            // Try to navigate back to original page
+            try {
+                driver.get(originalUrl);
+            } catch (Exception ex) {
+                System.err.println("Could not navigate back to original page: " + ex.getMessage());
+            }
+            return false;
         }
     }
 
-    public boolean isImportSuccessful() {
+    public void uploadFile(String fileName) {
+        // Get the absolute path to the file in test resources
+        String resourcePath = Paths.get("src", "test", "resources", "quote_demo", fileName).toAbsolutePath().toString();
+        File file = new File(resourcePath);
+
+        // Upload the file by sending the absolute path to the input field
+        driver.findElement(inputFile).sendKeys(file.getAbsolutePath());
+    }
+
+    public void clickImportCreate() {
+        driver.findElement(importCreateButton).click();
+    }
+
+    public void clickImportCreateAndUpdate() {
+        driver.findElement(importCreateAndUpdateButton).click();
+    }
+
+    public void clickNext() {
         try {
-            wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("module-title-text")));
-            String title = driver.findElement(pageTitle).getText();
-            return title.toUpperCase().contains("QUOTES");
+            // Wait for page to be ready after previous action
+            Thread.sleep(500);
+            
+            // Wait for the next button to be present and clickable
+            WebElement nextBtn = wait.until(ExpectedConditions.elementToBeClickable(nextButton));
+            
+            // Scroll into view and click
+            actions.moveToElement(nextBtn).perform();
+            Thread.sleep(200);
+            nextBtn.click();
+            
+            // Wait for page transition
+            Thread.sleep(800);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException("Thread was interrupted while clicking Next", e);
+        }
+    }
+
+    public boolean confirmInStep(String stepName) {
+        String pageTitle = driver.findElement(titlePage).getText();
+        System.out.println("Current Page Title: " + pageTitle);
+        return pageTitle.contains(stepName);
+    }
+
+    public void clickAddNewField() {
+        driver.findElement(addNewField).click();
+    }
+
+    public void clickImportNow() {
+        driver.findElement(importNowButton).click();
+    }
+
+    public boolean isRecordsImported() {
+        try {
+            wait.until(ExpectedConditions.visibilityOfElementLocated(summaryText));
+            String summaryContent = driver.findElement(summaryText).getText();
+            System.out.println("Import summary: " + summaryContent);
+            return summaryContent.toLowerCase().contains("records were created");
         } catch (Exception e) {
+            System.err.println("Failed to find import summary: " + e.getMessage());
             return false;
+        }
+    }
+
+    public WebElement getSummaryElement() {
+        try {
+            wait.until(ExpectedConditions.visibilityOfElementLocated(summaryText));
+            return driver.findElement(summaryText);
+        } catch (Exception e) {
+            System.err.println("Failed to find summary element: " + e.getMessage());
+            return null;
+        }
+    }
+
+    public int getCreatedRecordsCount() {
+        try {
+            wait.until(ExpectedConditions.visibilityOfElementLocated(summaryText));
+            String summaryContent = driver.findElement(summaryText).getText();
+            // Extract number from text like "4 records were created"
+            String[] parts = summaryContent.split(" ");
+            if (parts.length > 0) {
+                return Integer.parseInt(parts[0].trim());
+            }
+            return 0;
+        } catch (NumberFormatException e) {
+            System.err.println("Failed to extract created records count: " + e.getMessage());
+            return 0;
         }
     }
 }

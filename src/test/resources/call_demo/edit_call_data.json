@@ -9,7 +9,7 @@
   "reminder_email": "true",
   "reminder_email_time": "7200",
   "date_start_date": "01/20/2026",
-  "date_start_hours": "15",
+  "date_start_hours": "11",
   "date_start_minutes": "30",
   "parent_type": "Contact",
   "duration_hours": "2",
