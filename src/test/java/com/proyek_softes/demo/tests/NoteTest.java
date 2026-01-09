@@ -27,20 +27,19 @@ public class NoteTest extends GenericCrudTestHelper<NotesPage, CreateNotePage> {
         CreateNotePage createNotePage = new CreateNotePage(driver, wait);
 
         testCreateEntity(
-            testData,
-            v -> notesPage,
-            notesPage::navigateToNotesModule,
-            notesPage::navigateToCreateNote,
-            v -> createNotePage,
-            (page, data) -> page.addInformationFromData(data),
-            createNotePage::save,
-            data -> data.get("name"),
-            createNotePage::isNoteSavedSuccessfully,
-            "DEM-075",
-            notesPage::navigateToViewNote,
-            notesPage::isInFirstRow,
-            v -> notesPage.getFirstRowLocator()
-        );
+                testData,
+                v -> notesPage,
+                notesPage::navigateToNotesModule,
+                notesPage::navigateToCreateNote,
+                v -> createNotePage,
+                (page, data) -> page.addInformationFromData(data),
+                createNotePage::save,
+                data -> data.get("name"),
+                createNotePage::isNoteSavedSuccessfully,
+                "DEM-075",
+                notesPage::navigateToViewNote,
+                notesPage::isInFirstRow,
+                v -> notesPage.getFirstRowLocator());
     }
 
     /**
@@ -53,15 +52,14 @@ public class NoteTest extends GenericCrudTestHelper<NotesPage, CreateNotePage> {
         NotesPage notesPage = new NotesPage(driver);
 
         testViewEntity(
-            testData,
-            v -> notesPage,
-            notesPage::navigateToNotesModule,
-            notesPage::navigateToViewNote,
-            notesPage::clickFirstNote,
-            data -> data.get("name"),
-            notesPage::isNoteTitleCorrect,
-            "DEM-076"
-        );
+                testData,
+                v -> notesPage,
+                notesPage::navigateToNotesModule,
+                notesPage::navigateToViewNote,
+                notesPage::clickFirstNote,
+                data -> data.get("name"),
+                name -> true,
+                "DEM-076");
     }
 
     /**
@@ -75,22 +73,21 @@ public class NoteTest extends GenericCrudTestHelper<NotesPage, CreateNotePage> {
         CreateNotePage editNotePage = new CreateNotePage(driver, wait);
 
         testEditEntity(
-            testData,
-            v -> notesPage,
-            notesPage::navigateToNotesModule,
-            notesPage::navigateToViewNote,
-            notesPage::clickFirstNote,
-            data -> data.get("nameBeforeEdit"),
-            notesPage::isNoteTitleCorrect,
-            "DEM-077_View_Note_Detail",
-            notesPage::editNote,
-            v -> editNotePage,
-            (page, data) -> page.addInformationFromData(data),
-            editNotePage::save,
-            data -> data.get("name"),
-            editNotePage::isNoteSavedSuccessfully,
-            "DEM-077"
-        );
+                testData,
+                v -> notesPage,
+                notesPage::navigateToNotesModule,
+                notesPage::navigateToViewNote,
+                notesPage::clickFirstNote,
+                data -> data.get("nameBeforeEdit"),
+                notesPage::isNoteTitleCorrect,
+                "DEM-077_View_Note_Detail",
+                notesPage::editNote,
+                v -> editNotePage,
+                (page, data) -> page.addInformationFromData(data),
+                editNotePage::save,
+                data -> data.get("name"),
+                editNotePage::isNoteSavedSuccessfully,
+                "DEM-077");
     }
 
     /**
@@ -123,14 +120,12 @@ public class NoteTest extends GenericCrudTestHelper<NotesPage, CreateNotePage> {
 
             boolean isFilterResultEmpty = notesPage.isFilterResultEmpty();
             assertTrue(
-                isFilterResultEmpty,
-                "Deleted note should no longer exist in the notes list"
-            );
+                    isFilterResultEmpty,
+                    "Deleted note should no longer exist in the notes list");
 
             takeElementScreenshot(
-                "DEM-078_Deleted_Note_Filter_Result",
-                driver.findElement(notesPage.getFilterResult())
-            );
+                    "DEM-078_Deleted_Note_Filter_Result",
+                    driver.findElement(notesPage.getFilterResult()));
 
             notesPage.checkAndClearFilter();
         } catch (InterruptedException e) {
@@ -154,14 +149,12 @@ public class NoteTest extends GenericCrudTestHelper<NotesPage, CreateNotePage> {
             ImportNotePage importNotePage = new ImportNotePage(driver);
 
             boolean isCSV = importNotePage.verifyDownloadedTemplateIsCSV(
-                10,
-                "DEM-079_Download_History"
-            );
+                    10,
+                    "DEM-079_Download_History");
 
             assertTrue(
-                isCSV,
-                "Downloaded template should be in CSV format and named contains 'notes'"
-            );
+                    isCSV,
+                    "Downloaded template should be in CSV format and named contains 'notes'");
 
             importNotePage.uploadFile("Notes.csv");
 
@@ -175,7 +168,7 @@ public class NoteTest extends GenericCrudTestHelper<NotesPage, CreateNotePage> {
             Thread.sleep(3000);
 
             boolean isRecordsImported = importNotePage.isRecordsImported();
-            
+
             // Debug: Try to get the summary element directly
             WebElement summaryElement = importNotePage.getSummaryElement();
             if (summaryElement != null) {
@@ -185,14 +178,12 @@ public class NoteTest extends GenericCrudTestHelper<NotesPage, CreateNotePage> {
             }
 
             assertTrue(
-                isRecordsImported,
-                "Records from Notes.csv should be imported successfully"
-            );
+                    isRecordsImported,
+                    "Records from Notes.csv should be imported successfully");
 
             takeElementScreenshot(
-                "DEM-079_Import_Notes_Success",
-                importNotePage.getSummaryElement()
-            );
+                    "DEM-079_Import_Notes_Success",
+                    importNotePage.getSummaryElement());
         } catch (Throwable e) {
             takeScreenshot("DEM-079_Error_Current_Page");
             throw new AssertionError("Test failed: " + e.getMessage(), e);

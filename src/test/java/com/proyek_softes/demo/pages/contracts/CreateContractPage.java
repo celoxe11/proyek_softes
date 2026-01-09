@@ -122,13 +122,13 @@ public class CreateContractPage {
             fillInputFieldFromData("renewal_reminder_date", data.get("renewal_reminder_date"));
 
             // Select Opportunity (if provided)
-            if (data.get("opportunity") != null && !data.get("opportunity").isEmpty()) {
-                clickSelectOpportunity();
-                selectFirstItem(data.get("opportunity"));
-            }
-            else {
-                selectFirstItem();
-            }
+            // if (data.get("opportunity") != null && !data.get("opportunity").isEmpty()) {
+            // clickSelectOpportunity();
+            // selectFirstItem(data.get("opportunity"));
+            // }
+            // else {
+            // selectFirstItem();
+            // }
 
             fillInputFieldFromData("customer_signed_date", data.get("customer_signed_date"));
 
