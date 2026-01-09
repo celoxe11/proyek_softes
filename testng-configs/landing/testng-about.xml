@@ -74,7 +74,7 @@
             <class name="com.proyek_softes.landing.tests.about.NewsletterSignUpTest">
                 <methods>
                     <!-- ABT-008: Newsletter Sign-Up form submission -->
-                    <!-- <include name="testAbt008" /> -->
+                    <include name="testAbt008" />
                     
                     <!-- ABT-009: Newsletter Sign-Up validation error -->
                     <include name="testAbt009" />
@@ -93,6 +93,10 @@
                     
                     <!-- ABT-011: Contact Us > Tailored Support link -->
                     <include name="testAbt011" />
+
+                    <include name="testAbt012" />
+
+                    <include name="testAbt013" />
                 </methods>
             </class>
         </classes>
