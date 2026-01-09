@@ -2,6 +2,8 @@ package com.proyek_softes.landing.tests.about;
 
 import static org.testng.Assert.assertTrue;
 
+import java.util.Map;
+
 import org.testng.annotations.Test;
 
 import com.proyek_softes.landing.main.base.BaseLandingTest;
@@ -18,7 +20,9 @@ public class NewsletterSignUpTest extends BaseLandingTest {
 
     @Test(priority = 1, dataProvider = "signUpData", dataProviderClass = SignUpDataProvider.class)
     @Description("ABT-008")
-    public void testAbt008(String email) {
+    public void testAbt008(Map<String, String> data) {
+        String email = data.get("email");
+        
         navigateToHome();
 
         NewsletterSignUpPage signUpPage = new NewsletterSignUpPage(driver);
@@ -73,7 +77,9 @@ public class NewsletterSignUpTest extends BaseLandingTest {
 
     @Test(priority = 2, dataProvider = "signUpData", dataProviderClass = SignUpDataProvider.class)
     @Description("ABT-009")
-    public void testAbt009(String email) {
+    public void testAbt009(Map<String, String> data) {
+        String email = data.get("email");
+        
         navigateToHome();
 
         NewsletterSignUpPage signUpPage = new NewsletterSignUpPage(driver);
@@ -104,9 +110,9 @@ public class NewsletterSignUpTest extends BaseLandingTest {
         waitSeconds(2);
 
         boolean errorMessageShown = signUpPage.verifyRequiredErrorMessage();
+        assertTrue(errorMessageShown, "This is required.");
 
         takeScreenshot("ABT-009_Newsletter_Required_Error");
 
-        assertTrue(errorMessageShown, "This is required.");
     }
 }

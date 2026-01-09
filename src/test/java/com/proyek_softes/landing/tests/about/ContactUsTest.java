@@ -191,7 +191,7 @@ public class ContactUsTest extends BaseLandingTest {
         takeScreenshot("ABT-012_Contact_Form_Success");
     }
 
-    @Test(priority = 4, dataProvider = "contactUsData", dataProviderClass = ContactUsDataProvider.class)
+    @Test(priority = 4, dataProvider = "contactUsDataAbt013", dataProviderClass = ContactUsDataProvider.class)
     @Description("ABT-013")
     public void testAbt013(String firstName, String lastName, String businessEmail, String phone,
                           String company, String jobTitle, String country, String message,
@@ -213,68 +213,38 @@ public class ContactUsTest extends BaseLandingTest {
         boolean formLoaded = contactUsPage.waitForFormToLoad();
         assertTrue(formLoaded, "Form Contact Us harus berhasil dimuat");
 
-        contactUsPage.fillField(
-            contactUsPage.getFirstNameLocator(), 
-            firstName, 
-            "First Name"
-        );
-        contactUsPage.fillField(
-            contactUsPage.getLastNameLocator(), 
-            lastName, 
-            "Last Name"
-        );
+        contactUsPage.fillField(contactUsPage.getFirstNameLocator(), firstName, "First Name");
+        contactUsPage.fillField(contactUsPage.getLastNameLocator(), lastName, "Last Name");
         waitSeconds(1);
 
-        contactUsPage.fillField(
-            contactUsPage.getEmailLocator(), 
-            businessEmail, 
-            "Business Email"
-        );
-        contactUsPage.fillField(
-            contactUsPage.getCompanyLocator(), 
-            company, 
-            "Company"
-        );
+        contactUsPage.fillField(contactUsPage.getEmailLocator(), businessEmail, "Business Email");
+        contactUsPage.fillField(contactUsPage.getCompanyLocator(), company, "Company");
         waitSeconds(1);
 
         contactUsPage.selectCountry(country);
-        contactUsPage.fillField(
-            contactUsPage.getPhoneLocator(), 
-            phone, 
-            "Phone"
-        );
-        contactUsPage.fillField(
-            contactUsPage.getJobTitleLocator(), 
-            jobTitle, 
-            "Job Title"
-        );
+        contactUsPage.fillField(contactUsPage.getPhoneLocator(), phone, "Phone");
+        contactUsPage.fillField(contactUsPage.getJobTitleLocator(), jobTitle, "Job Title");
         waitSeconds(1);
 
-        contactUsPage.fillField(
-            contactUsPage.getMessageLocator(), 
-            message, 
-            "Message"
-        );
+        contactUsPage.fillField(contactUsPage.getMessageLocator(), message, "Message");
         waitSeconds(1);
 
         if (checkPrivacyPolicy) {
             contactUsPage.checkPrivacyPolicy();
-            waitSeconds(1);
         }
 
         if (checkMarketingComms) {
             contactUsPage.checkMarketingCommunications();
-            waitSeconds(1);
         }
 
-        System.out.println("Skipping CAPTCHA - expecting error message");
         contactUsPage.clickSubmit();
-        waitSeconds(3);
-
+        waitSeconds(1);
+        
+        // Verify error message
         boolean hasErrorMessage = contactUsPage.verifyRecaptchaErrorMessage(expectedErrorMessage);
-        assertTrue(hasErrorMessage,
-                "Error message harus muncul dengan teks: " + expectedErrorMessage);
-
+        assertTrue(hasErrorMessage, "Error message harus muncul: " + expectedErrorMessage);
+        
+        // Screenshot error message
         takeScreenshot("ABT-013_Contact_Form_Recaptcha_Error");
     }
 }

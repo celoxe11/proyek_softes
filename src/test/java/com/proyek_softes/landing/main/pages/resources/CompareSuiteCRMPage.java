@@ -22,14 +22,15 @@ public class CompareSuiteCRMPage extends ResourcesPage {
     private By microsoftDynamicsDemoButtonLocator = By.cssSelector("a.fusion-button[href*='/demo/']");
 
     // Form elements for whitepaper form
-    private By fullNameFieldLocator = By.id("mauticform_input_suitecrmpvssalesforcegtedcontent_full_name");
-    private By emailFieldLocator = By.id("mauticform_input_suitecrmpvssalesforcegtedcontent_your_email_address");
-    private By companyNameFieldLocator = By.id("mauticform_input_suitecrmpvssalesforcegtedcontent_company_name");
-    private By countryDropdownLocator = By.id("mauticform_input_suitecrmpvssalesforcegtedcontent_country");
-    private By privacyPolicyCheckboxLocator = By.id("mauticform_checkboxgrp_checkbox_i_have_read_the_privacy_p_10");
-    private By marketingInfoCheckboxLocator = By.id("mauticform_checkboxgrp_checkbox_i_would_like_to_receive_a_10");
+    private By forenameFieldLocator = By.cssSelector("input[name='mauticform[full_name]']");
+    private By surnameFieldLocator = By.cssSelector("input[name='mauticform[surname]']");
+    private By emailFieldLocator = By.cssSelector("input[name='mauticform[your_email_address]']");
+    private By companyNameFieldLocator = By.cssSelector("input[name='mauticform[company_name]']");
+    private By countryDropdownLocator = By.cssSelector("select[name='mauticform[country]']");
+    private By privacyPolicyCheckboxLocator = By.cssSelector("input[name='mauticform[i_have_read_the_privacy_p][]']");
+    private By marketingInfoCheckboxLocator = By.cssSelector("input[name='mauticform[i_would_like_to_receive_a][]']");
     private By captchaCheckboxLocator = By.cssSelector(".recaptcha-checkbox");
-    private By submitButtonLocator = By.id("mauticform_input_suitecrmpvssalesforcegtedcontent_submit");
+    private By submitButtonLocator = By.cssSelector("button[type='submit']");
     private By successMessageLocator = By.cssSelector(".mauticform-message");
 
     // ========================================
@@ -85,16 +86,37 @@ public class CompareSuiteCRMPage extends ResourcesPage {
     }
 
     /**
-     * Enter full name in whitepaper form
+     * Enter full name in whitepaper form (splits into forename and surname)
      * 
-     * @param fullName full name to enter
+     * @param fullName full name to enter (e.g., "John Doe")
      * @return true jika berhasil
      */
     public boolean enterFullName(String fullName) {
         try {
             System.out.println("Entering full name: " + fullName);
-            wait.until(d -> driver.findElement(fullNameFieldLocator)).clear();
-            wait.until(d -> driver.findElement(fullNameFieldLocator)).sendKeys(fullName);
+            
+            // Split full name into forename and surname
+            String[] nameParts = fullName.split(" ", 2);
+            String forename = nameParts.length > 0 ? nameParts[0] : fullName;
+            String surname = nameParts.length > 1 ? nameParts[1] : "";
+            
+            // Wait for form to be ready
+            waitForPageLoad();
+            scrollToPercentage(0.3);
+            Thread.sleep(500);
+            
+            // Enter forename
+            System.out.println("Entering forename: " + forename);
+            wait.until(d -> driver.findElement(forenameFieldLocator)).clear();
+            wait.until(d -> driver.findElement(forenameFieldLocator)).sendKeys(forename);
+            
+            // Enter surname if exists
+            if (!surname.isEmpty()) {
+                System.out.println("Entering surname: " + surname);
+                wait.until(d -> driver.findElement(surnameFieldLocator)).clear();
+                wait.until(d -> driver.findElement(surnameFieldLocator)).sendKeys(surname);
+            }
+            
             System.out.println("Full name entered successfully");
             return true;
         } catch (Exception e) {

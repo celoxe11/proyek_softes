@@ -52,6 +52,12 @@ public class SuiteCRMHostedTest extends BaseLandingTest {
                                 "URL harus " + EXPECTED_CHECKOUT_URL + " tapi actual: " + currentUrl);
 
                 takeScreenshot("SRV-009_Suite_Checkout_Page");
+
+                // Cleanup: tutup semua tab ekstra dan kembali ke main tab
+                while (driver.getWindowHandles().size() > 1) {
+                        driver.close();
+                        driver.switchTo().window(driver.getWindowHandles().iterator().next());
+                }
         }
 
         @Test(priority = 2)
@@ -86,6 +92,12 @@ public class SuiteCRMHostedTest extends BaseLandingTest {
                                 "URL harus " + EXPECTED_MIGRATIONS_URL + " tapi actual: " + currentUrl);
 
                 takeScreenshot("SRV-010_Migrations_Page");
+
+                // Cleanup: tutup semua tab ekstra dan kembali ke main tab
+                while (driver.getWindowHandles().size() > 1) {
+                        driver.close();
+                        driver.switchTo().window(driver.getWindowHandles().iterator().next());
+                }
         }
 
         @Test(priority = 3)
@@ -120,6 +132,12 @@ public class SuiteCRMHostedTest extends BaseLandingTest {
                                 "URL harus " + EXPECTED_CONTACT_URL + " tapi actual: " + currentUrl);
 
                 takeScreenshot("SRV-011_Contact_Page");
+
+                // Cleanup: tutup semua tab ekstra dan kembali ke main tab
+                while (driver.getWindowHandles().size() > 1) {
+                        driver.close();
+                        driver.switchTo().window(driver.getWindowHandles().iterator().next());
+                }
         }
 
         @Test(priority = 4)
@@ -155,5 +173,11 @@ public class SuiteCRMHostedTest extends BaseLandingTest {
                                 "URL harus " + EXPECTED_VIEWPACKAGES_URL + " tapi actual: " + currentUrl);
 
                 takeScreenshot("SRV-012_ViewPackages_Page");
+
+                // Cleanup: tutup semua tab ekstra dan kembali ke main tab
+                while (driver.getWindowHandles().size() > 1) {
+                        driver.close();
+                        driver.switchTo().window(driver.getWindowHandles().iterator().next());
+                }
         }
 }

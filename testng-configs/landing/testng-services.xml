@@ -30,6 +30,12 @@
                 <methods>
                     <!-- SRV-005: Consultancy and Implementation - Get Started button -->
                     <include name="testSrv005" />
+
+                    <!-- SRV-006: Consultancy and Implementation - Contact Us button -->
+                    <include name="testSrv007" />
+
+                    <!-- SRV-007: Consultancy and Implementation - Contact Us button (Gagal) -->
+                    <include name="testSrv008" />
                 </methods>
             </class>
         </classes>

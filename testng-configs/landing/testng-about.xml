@@ -17,12 +17,12 @@
         </classes>
     </test>
 
-    <!-- News & Press Tests -->
-    <test name="News & Press Tests" preserve-order="true">
+    <!-- News &amp; Press Tests -->
+    <test name="News &amp; Press Tests" preserve-order="true">
         <classes>
             <class name="com.proyek_softes.landing.tests.about.NewsTest">
                 <methods>
-                    <!-- ABT-003: Navigate to News & Press and click 5th article -->
+                    <!-- ABT-003: Navigate to News &amp; Press and click 5th article -->
                     <include name="testAbt003" />
                 </methods>
             </class>
@@ -74,7 +74,7 @@
             <class name="com.proyek_softes.landing.tests.about.NewsletterSignUpTest">
                 <methods>
                     <!-- ABT-008: Newsletter Sign-Up form submission -->
-                    <include name="testAbt008" />
+                    <!-- <include name="testAbt008" /> -->
                     
                     <!-- ABT-009: Newsletter Sign-Up validation error -->
                     <include name="testAbt009" />

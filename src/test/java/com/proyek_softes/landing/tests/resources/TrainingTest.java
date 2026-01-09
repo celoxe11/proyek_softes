@@ -156,6 +156,12 @@ public class TrainingTest extends BaseLandingTest{
         waitSeconds(2);
         takeScreenshot("RES-020_Masterclasses_Page");
 
+        // Select Series 2 (SuiteCRM Basics) package
+        boolean selectPackageSuccess = trainingPage.selectSeries2Package();
+        assertTrue(selectPackageSuccess, "Harus berhasil pilih Series 2 - SuiteCRM Basics");
+
+        waitSeconds(1);
+
         boolean checkPrivacySuccess = trainingPage.checkPrivacyPolicyCheckbox();
         assertTrue(checkPrivacySuccess, "Harus berhasil centang Privacy Policy");
 

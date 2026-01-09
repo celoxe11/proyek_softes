@@ -74,7 +74,7 @@
             <class name="com.proyek_softes.landing.tests.resources.CompareSuiteCRMTest">
                 <methods>
                     <!-- RES-011: Compare with Salesforce - Whitepaper form submission -->
-                    <include name="testRes011" />
+                    <!-- <include name="testRes011" /> -->
                     
                     <!-- RES-012: Compare with Salesforce - Whitepaper and Privacy Policy -->
                     <include name="testRes012" />

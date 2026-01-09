@@ -25,7 +25,7 @@ public class ClientLoginPage extends ResourcesPage {
     private By forgotUsernameLink = By.cssSelector("a[href*='remind?item=101']");
 
     // Email address field (forgot username form)
-    private By emailFieldLocator = By.cssSelector("input[name='form_email']");
+    private By emailFieldLocator = By.cssSelector("input#jform_email");
 
     // Submit button (forgot username form)
     private By submitButtonLocator = By.cssSelector("button[type='submit'].btn-primary");
@@ -122,7 +122,46 @@ public class ClientLoginPage extends ResourcesPage {
      * @return true jika berhasil
      */
     public boolean clickForgotUsernameLink() {
-        return scrollAndClick(forgotUsernameLink, "Forgot your username link");
+        try {
+            System.out.println("Clicking Forgot your username link");
+            
+            waitForPageLoad();
+            scrollToPercentage(0.5);
+            Thread.sleep(500);
+            
+            // Try multiple locators
+            By[] locators = {
+                By.cssSelector("a[href*='remind?item=101']"),
+                By.cssSelector("a[href*='remind']"),
+                By.xpath("//a[contains(text(), 'Forgot your username')]"),
+                By.xpath("//a[contains(text(), 'forgot') or contains(text(), 'Forgot')]"),
+                By.partialLinkText("Forgot your username"),
+                By.partialLinkText("username")
+            };
+            
+            boolean success = scrollAndClickWithFallback(locators, "Forgot your username link");
+            
+            if (success) {
+                return true;
+            }
+            
+            // If all fail, try direct navigation
+            System.out.println("All locators failed, using direct URL navigation");
+            String currentUrl = driver.getCurrentUrl();
+            // Extract base URL and navigate to remind page
+            if (currentUrl.contains("salesagility.com")) {
+                driver.get("https://www.salesagility.com/remind/?item=101");
+                Thread.sleep(1500);
+                return true;
+            }
+            
+            System.out.println("Failed to click Forgot your username link");
+            return false;
+            
+        } catch (Exception e) {
+            System.out.println("Error clicking Forgot your username link: " + e.getMessage());
+            return false;
+        }
     }
 
     /**

@@ -44,6 +44,12 @@
                     
                     <!-- GST-013: Get 30-Day Free Trial button -->
                     <include name="testGst013" />
+
+                    <!-- GST-014: Contact Us button -->
+                    <include name="testGst014" />
+
+                    <!-- GST-015: Learn More About Our Hosting Solutions link -->
+                    <include name="testGst015" />
                 </methods>
             </class>
         </classes>
