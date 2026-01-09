@@ -140,12 +140,13 @@ public class CreateQuotePage {
             }
 
             // select contact
-            clickSelectBillingContact();
-            if (data.get("billingContact") != null && !data.get("billingContact").isEmpty()) {
-                selectFirstItem(data.get("billingContact"));
-            } else {
-                selectFirstItem();
-            }
+            // clickSelectBillingContact();
+            // if (data.get("billingContact") != null &&
+            // !data.get("billingContact").isEmpty()) {
+            // selectFirstItem(data.get("billingContact"));
+            // } else {
+            // selectFirstItem();
+            // }
 
             fillInputFieldFromData("billingAddressStreet", data.get("billingAddressStreet"));
             fillInputFieldFromData("billingAddressCity", data.get("billingAddressCity"));
