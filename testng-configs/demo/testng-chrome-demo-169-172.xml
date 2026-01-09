@@ -1,0 +1,17 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Demo Test Suite - Chrome" parallel="false">
+    <parameter name="browser" value="chrome"/>
+    
+    <test name="Demo Tests - Chrome">
+        <classes>
+            <class name="com.proyek_softes.demo.tests.DashboardTest">
+                <methods>
+                    <include name="testDem169"/>
+                    <include name="testDem170"/>
+                    <include name="testDem171"/>
+                    <include name="testDem172"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>

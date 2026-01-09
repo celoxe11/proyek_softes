@@ -5,8 +5,6 @@ import java.util.Map;
 import static org.testng.Assert.assertTrue;
 import org.testng.annotations.Test;
 
-import com.proyek_softes.demo.pages.contracts.ContractsPage;
-import com.proyek_softes.demo.pages.contracts.ImportContractPage;
 import com.proyek_softes.demo.pages.project_templates.CreateProjectTemplatePage;
 import com.proyek_softes.demo.pages.project_templates.ImportProjectTemplatesPage;
 import com.proyek_softes.demo.pages.project_templates.ProjectTemplatesPage;
@@ -140,14 +138,14 @@ public class ProjectTemplateTest extends GenericCrudTestHelper<ProjectTemplatesP
             login("will", "will");
             ProjectTemplatesPage projectTemplatesPage = new ProjectTemplatesPage(driver);
             projectTemplatesPage.navigateToProjectTemplatesModule();
-            projectTemplatesPage.navigateToViewProjectTemplate();
+            projectTemplatesPage.navigateToImportProjectTemplate();
 
             ImportProjectTemplatesPage importProjectTemplatesPage = new ImportProjectTemplatesPage(driver);
             boolean isCSV = importProjectTemplatesPage.verifyDownloadedTemplateIsCSV(10, "DEM-116_Download_History");
             assertTrue(isCSV, "Downloaded template should be in CSV format and named contains 'invoices'");
 
             // upload file and complete import process
-            importProjectTemplatesPage.uploadFile("Project - Templates.csv");
+            importProjectTemplatesPage.uploadFile("Projects_Templates.csv");
 
             importProjectTemplatesPage.clickImportCreate();
             importProjectTemplatesPage.clickNext();
