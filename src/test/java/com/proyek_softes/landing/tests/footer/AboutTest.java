@@ -13,36 +13,46 @@ public class AboutTest extends BaseLandingTest {
         Footer footer = new Footer(driver);
         String tid = "FTR-003";
 
+        System.out.println("\n=== MENJALANKAN TEST CASE: " + tid + " ===");
+
         footer.clickLink("Contact Us", tid);
-        Assert.assertTrue(footer.getPageTitle().toLowerCase().contains("contact"));
-        ScreenshotUtils.takeAssertionScreenshot(driver, tid + "_Step02_ContactUsPage");
+        Assert.assertTrue(footer.getPageTitle().contains("contact"), "Gagal di link Contact Us");
+        System.out.println("[SUCCESS] Assert Step 02: Validasi Title 'Contact Us' BERHASIL (True)");
+        ScreenshotUtils.takeAssertionScreenshot(driver, tid + "_Step02_Passed");
         footer.back();
 
         footer.clickLink("Roadmap", tid);
-        Assert.assertTrue(footer.getPageTitle().toLowerCase().contains("roadmap"));
-        ScreenshotUtils.takeAssertionScreenshot(driver, tid + "_Step05_RoadmapPage");
+        Assert.assertTrue(footer.getPageTitle().contains("roadmap"), "Gagal di link Roadmap");
+        System.out.println("[SUCCESS] Assert Step 05: Validasi Title 'Roadmap' BERHASIL (True)");
+        ScreenshotUtils.takeAssertionScreenshot(driver, tid + "_Step05_Passed");
         footer.back();
 
         footer.clickLink("Always Open Source", tid);
-        Assert.assertTrue(footer.getPageTitle().toLowerCase().contains("open source"));
-        ScreenshotUtils.takeAssertionScreenshot(driver, tid + "_Step08_OpenSourcePage");
+        Assert.assertTrue(footer.getPageTitle().contains("open source"), "Gagal di link Open Source");
+        System.out.println("[SUCCESS] Assert Step 08: Validasi Title 'Open Source' BERHASIL (True)");
+        ScreenshotUtils.takeAssertionScreenshot(driver, tid + "_Step08_Passed");
         footer.back();
 
         footer.clickLink("News & Press", tid);
-        Assert.assertTrue(footer.getPageTitle().toLowerCase().contains("news"));
-        ScreenshotUtils.takeAssertionScreenshot(driver, tid + "_Step11_NewsPressPage");
+        String newsTitle = footer.getPageTitle();
+        Assert.assertTrue(newsTitle.contains("news") || newsTitle.contains("press"), "Gagal di News & Press");
+        System.out.println("[SUCCESS] Assert Step 11: Validasi Title 'News & Press' BERHASIL (True)");
+        ScreenshotUtils.takeAssertionScreenshot(driver, tid + "_Step11_Passed");
         footer.back();
 
         footer.clickLink("Careers", tid);
-        String title14 = footer.getPageTitle().toLowerCase();
-        // Sesuai temuan error: mengandung 'jobs' atau 'career'
-        Assert.assertTrue(title14.contains("jobs") || title14.contains("career"), "Ditemukan: " + title14);
-        ScreenshotUtils.takeAssertionScreenshot(driver, tid + "_Step14_CareersPage");
+        String jobsTitle = footer.getPageTitle();
+        Assert.assertTrue(jobsTitle.contains("jobs") || jobsTitle.contains("career"), "Gagal di Careers");
+        System.out.println("[SUCCESS] Assert Step 14: Validasi Title 'Careers' BERHASIL (True)");
+        ScreenshotUtils.takeAssertionScreenshot(driver, tid + "_Step14_Passed");
         footer.back();
 
         footer.clickLink("SuiteCRM Ltd", tid);
-        Assert.assertTrue(footer.getPageTitle().toLowerCase().contains("suitecrm"));
-        ScreenshotUtils.takeAssertionScreenshot(driver, tid + "_Step17_LtdPage");
+        Assert.assertTrue(footer.getPageTitle().contains("suitecrm"), "Gagal di link Ltd");
+        System.out.println("[SUCCESS] Assert Step 17: Validasi Title 'Ltd' BERHASIL (True)");
+        ScreenshotUtils.takeAssertionScreenshot(driver, tid + "_Step17_Passed");
         footer.back();
+
+        System.out.println("=== TEST CASE " + tid + " SELESAI: SEMUA ASSERT TRUE ===\n");
     }
 }

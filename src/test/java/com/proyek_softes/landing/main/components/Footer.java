@@ -15,28 +15,24 @@ public class Footer {
     public Footer(WebDriver driver) {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(20));
-        // Simpan ID tab utama agar bisa kembali dengan pasti
         this.originalWindow = driver.getWindowHandle();
     }
 
     public void clickLink(String linkText, String testId) {
         wait.until(d -> ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete"));
-        
         WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(By.partialLinkText(linkText)));
 
-        // Screenshot highlight merah sebelum klik (Utility Anda)
+        // Screenshot highlight merah sebelum klik (Smooth Scroll otomatis dari utility)
         ScreenshotUtils.screenshotBeforeClick(driver, element, testId, linkText.replace(" ", "_"));
 
-        // Klik menggunakan JavaScript (Paling stabil)
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("arguments[0].click();", element);
         
-        // Jeda agar browser punya waktu membuka halaman/tab baru
         try { Thread.sleep(2000); } catch (InterruptedException e) {}
     }
 
     public String getPageTitle() {
-        // Jika link membuka tab baru, pindah fokus ke tab tersebut agar bisa ambil title
+        // Pindah fokus jika terbuka di tab baru
         Set<String> handles = driver.getWindowHandles();
         if (handles.size() > 1) {
             for (String handle : handles) {
@@ -45,26 +41,18 @@ public class Footer {
                 }
             }
         }
-        
         wait.until(ExpectedConditions.not(ExpectedConditions.titleIs("")));
-        return driver.getTitle();
+        return driver.getTitle().toLowerCase(); // Return lowercase untuk validasi assert yang lebih stabil
     }
 
     public void back() {
         Set<String> handles = driver.getWindowHandles();
-
         if (handles.size() > 1) {
-            // Jika ada tab baru, tutup tab tersebut dan balik ke tab utama
             driver.close();
             driver.switchTo().window(originalWindow);
         } else {
-            // Jika tetap di tab yang sama, lakukan back biasa
             driver.navigate().back();
         }
-
-        // Beri jeda stabilitas agar halaman utama siap untuk link selanjutnya
-        try {
-            Thread.sleep(2500); 
-        } catch (InterruptedException e) {}
+        try { Thread.sleep(2500); } catch (InterruptedException e) {}
     }
 }

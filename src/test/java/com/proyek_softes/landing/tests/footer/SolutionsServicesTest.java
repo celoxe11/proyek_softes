@@ -13,29 +13,38 @@ public class SolutionsServicesTest extends BaseLandingTest {
         Footer footer = new Footer(driver);
         String tid = "FTR-002";
 
+        System.out.println("\n=== MENJALANKAN TEST CASE: " + tid + " ===");
+
         footer.clickLink("Hosted", tid);
-        Assert.assertTrue(footer.getPageTitle().toLowerCase().contains("hosted"));
-        ScreenshotUtils.takeAssertionScreenshot(driver, tid + "_Step02_HostedPage");
+        Assert.assertTrue(footer.getPageTitle().contains("hosted"), "Gagal di link Hosted");
+        System.out.println("[SUCCESS] Assert Step 02: Validasi Title 'Hosted' BERHASIL (True)");
+        ScreenshotUtils.takeAssertionScreenshot(driver, tid + "_Step02_Passed");
         footer.back();
 
         footer.clickLink("SuiteASSURED", tid);
-        Assert.assertTrue(footer.getPageTitle().toLowerCase().contains("assured"));
-        ScreenshotUtils.takeAssertionScreenshot(driver, tid + "_Step05_SuiteASSUREDPage");
+        Assert.assertTrue(footer.getPageTitle().contains("assured"), "Gagal di link SuiteASSURED");
+        System.out.println("[SUCCESS] Assert Step 05: Validasi Title 'SuiteASSURED' BERHASIL (True)");
+        ScreenshotUtils.takeAssertionScreenshot(driver, tid + "_Step05_Passed");
         footer.back();
 
         footer.clickLink("Support Services", tid);
-        Assert.assertTrue(footer.getPageTitle().toLowerCase().contains("support"));
-        ScreenshotUtils.takeAssertionScreenshot(driver, tid + "_Step08_SupportPage");
+        Assert.assertTrue(footer.getPageTitle().contains("support"), "Gagal di link Support Services");
+        System.out.println("[SUCCESS] Assert Step 08: Validasi Title 'Support Services' BERHASIL (True)");
+        ScreenshotUtils.takeAssertionScreenshot(driver, tid + "_Step08_Passed");
         footer.back();
 
         footer.clickLink("Training", tid);
-        Assert.assertTrue(footer.getPageTitle().toLowerCase().contains("training"));
-        ScreenshotUtils.takeAssertionScreenshot(driver, tid + "_Step11_TrainingPage");
+        Assert.assertTrue(footer.getPageTitle().contains("training"), "Gagal di link Training");
+        System.out.println("[SUCCESS] Assert Step 11: Validasi Title 'Training' BERHASIL (True)");
+        ScreenshotUtils.takeAssertionScreenshot(driver, tid + "_Step11_Passed");
         footer.back();
 
         footer.clickLink("Consultancy", tid);
-        Assert.assertTrue(footer.getPageTitle().toLowerCase().contains("consultancy"));
-        ScreenshotUtils.takeAssertionScreenshot(driver, tid + "_Step14_ConsultancyPage");
+        Assert.assertTrue(footer.getPageTitle().contains("consultancy"), "Gagal di link Consultancy");
+        System.out.println("[SUCCESS] Assert Step 14: Validasi Title 'Consultancy' BERHASIL (True)");
+        ScreenshotUtils.takeAssertionScreenshot(driver, tid + "_Step14_Passed");
         footer.back();
+
+        System.out.println("=== TEST CASE " + tid + " SELESAI: SEMUA ASSERT TRUE ===\n");
     }
 }
