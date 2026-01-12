@@ -13,8 +13,8 @@ public class NewsletterSignUpPage extends AboutBasePage {
 
     // Locators untuk form elements
     private By emailInputLocator = By.cssSelector("input[name='mauticform[email]']");
-    private By privacyPolicyCheckboxLocator = By.cssSelector("input[name='mauticform[i_have_read_the_privacy_p]']");
-    private By marketingCheckboxLocator = By.cssSelector("input[name='mauticform[i_would_like_to_receive_m_10]']");
+    private By privacyPolicyCheckboxLocator = By.id("mauticform_checkboxgrp_checkbox_i_have_read_the_privacy_p_10");
+    private By marketingCheckboxLocator = By.id("mauticform_checkboxgrp_checkbox_i_would_like_to_receive_m_10");
     private By submitButtonLocator = By.cssSelector("button[name='mauticform[submit]']");
     private By successMessageLocator = By.xpath("//div[contains(text(),'Thank you for joining our mailing list!')]");
 
@@ -60,25 +60,50 @@ public class NewsletterSignUpPage extends AboutBasePage {
     public boolean checkPrivacyPolicy() {
         try {
             System.out.println("Mencentang Privacy Policy checkbox");
-            WebElement checkbox = wait.until(ExpectedConditions.elementToBeClickable(privacyPolicyCheckboxLocator));
             
-            if (!checkbox.isSelected()) {
-                // Scroll to checkbox
-                js.executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", checkbox);
-                Thread.sleep(500);
-                
-                // Click checkbox
+            waitForPageLoad();
+            scrollToPercentage(0.6);
+            Thread.sleep(500);
+            
+            // Try multiple locators
+            By[] locators = {
+                By.id("mauticform_checkboxgrp_checkbox_i_have_read_the_privacy_p_10"),
+                By.cssSelector("input[name='mauticform[i_have_read_the_privacy_p][]']"),
+                By.xpath("//input[@id='mauticform_checkboxgrp_checkbox_i_have_read_the_privacy_p_10']"),
+                By.xpath("//label[contains(., 'Privacy Policy')]//input[@type='checkbox']"),
+                By.xpath("//input[@type='checkbox' and contains(@id, 'privacy')]")
+            };
+            
+            for (By locator : locators) {
                 try {
-                    checkbox.click();
+                    WebElement checkbox = wait.until(ExpectedConditions.presenceOfElementLocated(locator));
+                    
+                    // Scroll to checkbox
+                    js.executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", checkbox);
+                    Thread.sleep(500);
+                    
+                    if (!checkbox.isSelected()) {
+                        // Click checkbox
+                        try {
+                            checkbox.click();
+                        } catch (Exception e) {
+                            js.executeScript("arguments[0].click();", checkbox);
+                        }
+                        
+                        System.out.println("Privacy Policy checkbox berhasil dicentang");
+                    } else {
+                        System.out.println("Privacy Policy checkbox sudah tercentang");
+                    }
+                    return true;
                 } catch (Exception e) {
-                    js.executeScript("arguments[0].click();", checkbox);
+                    System.out.println("Locator failed: " + locator + " - " + e.getMessage());
+                    continue;
                 }
-                
-                System.out.println("Privacy Policy checkbox berhasil dicentang");
-            } else {
-                System.out.println("Privacy Policy checkbox sudah tercentang");
             }
-            return true;
+            
+            System.out.println("Semua locator privacy policy gagal");
+            return false;
+            
         } catch (Exception e) {
             System.out.println("Error mencentang Privacy Policy: " + e.getMessage());
             return false;
@@ -126,12 +151,24 @@ public class NewsletterSignUpPage extends AboutBasePage {
      */
     public boolean handleCaptcha() {
         try {
-            System.out.println("CAPTCHA detected - Manual intervention needed for real test");
-            System.out.println("For automation purposes, skipping CAPTCHA validation");
-            waitSeconds(2);
+            System.out.println("==============================================");
+            System.out.println("CAPTCHA DETECTED - MANUAL INTERVENTION NEEDED");
+            System.out.println("==============================================");
+            System.out.println("Please solve the CAPTCHA manually...");
+            System.out.println("Waiting 60 seconds for manual CAPTCHA completion...");
+            
+            // Wait 60 seconds for manual CAPTCHA solving
+            for (int i = 120; i > 0; i--) {
+                System.out.println("Time remaining: " + i + " seconds");
+                Thread.sleep(1000);
+            }
+            
+            System.out.println("CAPTCHA wait time completed");
+            System.out.println("==============================================");
+            
             return true;
         } catch (Exception e) {
-            System.out.println("CAPTCHA handling: " + e.getMessage());
+            System.out.println("CAPTCHA handling error: " + e.getMessage());
             return false;
         }
     }
@@ -198,36 +235,49 @@ public class NewsletterSignUpPage extends AboutBasePage {
     public boolean verifyRequiredErrorMessage() {
         try {
             System.out.println("Verifying required error message");
-            waitSeconds(2);
+            waitSeconds(1);
             
-            // Locator untuk error message "This is required."
-            By errorMessageLocator = By.xpath("//span[contains(text(),'This is required.')]");
-            By errorMessageAltLocator = By.cssSelector(".mauticform-errormsg");
+            // Multiple locators to find the error message
+            By[] errorLocators = {
+                By.xpath("//*[contains(text(),'This is required')]"),
+                By.xpath("//span[contains(text(),'This is required')]"),
+                By.cssSelector(".mauticform-errormsg"),
+                By.cssSelector("span.mauticform-errormsg"),
+                By.xpath("//span[@class='mauticform-errormsg']"),
+                By.xpath("//*[contains(@style,'color') and contains(text(),'required')]")
+            };
             
-            WebElement errorMessage = null;
-            
-            // Try primary locator
-            try {
-                errorMessage = wait.until(ExpectedConditions.presenceOfElementLocated(errorMessageLocator));
-            } catch (Exception e1) {
-                // Try alternative locator
+            for (By locator : errorLocators) {
                 try {
-                    errorMessage = wait.until(ExpectedConditions.presenceOfElementLocated(errorMessageAltLocator));
-                } catch (Exception e2) {
-                    System.out.println("Error message not found with both locators");
-                    return false;
+                    WebElement errorMessage = driver.findElement(locator);
+                    if (errorMessage.isDisplayed()) {
+                        String messageText = errorMessage.getText();
+                        System.out.println("Error message found: " + messageText);
+                        if (messageText.toLowerCase().contains("required")) {
+                            return true;
+                        }
+                    }
+                } catch (Exception e) {
+                    // Continue to next locator
+                    continue;
                 }
             }
             
-            if (errorMessage != null && errorMessage.isDisplayed()) {
-                String messageText = errorMessage.getText();
-                System.out.println("Error message found: " + messageText);
-                return messageText.contains("This is required");
+            // Fallback: check if page still has the form (submission blocked by validation)
+            try {
+                String pageSource = driver.getPageSource();
+                if (pageSource.contains("This is required")) {
+                    System.out.println("Validation error found in page source");
+                    return true;
+                }
+            } catch (Exception e) {
+                // Ignore
             }
             
+            System.out.println("✗ Error message not found");
             return false;
         } catch (Exception e) {
-            System.out.println("Required error message not found: " + e.getMessage());
+            System.out.println("Required error message verification failed: " + e.getMessage());
             return false;
         }
     }

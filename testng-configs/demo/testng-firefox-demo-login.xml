@@ -1,0 +1,16 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Demo Test Suite - Firefox" parallel="false">
+    <parameter name="browser" value="Firefox"/>
+    
+    <test name="Demo Tests - Firefox">
+        <classes>
+            <class name="com.proyek_softes.demo.tests.LoginTest">
+                <methods>
+                    <include name="testDem001"/>
+                    <include name="testDem002"/>
+                    <include name="testDem003"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>

@@ -121,7 +121,7 @@ public class QuoteTest extends GenericCrudTestHelper<QuotesPage, CreateQuotePage
         boolean isCSV = importQuotePage.verifyDownloadedTemplateIsCSV(10, "DEM-030_Download_History");
         assertTrue(isCSV, "Downloaded template should be in CSV format and named contains 'quotes'");
         // upload file and complete import process
-        importQuotePage.uploadFile("Quotes_2.csv");
+        importQuotePage.uploadFile("Quotes.csv");
 
         importQuotePage.clickImportCreate();
         importQuotePage.clickNext();

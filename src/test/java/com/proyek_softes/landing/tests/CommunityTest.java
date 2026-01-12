@@ -25,6 +25,8 @@ public class CommunityTest extends BaseLandingTest {
         // Navigate ke menu Community dan pilih sub-menu Community Support
         boolean hoverSuccess = communityPage.hoverCommunityMenu();
         assertTrue(hoverSuccess, "Harus berhasil hover ke menu Community");
+        
+        waitSeconds(2); // Beri waktu untuk menu dropdown terlihat
 
         boolean navSuccess = communityPage.navigateToCommunitySupport();
         assertTrue(navSuccess, "Harus berhasil navigate ke Community Support");
@@ -32,7 +34,7 @@ public class CommunityTest extends BaseLandingTest {
         // Wait for page/tab to load (external link opens in new tab)
         communityPage.switchToNewTab();
         communityPage.waitForPageLoad();
-        waitSeconds(2);
+        waitSeconds(3); // Tunggu halaman fully loaded
 
         // Assert halaman correct
         String currentUrl = communityPage.getCurrentUrl();
@@ -45,6 +47,12 @@ public class CommunityTest extends BaseLandingTest {
 
         // Screenshot hasil assert
         takeScreenshot("COM-001_Community_Support_Page");
+
+        // Close tab dan kembali ke main tab
+        if (driver.getWindowHandles().size() > 1) {
+            driver.close();
+            driver.switchTo().window(driver.getWindowHandles().iterator().next());
+        }
     }
 
     @Test(priority = 2)
@@ -56,20 +64,25 @@ public class CommunityTest extends BaseLandingTest {
 
         boolean hoverSuccess = communityPage.hoverCommunityMenu();
         assertTrue(hoverSuccess, "Harus berhasil hover ke menu Community");
+        
+        waitSeconds(2); // Beri waktu untuk menu dropdown terlihat
 
         boolean navSuccess = communityPage.navigateToSponsorship();
         assertTrue(navSuccess, "Harus berhasil navigate ke Sponsorship");
 
         communityPage.waitForPageLoad();
+        waitSeconds(2); // Tunggu halaman fully loaded
         takeScreenshot("COM-002_Sponsorship_Page");
 
+        waitSeconds(1); // Beri waktu sebelum klik button
         boolean clickSuccess = communityPage.clickSponsorNowButton();
         assertTrue(clickSuccess, "Harus berhasil klik button Sponsor Now");
 
         // Wait for new tab to open (external link)
+        waitSeconds(2); // Tunggu tab baru terbuka
         communityPage.switchToNewTab();
         communityPage.waitForPageLoad();
-        waitSeconds(2);
+        waitSeconds(3); // Tunggu halaman fully loaded
 
         // Assert halaman correct
         String currentUrl = communityPage.getCurrentUrl();
@@ -82,6 +95,12 @@ public class CommunityTest extends BaseLandingTest {
 
         // Screenshot hasil assert
         takeScreenshot("COM-002_OpenCollective_Page");
+
+        // Close tab dan kembali ke main tab
+        if (driver.getWindowHandles().size() > 1) {
+            driver.close();
+            driver.switchTo().window(driver.getWindowHandles().iterator().next());
+        }
     }
 
     @Test(priority = 3)
@@ -94,21 +113,26 @@ public class CommunityTest extends BaseLandingTest {
         // Navigate ke menu Community dan pilih sub-menu Sponsorship
         boolean hoverSuccess = communityPage.hoverCommunityMenu();
         assertTrue(hoverSuccess, "Harus berhasil hover ke menu Community");
+        
+        waitSeconds(2); // Beri waktu untuk menu dropdown terlihat
 
         boolean navSuccess = communityPage.navigateToSponsorship();
         assertTrue(navSuccess, "Harus berhasil navigate ke Sponsorship");
 
         communityPage.waitForPageLoad();
+        waitSeconds(2); // Tunggu halaman fully loaded
         takeScreenshot("COM-003_Sponsorship_Page");
 
+        waitSeconds(1); // Beri waktu sebelum klik link
         // Klik link "Open Collective"
         boolean clickSuccess = communityPage.clickOpenCollectiveLink();
         assertTrue(clickSuccess, "Harus berhasil klik link Open Collective");
 
         // Wait for new tab to open (external link)
+        waitSeconds(2); // Tunggu tab baru terbuka
         communityPage.switchToNewTab();
         communityPage.waitForPageLoad();
-        waitSeconds(2);
+        waitSeconds(3); // Tunggu halaman fully loaded
 
         // Assert halaman correct
         String currentUrl = communityPage.getCurrentUrl();
@@ -121,6 +145,12 @@ public class CommunityTest extends BaseLandingTest {
 
         // Screenshot hasil assert
         takeScreenshot("COM-003_OpenCollective_Page");
+
+        // Close tab dan kembali ke main tab
+        if (driver.getWindowHandles().size() > 1) {
+            driver.close();
+            driver.switchTo().window(driver.getWindowHandles().iterator().next());
+        }
     }
 
     @Test(priority = 4)
@@ -133,21 +163,26 @@ public class CommunityTest extends BaseLandingTest {
         // Navigate ke menu Community dan pilih sub-menu Sponsorship
         boolean hoverSuccess = communityPage.hoverCommunityMenu();
         assertTrue(hoverSuccess, "Harus berhasil hover ke menu Community");
+        
+        waitSeconds(2); // Beri waktu untuk menu dropdown terlihat
 
         boolean navSuccess = communityPage.navigateToSponsorship();
         assertTrue(navSuccess, "Harus berhasil navigate ke Sponsorship");
 
         communityPage.waitForPageLoad();
+        waitSeconds(2); // Tunggu halaman fully loaded
         takeScreenshot("COM-004_Sponsorship_Page");
 
+        waitSeconds(1); // Beri waktu sebelum klik link
         // Klik link "Route4Me"
         boolean clickSuccess = communityPage.clickRoute4MeLink();
         assertTrue(clickSuccess, "Harus berhasil klik link Route4Me");
 
         // Wait for new tab to open (external link)
+        waitSeconds(2); // Tunggu tab baru terbuka
         communityPage.switchToNewTab();
         communityPage.waitForPageLoad();
-        waitSeconds(2);
+        waitSeconds(3); // Tunggu halaman fully loaded
 
         // Assert halaman correct
         String currentUrl = communityPage.getCurrentUrl();
@@ -160,6 +195,12 @@ public class CommunityTest extends BaseLandingTest {
 
         // Screenshot hasil assert
         takeScreenshot("COM-004_Route4Me_Page");
+
+        // Close tab dan kembali ke main tab
+        if (driver.getWindowHandles().size() > 1) {
+            driver.close();
+            driver.switchTo().window(driver.getWindowHandles().iterator().next());
+        }
     }
 
     @Test(priority = 5)
@@ -171,19 +212,24 @@ public class CommunityTest extends BaseLandingTest {
 
         boolean hoverSuccess = communityPage.hoverCommunityMenu();
         assertTrue(hoverSuccess, "Harus berhasil hover ke menu Community");
+        
+        waitSeconds(2); // Beri waktu untuk menu dropdown terlihat
 
         boolean navSuccess = communityPage.navigateToSponsorship();
         assertTrue(navSuccess, "Harus berhasil navigate ke Sponsorship");
 
         communityPage.waitForPageLoad();
+        waitSeconds(2); // Tunggu halaman fully loaded
         takeScreenshot("COM-005_Sponsorship_Page");
 
+        waitSeconds(1); // Beri waktu sebelum klik button
         boolean clickSuccess = communityPage.clickBecomeASponsorButton();
         assertTrue(clickSuccess, "Harus berhasil klik button Become a Sponsor Today");
 
+        waitSeconds(2); // Tunggu tab baru terbuka
         communityPage.switchToNewTab();
         communityPage.waitForPageLoad();
-        waitSeconds(2);
+        waitSeconds(3); // Tunggu halaman fully loaded
 
         String currentUrl = communityPage.getCurrentUrl();
         System.out.println("📍 Current URL: " + currentUrl);
@@ -194,6 +240,12 @@ public class CommunityTest extends BaseLandingTest {
                 "URL harus " + EXPECTED_OPENCOLLECTIVE_URL + " tapi actual: " + currentUrl);
 
         takeScreenshot("COM-005_OpenCollective_Page");
+
+        // Close tab dan kembali ke main tab
+        if (driver.getWindowHandles().size() > 1) {
+            driver.close();
+            driver.switchTo().window(driver.getWindowHandles().iterator().next());
+        }
     }
 
     @Test(priority = 6)
@@ -205,19 +257,29 @@ public class CommunityTest extends BaseLandingTest {
 
         boolean hoverSuccess = communityPage.hoverCommunityMenu();
         assertTrue(hoverSuccess, "Harus berhasil hover ke menu Community");
+        
+        waitSeconds(2); // Beri waktu untuk menu dropdown terlihat
 
         boolean navSuccess = communityPage.navigateToPartners();
         assertTrue(navSuccess, "Harus berhasil navigate ke Partners");
 
         communityPage.waitForPageLoad();
+        waitSeconds(2); // Tunggu halaman fully loaded
         takeScreenshot("COM-006_Partners_Page");
 
+        waitSeconds(1); // Beri waktu sebelum klik button
         boolean clickSuccess = communityPage.clickVisitTechespertoButton();
         assertTrue(clickSuccess, "Harus berhasil klik button Visit Techesperto");
 
-        communityPage.switchToNewTab();
+        waitSeconds(2); // Tunggu tab baru terbuka atau page load
+        
+        // Cek apakah ada tab baru
+        if (driver.getWindowHandles().size() > 1) {
+            communityPage.switchToNewTab();
+        }
+        
         communityPage.waitForPageLoad();
-        waitSeconds(2);
+        waitSeconds(3); // Tunggu halaman fully loaded
 
         String currentUrl = communityPage.getCurrentUrl();
         System.out.println("📍 Current URL: " + currentUrl);
@@ -228,6 +290,12 @@ public class CommunityTest extends BaseLandingTest {
                 "URL harus " + EXPECTED_TECHESPERTO_URL + " tapi actual: " + currentUrl);
 
         takeScreenshot("COM-006_Techesperto_Page");
+
+        // Close tab dan kembali ke main tab (hanya jika ada multiple tabs)
+        if (driver.getWindowHandles().size() > 1) {
+            driver.close();
+            driver.switchTo().window(driver.getWindowHandles().iterator().next());
+        }
     }
 
     @Test(priority = 7)
@@ -239,13 +307,16 @@ public class CommunityTest extends BaseLandingTest {
 
         boolean hoverSuccess = communityPage.hoverCommunityMenu();
         assertTrue(hoverSuccess, "Harus berhasil hover ke menu Community");
+        
+        waitSeconds(2); // Beri waktu untuk menu dropdown terlihat
 
         boolean navSuccess = communityPage.navigateToGitHub();
         assertTrue(navSuccess, "Harus berhasil navigate ke GitHub");
 
+        waitSeconds(2); // Tunggu tab baru terbuka
         communityPage.switchToNewTab();
         communityPage.waitForPageLoad();
-        waitSeconds(2);
+        waitSeconds(3); // Tunggu halaman fully loaded
 
         String currentUrl = communityPage.getCurrentUrl();
         System.out.println("📍 Current URL: " + currentUrl);
@@ -256,5 +327,11 @@ public class CommunityTest extends BaseLandingTest {
                 "URL harus " + EXPECTED_GITHUB_URL + " tapi actual: " + currentUrl);
 
         takeScreenshot("COM-007_GitHub_Page");
+
+        // Close tab dan kembali ke main tab
+        if (driver.getWindowHandles().size() > 1) {
+            driver.close();
+            driver.switchTo().window(driver.getWindowHandles().iterator().next());
+        }
     }
 }

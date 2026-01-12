@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+<suite name="SuiteCRM Landing - Browser Compatibility Test Suite">
+    <test name="Browser Compatibility Tests">
+        <classes>
+            <class name="com.proyek_softes.landing.tests.main.BrowserCompatibilityTest">
+                <methods>
+                    <include name="testMain001_ChromeBrowser" />
+                    <include name="testMain002_FirefoxBrowser" />
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>

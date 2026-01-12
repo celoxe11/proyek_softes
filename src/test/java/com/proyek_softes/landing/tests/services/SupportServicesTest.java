@@ -52,6 +52,12 @@ public class SupportServicesTest extends BaseLandingTest {
                 "URL harus " + EXPECTED_CONTACT_URL + " tapi actual: " + currentUrl);
 
         takeScreenshot("SRV-001_Contact_Page");
+
+        // Cleanup: tutup semua tab ekstra dan kembali ke main tab
+        while (driver.getWindowHandles().size() > 1) {
+            driver.close();
+            driver.switchTo().window(driver.getWindowHandles().iterator().next());
+        }
     }
 
     @Test(priority = 2)
@@ -86,6 +92,12 @@ public class SupportServicesTest extends BaseLandingTest {
                 "URL harus " + EXPECTED_EVS_URL + " tapi actual: " + currentUrl);
 
         takeScreenshot("SRV-002_EVS_Page");
+
+        // Cleanup: tutup semua tab ekstra dan kembali ke main tab
+        while (driver.getWindowHandles().size() > 1) {
+            driver.close();
+            driver.switchTo().window(driver.getWindowHandles().iterator().next());
+        }
     }
 
     @Test(priority = 3)
@@ -120,6 +132,12 @@ public class SupportServicesTest extends BaseLandingTest {
                 "URL harus " + EXPECTED_SUITECRM_HOSTED_URL + " tapi actual: " + currentUrl);
 
         takeScreenshot("SRV-003_SuiteCRM_Hosted_Page");
+
+        // Cleanup: tutup semua tab ekstra dan kembali ke main tab
+        while (driver.getWindowHandles().size() > 1) {
+            driver.close();
+            driver.switchTo().window(driver.getWindowHandles().iterator().next());
+        }
     }
 
     @Test(priority = 4)
@@ -156,5 +174,11 @@ public class SupportServicesTest extends BaseLandingTest {
                 "URL harus " + EXPECTED_TERMS_PDF_URL + " tapi actual: " + currentUrl);
 
         takeScreenshot("SRV-004_Terms_PDF_Page");
+
+        // Cleanup: tutup semua tab ekstra dan kembali ke main tab
+        while (driver.getWindowHandles().size() > 1) {
+            driver.close();
+            driver.switchTo().window(driver.getWindowHandles().iterator().next());
+        }
     }
 }

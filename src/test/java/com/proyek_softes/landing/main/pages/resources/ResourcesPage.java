@@ -161,7 +161,11 @@ public class ResourcesPage {
      * @return true jika berhasil
      */
     public boolean navigateToCompareSalesforce() {
-        return navigateToSubMenu(compareSuiteCRMSalesforceSubMenuLocator, "Compare SuiteCRM > Compare with Salesforce");
+        return navigateToNestedSubMenu(
+            By.cssSelector("li#menu-item-564420 > a"),
+            compareSuiteCRMSalesforceSubMenuLocator, 
+            "Compare SuiteCRM > Compare with Salesforce"
+        );
     }
 
     /**
@@ -170,7 +174,11 @@ public class ResourcesPage {
      * @return true jika berhasil
      */
     public boolean navigateToCompareMicrosoftDynamics() {
-        return navigateToSubMenu(compareSuiteCRMMicrosoftDynamicsSubMenuLocator, "Compare SuiteCRM > Compare with Microsoft Dynamics");
+        return navigateToNestedSubMenu(
+            By.cssSelector("li#menu-item-564420 > a"),
+            compareSuiteCRMMicrosoftDynamicsSubMenuLocator, 
+            "Compare SuiteCRM > Compare with Microsoft Dynamics"
+        );
     }
 
     /**
@@ -188,7 +196,11 @@ public class ResourcesPage {
      * @return true jika berhasil
      */
     public boolean navigateToUserTraining() {
-        return navigateToSubMenu(trainingUserTrainingSubMenuLocator, "Training > User Training");
+        return navigateToNestedSubMenu(
+            By.cssSelector("li#menu-item-564577 > a"),
+            trainingUserTrainingSubMenuLocator, 
+            "Training > User Training"
+        );
     }
 
     /**
@@ -197,7 +209,11 @@ public class ResourcesPage {
      * @return true jika berhasil
      */
     public boolean navigateToDeveloperTraining() {
-        return navigateToSubMenu(trainingDeveloperTrainingSubMenuLocator, "Training > Developer Training");
+        return navigateToNestedSubMenu(
+            By.cssSelector("li#menu-item-564577 > a"),
+            trainingDeveloperTrainingSubMenuLocator, 
+            "Training > Developer Training"
+        );
     }
 
     /**
@@ -244,6 +260,53 @@ public class ResourcesPage {
             return true;
         } catch (Exception e) {
             System.out.println("Gagal navigate ke " + subMenuName + ": " + e.getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Helper method untuk navigate ke nested sub-menu (menu bertingkat)
+     * 
+     * @param parentMenuLocator locator untuk parent menu yang perlu di-hover
+     * @param nestedSubMenuLocator locator untuk nested sub-menu yang akan diklik
+     * @param subMenuName nama sub-menu untuk logging
+     * @return true jika berhasil
+     */
+    protected boolean navigateToNestedSubMenu(By parentMenuLocator, By nestedSubMenuLocator, String subMenuName) {
+        try {
+            System.out.println("Navigating ke nested submenu: " + subMenuName);
+
+            // Step 1: Hover ke Resources menu utama
+            hoverResourcesMenu();
+            Thread.sleep(500);
+
+            // Step 2: Hover ke parent menu (contoh: Compare SuiteCRM)
+            System.out.println("Hovering ke parent menu untuk membuka nested submenu");
+            WebElement parentMenu = wait.until(ExpectedConditions.visibilityOfElementLocated(parentMenuLocator));
+            actions.moveToElement(parentMenu).perform();
+            Thread.sleep(500);
+
+            // Step 3: Klik nested submenu
+            System.out.println("Clicking nested submenu");
+            WebElement nestedSubMenu = wait.until(ExpectedConditions.elementToBeClickable(nestedSubMenuLocator));
+            
+            // Scroll ke element jika perlu
+            js.executeScript("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", nestedSubMenu);
+            Thread.sleep(300);
+
+            // Klik nested submenu
+            try {
+                nestedSubMenu.click();
+            } catch (Exception e) {
+                // Fallback to JavaScript click
+                js.executeScript("arguments[0].click();", nestedSubMenu);
+            }
+
+            Thread.sleep(1000);
+            System.out.println("Berhasil navigate ke nested submenu: " + subMenuName);
+            return true;
+        } catch (Exception e) {
+            System.out.println("Gagal navigate ke nested submenu " + subMenuName + ": " + e.getMessage());
             return false;
         }
     }

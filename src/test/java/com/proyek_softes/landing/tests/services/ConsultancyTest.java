@@ -47,6 +47,12 @@ public class ConsultancyTest extends BaseLandingTest {
                 "URL harus " + EXPECTED_CONTACT_URL + " tapi actual: " + currentUrl);
 
         takeScreenshot("SRV-005_Contact_Page");
+
+        // Cleanup: tutup semua tab ekstra dan kembali ke main tab
+        while (driver.getWindowHandles().size() > 1) {
+            driver.close();
+            driver.switchTo().window(driver.getWindowHandles().iterator().next());
+        }
     }
 
     @Test(priority = 2, dataProvider = "implementationData", dataProviderClass = ImplementationDataProvider.class)
@@ -112,17 +118,19 @@ public class ConsultancyTest extends BaseLandingTest {
             waitSeconds(1);
         }
 
-        System.out.println("Attempting to solve CAPTCHA automatically");
-        boolean captchaSolved = consultancyPage.solveCaptcha();
+        System.out.println("Waiting 120 seconds for manual CAPTCHA completion");
         
-        if (!captchaSolved) {
-            System.out.println("CAPTCHA needs to be solved manually");
-            System.out.println("Please solve the CAPTCHA within 30 seconds");
-            waitSeconds(30); // Give time for manual CAPTCHA solving
-        } else {
-            System.out.println("CAPTCHA solved automatically - form will auto-submit");
-            waitSeconds(5); // Wait for auto-submit and validation
+        // Wait 120 seconds for manual CAPTCHA solving with countdown
+        for (int i = 120; i > 0; i--) {
+            if (i % 10 == 0 || i <= 10) {
+                System.out.println("Time remaining: " + i + " seconds");
+            }
+            waitSeconds(1);
         }
+        
+        System.out.println("CAPTCHA wait time completed");
+        
+        waitSeconds(3); // Wait for form submission to complete
 
         boolean hasSuccessMessage = consultancyPage.verifySuccessMessage(expectedSuccessMessage);
         assertTrue(hasSuccessMessage,
@@ -130,6 +138,12 @@ public class ConsultancyTest extends BaseLandingTest {
 
         // Step 10: Screenshot hasil assert
         takeScreenshot("SRV-007_Implementation_Form_Success");
+
+        // Cleanup: tutup semua tab ekstra dan kembali ke main tab
+        while (driver.getWindowHandles().size() > 1) {
+            driver.close();
+            driver.switchTo().window(driver.getWindowHandles().iterator().next());
+        }
     }
 
     @Test(priority = 3, dataProvider = "implementationDataSrv008", dataProviderClass = ImplementationDataProvider.class)
@@ -183,5 +197,11 @@ public class ConsultancyTest extends BaseLandingTest {
                 "Error message harus muncul dengan teks: " + expectedErrorMessage);
 
         takeScreenshot("SRV-008_Implementation_Form_Validation_Error");
+
+        // Cleanup: tutup semua tab ekstra dan kembali ke main tab
+        while (driver.getWindowHandles().size() > 1) {
+            driver.close();
+            driver.switchTo().window(driver.getWindowHandles().iterator().next());
+        }
     }
 }
